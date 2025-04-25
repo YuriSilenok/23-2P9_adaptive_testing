@@ -1,7 +1,7 @@
-@import url(/src/styles/Switcher.css);
-@import url(/src/styles/Autorize.css);
-@import url(/src/styles/showForm.css);
-@import url(/src/styles/UserProfile.css);
+@import url(/src/styles/ThemeSwitcher/Switcher.css);
+@import url(/src/styles/Autorize/Autorize.css);
+@import url(/src/styles/showForm/showForm.css);
+@import url(/src/styles/UserProfile/UserProfile.css);
 
 
 :root {
