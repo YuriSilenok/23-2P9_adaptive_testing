@@ -1,6 +1,5 @@
 import {Question, Status} from './types'
 
-
 interface userStoreShema {
     nick: string | undefined,
     status: Status,
