@@ -1,0 +1,106 @@
+.profile-container {
+    width: 150px;
+    height: 40px;
+    margin-right: 10px;
+    position: relative;
+
+    .user-shower {
+        z-index: 2;
+        position: relative;
+        height: 100%;
+        width: 100%;;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content:space-between ;
+        padding: 20px;
+        gap: 10px;
+        background: var(--main-input-bg);
+        border-radius: 20px;
+        overflow: hidden;
+        
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff0000, #0000ff);
+            filter: blur(20px);
+            z-index: -1;
+        }
+
+        label {
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight:600 ;
+            font-size: large;
+        }
+
+        .arrow-element {
+            border-radius: 50%;
+            height: 30px; width: 30px;
+            background-color: beige;
+            position: relative;
+            transition: all .3s;
+
+            &::after, &::before {
+                position: absolute;
+                content: '';
+                height: 1.5px;
+                width: 12px;
+                background-color: black;
+                transform: rotate(45deg);
+                top: 15px;
+                left: 5px;
+            }
+
+            &::before {
+                transform: rotate(135deg);
+                left: 13px;
+            }
+
+        }
+    }
+
+    .user-menu {
+        position: absolute;
+        height: 0px;
+        width: 100px;   
+        left: calc(100% - 100px );   
+        padding: 10px;
+        // opacity: 0;
+        transition: transform .3s;
+
+        button {
+            background: var(--main-input-bg);
+            border: none;
+            outline: none;
+            border-radius: 12px;
+            height: 28px;
+            width: 70px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 600;
+            font-size: medium;
+        }
+    }
+    
+    .active {
+
+        & ~ .user-menu {
+            opacity: 1;
+            z-index: 1;
+            transform: translateY(40px);
+            position: absolute;
+        }
+
+        .arrow-element {
+            transform: rotate(-180deg);
+        }
+    }
+
+    input {
+        position: relative;
+    }
+}
