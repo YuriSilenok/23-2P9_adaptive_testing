@@ -5,17 +5,16 @@ export default function Regisration () {
             <form id="registration-form">
                 <input type="text" placeholder="login" className="input" autoComplete="off" datatype="off" name="login" />
                 <input 
-                type="text" 
+                type="password" 
                 placeholder="password" 
                 className="input" 
-                datatype="password" 
                 name="password" />
                 <input 
-                type="text"
+                type="password"
                 placeholder="repeat password"
                 className="input"
                 name="password-rp" />
-                <button type='button' onClick={e => {}} id="button">Авторизоваться</button>
+                <button type='button' onClick={e => {}} id="button">Зарегистрироваться</button>
             </form>
         </div>
     )
