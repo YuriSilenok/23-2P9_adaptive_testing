@@ -9,7 +9,15 @@ export default function MainLOUT () {
     const nav = useNavigate()
     const { nick, status  } = userStore()
 
-    useEffect(() => {window.location.pathname === '/' && nick ? [ status === 'Student' ? nav('/forstudent'): nav('/forteacher')] : null}, [window.location.pathname])
+    useEffect(() => {
+        window.location.pathname === '/' && nick 
+        ? [ 
+            status === 'Student' 
+            ? nav('/forstudent')
+            : nav('/forteacher')
+        ] 
+        : null}
+        , [window.location.pathname])
 
     return(
         <>

@@ -6,7 +6,6 @@ import { userStore } from "../Static/store"
 export default function Autorize () {
 
     const nav = useNavigate()
-    const authForm = useRef(null)
     const {DelUser, RegUser} = userStore()
 
     function handleSubmit (event: FormEvent<HTMLFormElement>) {
