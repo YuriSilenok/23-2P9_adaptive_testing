@@ -22,7 +22,10 @@ export default function MainLOUT () {
     return(
         <>
             <div id="main-nav">
-                <img id="icon" src={logo} onClick={() => {nav('/forstudent')}} /> 
+                <img id="icon" src={logo} onClick={() => {
+                    status === 'Student' 
+                    ? nav('/forstudent')
+                    : nav('/forteacher')}} /> 
                 <nav className="top-nav">
                 </nav>
                 <aside>
