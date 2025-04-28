@@ -6,6 +6,7 @@ import Regisration from "../Components/Registration";
 import MainRedirect from "../Layouts/Redirect";
 import ShowForm from "../Components/Form";
 import { createBrowserHistory } from "history";
+import TeacherLout from "../Layouts/TeacherLOUT";
 
 
 export default function RoutePaths () {
@@ -13,18 +14,28 @@ export default function RoutePaths () {
     <>
       <BrowserRouter>
         <Routes>
+
           <Route path="/*" Component={MainLOUT}>
+
             <Route path="users/*">
               <Route path="autorize" Component={Autorize}/>
               <Route path="registration" Component={Regisration} />
             </Route>
-            <Route path="*" element={<MainRedirect checkAccount={true} />}>
-              <Route path="showForm/">
-                <Route path=":id" Component={ShowForm} />
-              </Route>
-              <Route path="forstudent" Component={FormLayout}/>
+
+            <Route path="*" element={<MainRedirect checkAccount={true} /> } >
+
+                <Route path="showForm/">
+                    <Route path=":id" Component={ShowForm} />
+                </Route>
+
+                <Route path="forstudent" Component={FormLayout} />
+
+                <Route path="forteacher" Component={TeacherLout} />
+
             </Route>
+
           </Route>
+
         </Routes>
       </BrowserRouter>
     </>

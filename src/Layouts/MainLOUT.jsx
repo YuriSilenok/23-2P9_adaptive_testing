@@ -16,8 +16,8 @@ export default function MainLOUT () {
             ? nav('/forstudent')
             : nav('/forteacher')
         ] 
-        : null}
-        , [window.location.pathname])
+        : null
+    }, [window.location.pathname])
 
     return(
         <>
