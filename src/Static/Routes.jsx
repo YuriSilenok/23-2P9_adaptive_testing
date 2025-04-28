@@ -18,7 +18,7 @@ export default function RoutePaths () {
               <Route path="autorize" Component={Autorize}/>
               <Route path="registration" Component={Regisration} />
             </Route>
-            <Route path="*" element={<MainRedirect forAuth={true} />}>
+            <Route path="*" element={<MainRedirect checkAccount={true} />}>
               <Route path="showForm/">
                 <Route path=":id" Component={ShowForm} />
               </Route>

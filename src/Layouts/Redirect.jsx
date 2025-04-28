@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { userStore } from "../Static/store";
 
-export default function MainRedirect ({forAuth = false}) {
+export default function MainRedirect ({checkAccount = false}) {
     const nav = useNavigate()
     const {nick} = userStore()
-    useEffect(() => {if (forAuth) {
+    useEffect(() => {if (checkAccount) {
         !nick 
         ? nav('/users/autorize')
         : null
