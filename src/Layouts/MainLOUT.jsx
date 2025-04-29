@@ -21,7 +21,7 @@ export default function MainLOUT () {
 
     return(
         <>
-            <div id="main-nav">
+            <nav id="main-nav">
                 <img id="icon" src={logo} onClick={() => {
                     status === 'Student' 
                     ? nav('/forstudent')
@@ -32,7 +32,7 @@ export default function MainLOUT () {
                     {window.location.pathname === '/users/autorize' ? null : <UserProfile /> }    
                     <ThemeSwitcher />
                 </aside>
-            </div>
+            </nav>
             <Outlet />
         </>
     )
