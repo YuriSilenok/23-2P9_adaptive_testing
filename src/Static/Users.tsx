@@ -40,7 +40,7 @@ function Identification<T>(nick: T): boolean {
     return false
 }
 
-const Authentification = (nick: string, pass: string| number): boolean|User => {
+const Authentification = (nick: string, pass: string| number): false|User => {
     for (const user of Users) {
         if (user.name === nick) {
             if (user.password === pass) {
