@@ -14,7 +14,7 @@ export default function Regisration () {
                 placeholder="repeat password"
                 className="input"
                 name="password-rp" />
-                <button type='button' onClick={e => {}} id="button">Зарегистрироваться</button>
+                <button type='button' onClick={e => {}} className="main_button">Зарегистрироваться</button>
             </form>
         </div>
     )

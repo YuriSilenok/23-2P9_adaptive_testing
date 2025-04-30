@@ -3,6 +3,7 @@
 @import url(/src/styles/showForm/showForm.css);
 @import url(/src/styles/UserProfile/UserProfile.css);
 @import url(/src/styles/Registration/Registration.css);
+@import url(/src/styles/TeacherLout/TeachLout.css);
 
 
 :root {
@@ -133,7 +134,7 @@ body {
   background-color: black;
 }
 /* --------------------------------------------- */
-#button {
+.main_button {
   width: var(--input-width);
   block-size: auto;
   border: none;
@@ -244,6 +245,11 @@ aside {
 }
 html {
   background: fixed;
+  position: fixed;
+}
+
+#root {
+  height: 100%;
 }
 
 

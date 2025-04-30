@@ -47,7 +47,7 @@ export default function Autorize () {
                     <input name="remember" id="remember" checked={true} type='checkbox' />
                     <label htmlFor="#remember"> Запомнить меня</label>
                 </div>
-                <button type='submit' id="button">Авторизоваться</button>
+                <button type='submit' className="main_button" >Авторизоваться</button>
                 <div onClick={ () => { nav('/users/registration') } } id="reg-link" >Нет аккаунта?<br /><span>ЗАРЕГИСТРИРОВАТЬСЯ!</span></div>
             </form>
             

@@ -30,7 +30,8 @@ export default function RoutePaths () {
 
                 <Route path="forstudent" Component={FormLayout} />
 
-                <Route path="forteacher" Component={TeacherLout} />
+                <Route path="forteacher/" Component={TeacherLout} />
+                <Route path="forteacher/results/"></Route>
 
             </Route>
 

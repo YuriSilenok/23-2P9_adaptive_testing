@@ -25,7 +25,7 @@ export default function FormLayout () {
             <div className="studentpage" id="formlout">
                 <img src={logo} />
                 <input onChange={handleChange} maxLength={8} placeholder="id теста" autoComplete="off" className="input" ref={input} type='text' />
-                <button id="button" onClick={() => {toFormById()}} >Подключиться</button>
+                <button className="main_button" onClick={() => {toFormById()}} >Подключиться</button>
             </div>
             <div className="background-animate">
                 <div id="figure-1" />
