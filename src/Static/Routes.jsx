@@ -7,6 +7,7 @@ import MainRedirect from "../Layouts/Redirect";
 import ShowForm from "../Components/Form";
 import { createBrowserHistory } from "history";
 import TeacherLout from "../Layouts/TeacherLOUT";
+import Results from "../Components/Results";
 
 
 export default function RoutePaths () {
@@ -31,7 +32,7 @@ export default function RoutePaths () {
                 <Route path="forstudent" Component={FormLayout} />
 
                 <Route path="forteacher/" Component={TeacherLout} />
-                <Route path="forteacher/results/"></Route>
+                <Route path="forteacher/results/" Component={Results}></Route>
 
             </Route>
 
