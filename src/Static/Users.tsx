@@ -1,4 +1,5 @@
 import { use } from "react"
+import { userShema } from "./interfaces"
 
 type Status = 'Student' | 'Teacher'
 type login = string
@@ -30,7 +31,7 @@ const Users:User[] = [
     }
 ]
 
-function Identification<T>(nick: T){
+function Identification<T>(nick: T): boolean {
     for (const user of Users) {
         if (user.name === nick) {
             return true
@@ -39,7 +40,7 @@ function Identification<T>(nick: T){
     return false
 }
 
-const Authentification = (nick: string, pass: string| number) => {
+const Authentification = (nick: string, pass: string| number): boolean|User => {
     for (const user of Users) {
         if (user.name === nick) {
             if (user.password === pass) {

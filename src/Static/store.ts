@@ -35,7 +35,6 @@ let userStore = create<userStoreShema>( set => ({
         localStorage.removeItem('userdata')
         sessionStorage.removeItem('userdata')
     }
-
 }))
 
 const themeStore = create(set => ({
@@ -51,11 +50,9 @@ const themeStore = create(set => ({
     },
     
     toggleTheme: () => {
-        localStorage.getItem('theme') === 'light' ? [
-            localStorage.setItem('theme', 'dark'), set({theme : 'dark'}), document.documentElement.classList.add('theme-dark')
-        ] : [
-            localStorage.setItem('theme', 'light'), set({theme : 'light'}), document.documentElement.classList.remove('theme-dark')
-        ]
+        localStorage.getItem('theme') === 'light' 
+            ? [localStorage.setItem('theme', 'dark'), set({theme : 'dark'}), document.documentElement.classList.add('theme-dark')] 
+            : [localStorage.setItem('theme', 'light'), set({theme : 'light'}), document.documentElement.classList.remove('theme-dark')]
     }
 }))
 
