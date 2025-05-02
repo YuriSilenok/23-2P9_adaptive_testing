@@ -2,6 +2,7 @@ import React from "react"
 
 export default function Results() {
     return(
-        <h1>Вы на хуе!</h1>
+        <iframe width='100%' height='100%' src="github/"></iframe>
+        
     )
 }
