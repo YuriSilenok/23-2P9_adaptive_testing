@@ -1,1 +1,11 @@
-Front-end for Adaptive testing project.
+To start react :
+1) install NPM 
+      |
+      V
+
+2) paste in terminal: 
+    **npm install react vite react-router-dom zustand**
+      |
+      V
+
+3) **npx vite --host** to start dev-server

@@ -44,7 +44,7 @@ export default function Autorize () {
                     datatype="new"
                     name="password" />
                 <div id="checkbox-container"> 
-                    <input name="remember" id="remember" checked={true} type='checkbox' />
+                    <input name="remember" id="remember" type='checkbox' />
                     <label htmlFor="#remember"> Запомнить меня</label>
                 </div>
                 <button type='submit' className="main_button" >Авторизоваться</button>
