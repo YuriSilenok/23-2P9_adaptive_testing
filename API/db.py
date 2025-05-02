@@ -1,6 +1,8 @@
+"""database discription"""
 from datetime import datetime, timedelta
 
-from peewee import *
+from peewee import SqliteDatabase, CharField, DateTimeField, BooleanField, \
+                   TextField, ForeignKeyField, AutoField, IntegerField, Model, fn
 
 database = SqliteDatabase('my_database.db')
 
@@ -18,7 +20,7 @@ class User(BaseModel):
     role = CharField()  # 'student' или 'teacher'
     created_at = DateTimeField(default=datetime.now)
     is_active = BooleanField(default=True)
-    
+
     def is_teacher(self):
         return self.role == 'teacher'
 
@@ -37,7 +39,7 @@ class Question(BaseModel):
     poll = ForeignKeyField(Poll, backref='questions')
     text = TextField()
     question_type = CharField(default='single_choice')
-    
+
     def save(self, *args, **kwargs):
         if not self.id:  # Только для новых записей
             # Находим максимальный id_in_question для этого вопроса
@@ -54,7 +56,7 @@ class AnswerOption(BaseModel):
     question = ForeignKeyField(Question, backref='answer_options')
     text = TextField()
     is_correct = BooleanField(default=False)
-    
+
     def save(self, *args, **kwargs):
         if not self.id:  # Только для новых записей
             # Находим максимальный id_in_question для этого вопроса
@@ -70,11 +72,10 @@ class UserAnswer(BaseModel):
     question = ForeignKeyField(Question, backref='user_answers')
     answer_option = ForeignKeyField(AnswerOption, backref='selected_by')
     answered_at = DateTimeField(default=datetime.now)
-    
+
 
 if __name__ == "__main__":
     database.connect()
-    database.drop_tables([User,Poll,Question,AnswerOption,UserAnswer])
-    database.create_tables([User,Poll,Question,AnswerOption,UserAnswer])
+    database.drop_tables([User, Poll, Question, AnswerOption, UserAnswer])
+    database.create_tables([User, Poll, Question, AnswerOption, UserAnswer])
     database.close()
-
