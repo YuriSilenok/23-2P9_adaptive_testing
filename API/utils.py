@@ -16,6 +16,8 @@ def encode_jwt(
     expire_timedelta: timedelta | None = None,
     expire_munites: int = settings.auth_jwt.access_token_expire
 ):
+    with open(private_key, "r") as f:
+        private_key = f.read()
     to_encode = payload.copy()
     now = datetime.utcnow()
     if expire_timedelta:
@@ -47,6 +49,8 @@ def decode_jwt(
     public_key: str = settings.auth_jwt.public_key_path,
     algorithm: str = settings.auth_jwt.algorithm
 ):
+    with open(public_key, "r") as f:
+        public_key = f.read()
     decoded = jwt.decode(
         token,
         public_key,
