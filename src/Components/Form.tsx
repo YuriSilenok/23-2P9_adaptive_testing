@@ -1,5 +1,6 @@
 import { memo, useEffect } from "react";
 import { showFormStore } from "../Static/store";
+import React from "react";
 
 export default function ShowForm () {
     const {form} = showFormStore()
@@ -14,7 +15,7 @@ export default function ShowForm () {
             <div className="show-form-questions">
                 {form.questions.map(element => {
                     console.warn(element)
-                    return Question({element})
+                    return <Question element={element} /> 
                 })}
             </div>
         </div>

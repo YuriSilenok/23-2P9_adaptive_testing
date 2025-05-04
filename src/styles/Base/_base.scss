@@ -52,7 +52,7 @@ body {
   transition: box-shadow 0.3s, transform 0.5s;
 
   &::placeholder {
-    color: var(--placeholder-color);
+    color: gray ;
   }
 
   
@@ -69,13 +69,14 @@ body {
 .main_button {
   @include size;
   height: 40px;
-  border: none;
+  border: solid 1px wheat ;
   border-radius: 20px;
   color: white;
   font-weight: 700;
   font-family: 'Courier New', Courier, monospace;
   font-size: larger;
   position: relative;
+  background-color: rgba(255, 255, 255, 0.185);
   transition: all 0.4s ease;
   scale: 1;
 
@@ -83,23 +84,24 @@ body {
     @include pseudoelement;
     border-radius: 20px;
     transition: .4s;
-    clip-path:view-box;
+    filter: blur(5px);
   }
 
   &::before {
-    background: linear-gradient(90deg, #ff0000, #0000ff);
-    filter: blur(15px);
+    background: var(--button-background);
+    clip-path: view-box;
     opacity: 1;;
   }
 
   &::after {
-    background: linear-gradient(90deg, #4ecdc4, orange);
+    background: var(--button-hover-ground);
     opacity: 0;
   }
 
   &:hover{
 
     transform:scale(1.08);
+    border-color: rgba(255, 255, 255, 0);
 
     &::before {
       opacity: 0;

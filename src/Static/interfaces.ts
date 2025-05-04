@@ -1,4 +1,5 @@
-import {Question, Status} from './types'
+import { Form } from 'react-router-dom'
+import { Status} from './types'
 
 interface userStoreShema {
     nick: string | undefined,
@@ -14,11 +15,25 @@ interface userShema {
     token?: string | null
 }
 
-interface ShowFormShema {
-    title: string,
-    description: string,
-    questions: [Question]
+interface Answer {
+    label: string
 }
 
-export {userShema, userStoreShema, ShowFormShema}
+interface Question {
+    header: string,
+    answers: Answer[]
+}
+
+interface Form {
+    title: string,
+    description: string,
+    questions: Question[]
+}
+
+interface ShowFormShema {
+    form: Form,
+    setForm: (_:Form) => void
+}
+
+export {userShema, userStoreShema, ShowFormShema, Form}
 

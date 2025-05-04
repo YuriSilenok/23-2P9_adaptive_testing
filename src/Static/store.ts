@@ -1,9 +1,11 @@
 import { create, StoreApi } from "zustand";
-import {userStoreShema, userShema, ShowFormShema} from './interfaces'
+import {userStoreShema, userShema, ShowFormShema, Form} from './interfaces'
 import {Theme} from './types.ts'
+import { HookHandler, ServerHook } from "vite";
+import { ReactInstance } from "react";
 
 
-let userStore = create<userStoreShema>( set => ({
+const userStore = create<userStoreShema>( set => ({
     status: JSON.parse(
                 (localStorage.getItem('userdata')
                 ?? sessionStorage.getItem('userdata')) 
@@ -50,13 +52,19 @@ const themeStore = create(set => ({
     },
     
     toggleTheme: () => {
+        if (!localStorage.getItem('theme')) {
+            localStorage.setItem('theme', 'dark') 
+            set({theme : 'dark'})
+            document.documentElement.classList.add('theme-dark')
+        } else {
         localStorage.getItem('theme') === 'light' 
             ? [localStorage.setItem('theme', 'dark'), set({theme : 'dark'}), document.documentElement.classList.add('theme-dark')] 
             : [localStorage.setItem('theme', 'light'), set({theme : 'light'}), document.documentElement.classList.remove('theme-dark')]
+        }
     }
 }))
 
-const showFormStore = create( set => ({
+const showFormStore = create<ShowFormShema>( set => ({
     form: {
         title: 'some title',
         description : 'some description',
@@ -85,14 +93,14 @@ const showFormStore = create( set => ({
             }
         ]
     },
-    setForm : (form: ShowFormShema ) => set({
-        form : {
-            title : form.title,
-            description : form.description,
-            questions : form.questions
+
+    setForm : (fom: Form) => set({
+        form: {
+            title: fom.title,
+            description: fom.description,
+            questions: fom.questions
         }
     })
 }))
 
-export {userStore, showFormStore, themeStore} 
-   
+export {userStore, showFormStore, themeStore}
