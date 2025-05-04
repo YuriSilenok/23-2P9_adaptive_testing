@@ -1,8 +1,6 @@
 @charset "UTF-8";
 /* """ main css file """ */
 :root {
-  --main-width: 250px;
-  --main-height: 290px;
   --top-menu-height: 60px;
   --is-theme-dark: 0;
   --is-theme-light: 1;
@@ -12,18 +10,19 @@
   --bg-color-dark-2: black;
   --backdrop-light: linear-gradient(235deg, var(--bg-color-light-1), var(--bg-color-light-2));
   --backdrop-dark: linear-gradient(235deg, var(--bg-color-dark-1), var(--bg-color-dark-2) );
-  --button-color-1: #4305ed;
-  --button-color-2: #9c108e;
-  --placeholder-color: gray;
+  --button-color-dark-1: #4400ff;
+  --button-color-dark-2: #ff00e6;
+  --button-color-light-1: #4ecdc4;
+  --button-color-light-2: orange;
+  --button-background: linear-gradient(90deg, var(--button-color-light-2), var(--button-color-light-1));
+  --button-hover-ground: linear-gradient(90deg, var(--button-color-dark-2), var(--button-color-dark-1));
 }
 
 .theme-dark {
-  --button-color-1: #4ecdc4;
-  --button-color-2: orange;
-  --input-shadow-color: #5b444c;
-  --input-shadow-width: 50px ;
   --is-theme-dark: 1;
   --is-theme-light: 0;
+  --button-background: linear-gradient(90deg, var(--button-color-dark-2), var(--button-color-dark-1));
+  --button-hover-ground: linear-gradient(90deg, var(--button-color-light-1), var(--button-color-light-2));
 }
 
 * {
@@ -93,10 +92,10 @@ body::after {
   transition: box-shadow 0.3s, transform 0.5s;
 }
 .input::-moz-placeholder {
-  color: var(--placeholder-color);
+  color: gray;
 }
 .input::placeholder {
-  color: var(--placeholder-color);
+  color: gray;
 }
 .input:focus {
   outline: none;
@@ -110,13 +109,14 @@ body::after {
   height: 7.5dvh;
   width: 23.4375dvw;
   height: 40px;
-  border: none;
+  border: solid 1px wheat;
   border-radius: 20px;
   color: white;
   font-weight: 700;
   font-family: "Courier New", Courier, monospace;
   font-size: larger;
   position: relative;
+  background-color: rgba(255, 255, 255, 0.185);
   transition: all 0.4s ease;
   scale: 1;
 }
@@ -132,20 +132,21 @@ body::after {
   z-index: -1;
   border-radius: 20px;
   transition: 0.4s;
-  -webkit-clip-path: view-box;
-          clip-path: view-box;
+  filter: blur(5px);
 }
 .main_button::before {
-  background: linear-gradient(90deg, #ff0000, #0000ff);
-  filter: blur(15px);
+  background: var(--button-background);
+  -webkit-clip-path: view-box;
+          clip-path: view-box;
   opacity: 1;
 }
 .main_button::after {
-  background: linear-gradient(90deg, #4ecdc4, orange);
+  background: var(--button-hover-ground);
   opacity: 0;
 }
 .main_button:hover {
   transform: scale(1.08);
+  border-color: rgba(255, 255, 255, 0);
 }
 .main_button:hover::before {
   opacity: 0;
@@ -315,7 +316,7 @@ html {
 }
 
 .switcher-circle {
-  transition: 0.7s;
+  transition: 0.5s;
   width: 30px;
   height: 30px;
   border-radius: 50%;

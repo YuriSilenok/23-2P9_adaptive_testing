@@ -1,6 +1,8 @@
+// Using Base
 @use './Base/root';
 @use './Base/base';
 
+// Using Components
 @use './Components/Autorize/autorize';
 @use './Components/ThemeSwitcher/switcher';
 @use './Components/Registration/registration';
