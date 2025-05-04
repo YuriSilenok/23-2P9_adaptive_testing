@@ -52,9 +52,15 @@ const themeStore = create(set => ({
     },
     
     toggleTheme: () => {
+        if (!localStorage.getItem('theme')) {
+            localStorage.setItem('theme', 'dark') 
+            set({theme : 'dark'})
+            document.documentElement.classList.add('theme-dark')
+        } else {
         localStorage.getItem('theme') === 'light' 
             ? [localStorage.setItem('theme', 'dark'), set({theme : 'dark'}), document.documentElement.classList.add('theme-dark')] 
             : [localStorage.setItem('theme', 'light'), set({theme : 'light'}), document.documentElement.classList.remove('theme-dark')]
+        }
     }
 }))
 
