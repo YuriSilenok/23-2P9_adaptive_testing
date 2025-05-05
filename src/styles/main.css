@@ -100,6 +100,16 @@ body::after {
   transition: all 0.7s;
   transition: box-shadow 0.3s, transform 0.5s;
 }
+.input + label.valid_message {
+  display: none;
+}
+.input.invalid {
+  border: red solid;
+}
+.input.invalid + label.valid_message {
+  display: block;
+  animation: shake 0.5s;
+}
 .input::-moz-placeholder {
   color: gray;
 }
@@ -192,6 +202,21 @@ aside {
   scale: 1.5;
 }
 
+label.valid_message {
+  color: red;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-5px);
+  }
+  40%, 80% {
+    transform: translateX(5px);
+  }
+}
 .auth-container {
   position: absolute;
   display: flex;

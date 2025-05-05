@@ -7,6 +7,7 @@ export default function Autorize () {
 
     const nav = useNavigate()
     const {DelUser, RegUser} = userStore()
+    const queryParams = new URLSearchParams(window.location.search)
 
     function handleAuth (event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
@@ -35,7 +36,8 @@ export default function Autorize () {
                     autoComplete="nope" 
                     placeholder="login" 
                     className="input"
-                    name="login" />
+                    name="login"
+                    defaultValue={queryParams.get('login') ?? ''} />
                 <input 
                     type='password'
                     maxLength={10} 
@@ -43,7 +45,8 @@ export default function Autorize () {
                     placeholder="password" 
                     className="input"
                     datatype="new"
-                    name="password" />
+                    name="password"
+                    defaultValue={queryParams.get('password') ?? ''} />
                 <div id="checkbox-container"> 
                     <input name="remember" id="remember" type='checkbox' />
                     <label htmlFor="#remember"> Запомнить меня</label>

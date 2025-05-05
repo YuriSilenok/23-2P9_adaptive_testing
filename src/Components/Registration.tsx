@@ -1,23 +1,34 @@
 import React, { DialogHTMLAttributes, FormEvent, Ref, RefObject, useRef, useState } from "react"
-import { themeStore, useUrl } from "../Static/store"
+import { themeStore, ThrowStore, useUrl } from "../Static/store"
 import axios from "axios"
 import { Form, useNavigate } from "react-router-dom"
+import { RegistrationForm } from "../Static/interfaces"
+import { Input } from "./Base"
 
 export default function Regisration () {
     const dialog: RefObject<HTMLDialogElement | null> = useRef(null)
     const user: RefObject<{login: string, password: string}> = useRef({login:'',password:''})
-    
     const {URL} = useUrl()
+    const {ThrowMsg} = ThrowStore()
+
+    
+    
+    function validity(form: HTMLFormElement):HTMLFormElement | null {
+        const Form = Object.fromEntries(new FormData(form)) as Partial<RegistrationForm>
+        if ( !( Form.name && Form.name.length >= 3 ) ) {
+            ThrowMsg('name', form)
+        }
+    }
 
     async function handleRegistration (event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
-        const form = Object.fromEntries( await new FormData(event.currentTarget))
+        
         let data = await fetch(`${URL.hostname}/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify( form )
+            // body: JSON.stringify( form )
         })
         switch (data.status) {
             case 200:
@@ -29,29 +40,23 @@ export default function Regisration () {
         <>
             <section className="registration-container">
                 <Modal ref={dialog} user={user} />
-                <form onSubmit={ (event:FormEvent<HTMLFormElement>) => {event.preventDefault(), dialog.current?.showModal()} } id="registration-form">
+                <form onSubmit={ (event:FormEvent<HTMLFormElement>) => {event.preventDefault(), dialog.current?.showModal(),validity(event.currentTarget)} } id="registration-form">
 
                     <legend>Регистрация</legend>
-                    <input type="text" 
-                    placeholder="username" 
-                    className="input" 
-                    autoComplete="off" 
-                    datatype="off" 
-                    name="username"
-                    onChange={(event) => {user.current.login = event.currentTarget.value}} />
 
-                    <input type="text" 
-                    placeholder="name" 
-                    className="input" 
-                    autoComplete="off" 
-                    datatype="off" 
-                    name="name" />
+                    <Input 
+                    name='username' 
+                    onChange={(event) => {
+                        user.current.login = event.currentTarget.value
+                    }} />                     
 
-                    <input type="text"
-                    placeholder="telegram link"
-                    className="input"
-                    defaultValue="https:t.me//example.com/"
-                    name="telegram_link"/>
+                    <Input 
+                    name='name' 
+                    onChange={undefined} /> 
+
+                    <Input 
+                    name="telegram_link" 
+                    onChange={undefined} /> 
 
                     <fieldset>
                         <legend>Выберите роль:</legend>
@@ -79,19 +84,16 @@ export default function Regisration () {
 
                     </fieldset>
 
-                    <input 
-                    type="password" 
-                    placeholder="password" 
-                    className="input" 
-                    name="password" 
-                    onChange={(event) => {user.current.password = event.currentTarget.value}}/>
+                    <Input 
+                    name='password' 
+                    onChange={(event) => {
+                        user.current.password = event.currentTarget.value
+                    }} /> 
 
-                    <input 
-                    type="password"
-                    placeholder="repeat password"
-                    className="input"
-                    // name="password-rp"
-                    />
+                    <Input 
+                    name='repeat' 
+                    onChange={undefined} /> 
+
                     <button type='submit' className="main_button">Зарегистрироваться</button>
                 </form>
             </section>
