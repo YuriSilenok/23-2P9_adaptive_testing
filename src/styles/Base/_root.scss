@@ -43,6 +43,15 @@
   box-sizing: border-box;
 }
 
+html {
+  background: fixed;
+  position: fixed;
+}
+
+#root {
+  height: 100%;
+}
+
 
 
 

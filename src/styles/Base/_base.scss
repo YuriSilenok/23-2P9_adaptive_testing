@@ -84,7 +84,7 @@ body {
     @include pseudoelement;
     border-radius: 20px;
     transition: .4s;
-    filter: blur(5px);
+    filter: blur(3px);
   }
 
   &::before {
@@ -136,11 +136,8 @@ aside {
   margin-left: 10px;
 }
 
-html {
-  background: fixed;
-  position: fixed;
+.main_radio {
+  scale: 1.5;
 }
 
-#root {
-  height: 100%;
-}
+

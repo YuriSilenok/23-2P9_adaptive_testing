@@ -1,0 +1,84 @@
+@use '../../Base/mixins' as *
+    
+.registration-container 
+    display: flex
+    align-items: center
+    justify-content: center
+    position: absolute
+    width: 100dvw
+    height: 100dvh
+    flex-direction: column
+
+    dialog[open]
+        justify-self: center
+        align-self: center
+        margin: auto
+        opacity: 1
+        border: none
+        background: none
+        color: black
+    
+    dialog::backdrop
+        backdrop-filter: blur(5px)
+
+    #registration-form 
+        display: flex
+        flex-direction: column
+        height: auto
+        align-items: center
+
+        & > .input
+            text-overflow: ellipsis
+
+        legend        
+            color: white
+            font-family: 'Courier New', Courier, monospace
+            font-size: xx-large
+            font-weight: 600
+    
+
+        & > .input:nth-last-child(2), & > :nth-last-child(3) 
+            height:40px
+            margin: 10px 0
+            &::placeholder 
+                font-size: large
+            
+        fieldset
+            display: flex
+            align-items: center 
+            background: white
+            width: 90%
+            border: none
+            border-radius: 10px
+            justify-content: center
+
+            legend
+                color: wheat
+                width: 154px
+                height: 20px
+                font-size: large
+                position: relative
+                // color: gray
+                top: -10px
+                // left: calc(50% - 77px)
+            
+            div
+                display: flex
+                align-items: center
+                justify-content: space-between
+                width: 70%
+                position: relative
+                top: -5px
+
+                input
+                    height: 40px
+
+                label
+                    font-family: 'Courier New', Courier, monospace
+                    font-weight: 600
+
+
+        button 
+            margin-top: 8%
+            width:280px
+

@@ -5,7 +5,7 @@ import { HookHandler, ServerHook } from "vite";
 import { ReactInstance } from "react";
 
 
-const userStore = create<userStoreShema>( set => ({
+export const userStore = create<userStoreShema>( set => ({
     status: JSON.parse(
                 (localStorage.getItem('userdata')
                 ?? sessionStorage.getItem('userdata')) 
@@ -39,7 +39,7 @@ const userStore = create<userStoreShema>( set => ({
     }
 }))
 
-const themeStore = create(set => ({
+export const themeStore = create(set => ({
     theme:<Theme> 'light',
 
     init: () => {
@@ -64,7 +64,7 @@ const themeStore = create(set => ({
     }
 }))
 
-const showFormStore = create<ShowFormShema>( set => ({
+export const showFormStore = create<ShowFormShema>( set => ({
     form: {
         title: 'some title',
         description : 'some description',
@@ -103,4 +103,10 @@ const showFormStore = create<ShowFormShema>( set => ({
     })
 }))
 
-export {userStore, showFormStore, themeStore}
+
+export const useUrl = create<{URL: Partial<URL>}>(() => ({
+    URL: {
+        hostname: "http://127.0.0.1:8001"
+    }
+}))
+
