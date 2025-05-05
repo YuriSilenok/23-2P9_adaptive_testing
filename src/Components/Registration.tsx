@@ -13,7 +13,7 @@ export default function Regisration () {
 
     
     
-    function validity(form: HTMLFormElement):HTMLFormElement | null {
+    function validity(form: HTMLFormElement) {
         const Form = Object.fromEntries(new FormData(form)) as Partial<RegistrationForm>
         if ( !( Form.name && Form.name.length >= 3 ) ) {
             ThrowMsg('name', form)
