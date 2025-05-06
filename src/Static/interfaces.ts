@@ -9,6 +9,15 @@ interface userStoreShema {
     DelUser: Function
 }
 
+export interface RegistrationForm {
+    nickname: string
+    name:string
+    telegram_link: string
+    role: 'student' | 'teacher'
+    password: string
+    password_rp: string
+}
+
 interface userShema {
     nick: string | undefined,
     status: Status,

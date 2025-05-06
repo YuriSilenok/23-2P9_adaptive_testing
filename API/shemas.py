@@ -12,10 +12,10 @@ class Role(str, Enum):
 
 
 class UserBase(BaseModel):
-    username: str = Field("your_username", min_length=3, max_length=50, pattern=r"^[a-zA-Z0-9_]+$")
+    username: str = Field("your_username", min_length=3, max_length=50)
     name: str = Field("your_name", min_length=2, max_length=100)
-    telegram_link: HttpUrl = "https:t.me//example.com/"
-    role: Role = "student_or_teacher"
+    telegram_link: HttpUrl= "https:t.me//example.com/"
+    role: Role = "student"
 
     @field_validator('telegram_link')
     def validate_telegram_link(cls, v):

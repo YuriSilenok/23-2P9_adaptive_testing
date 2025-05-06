@@ -34,6 +34,15 @@
   box-sizing: border-box;
 }
 
+html {
+  background: fixed;
+  position: fixed;
+}
+
+#root {
+  height: 100%;
+}
+
 #main-nav {
   display: flex;
   align-items: center;
@@ -79,7 +88,6 @@ body::after {
   caret-color: #9c108e;
   height: 7.5dvh;
   width: 23.4375dvw;
-  margin: 15px;
   border-radius: 15px;
   border: none;
   font-family: "Courier New", Courier, monospace;
@@ -89,7 +97,23 @@ body::after {
   padding: 20px;
   box-sizing: border-box;
   transition: all 0.7s;
+  position: relative;
   transition: box-shadow 0.3s, transform 0.5s;
+}
+.input + label {
+  visibility: hidden;
+  height: 20px;
+  margin-bottom: 5px;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 700;
+}
+.input.invalid + label {
+  visibility: visible;
+  animation: shake 0.5s;
+  color: red;
+}
+.input:invalid {
+  border: red solid;
 }
 .input::-moz-placeholder {
   color: gray;
@@ -132,7 +156,7 @@ body::after {
   z-index: -1;
   border-radius: 20px;
   transition: 0.4s;
-  filter: blur(5px);
+  filter: blur(3px);
 }
 .main_button::before {
   background: var(--button-background);
@@ -172,6 +196,18 @@ aside {
   margin-top: 0;
   margin-right: 30px;
 }
+aside > * {
+  z-index: 1;
+}
+aside > svg {
+  align-self: center;
+  justify-self: center;
+  margin-left: 10px;
+  transition: transform 0.3s;
+}
+aside > svg:hover {
+  transform: scale(1.2);
+}
 
 #icon {
   margin-top: 5px;
@@ -179,15 +215,21 @@ aside {
   margin-left: 10px;
 }
 
-html {
-  background: fixed;
-  position: fixed;
+.main_radio {
+  scale: 1.5;
 }
 
-#root {
-  height: 100%;
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-5px);
+  }
+  40%, 80% {
+    transform: translateX(5px);
+  }
 }
-
 .auth-container {
   position: absolute;
   display: flex;
@@ -232,9 +274,6 @@ html {
 }
 #auth-form #reg-link:hover {
   transform: scale(1.03);
-}
-#auth-form > input {
-  margin: 15px;
 }
 #auth-form > div > input[type=checkbox] {
   -webkit-appearance: none;
@@ -350,27 +389,68 @@ html {
   height: 100dvh;
   flex-direction: column;
 }
-.registration-container h2 {
+.registration-container dialog[open] {
+  justify-self: center;
+  align-self: center;
+  margin: auto;
+  opacity: 1;
+  border: none;
+  background: none;
+  color: black;
+}
+.registration-container dialog::backdrop {
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+}
+.registration-container #registration-form {
+  display: flex;
+  flex-direction: column;
+  height: -moz-min-content;
+  height: min-content;
+  align-items: center;
+}
+.registration-container #registration-form > .input {
+  text-overflow: ellipsis;
+}
+.registration-container #registration-form legend {
   color: white;
   font-family: "Courier New", Courier, monospace;
   font-size: xx-large;
   font-weight: 600;
 }
-.registration-container #registration-form {
+.registration-container #registration-form fieldset {
   display: flex;
-  flex-direction: column;
-  height: auto;
   align-items: center;
+  background: white;
+  width: 90%;
+  margin-bottom: 20px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 10px;
+  justify-content: center;
 }
-.registration-container #registration-form .input:nth-last-child(2), .registration-container #registration-form :nth-last-child(3) {
+.registration-container #registration-form fieldset legend {
+  color: wheat;
+  width: 154px;
+  height: 20px;
+  font-size: large;
+  position: relative;
+  top: -10px;
+}
+.registration-container #registration-form fieldset div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 70%;
+  position: relative;
+  top: -5px;
+}
+.registration-container #registration-form fieldset div input {
   height: 40px;
-  margin: 10px 0;
 }
-.registration-container #registration-form .input:nth-last-child(2)::-moz-placeholder, .registration-container #registration-form :nth-last-child(3)::-moz-placeholder {
-  font-size: large;
-}
-.registration-container #registration-form .input:nth-last-child(2)::placeholder, .registration-container #registration-form :nth-last-child(3)::placeholder {
-  font-size: large;
+.registration-container #registration-form fieldset div label {
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 600;
 }
 .registration-container #registration-form button {
   margin-top: 8%;

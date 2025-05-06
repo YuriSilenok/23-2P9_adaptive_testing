@@ -97,6 +97,7 @@ async def login_for_access_token(
 
 @router.post("/register")
 async def register(user: UserCreate) -> str:
+    print(user)
     user_data = await create_user(user)
     return user_data
 
