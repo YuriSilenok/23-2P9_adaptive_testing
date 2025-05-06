@@ -24,8 +24,9 @@
     #registration-form 
         display: flex
         flex-direction: column
-        height: auto
+        height: min-content
         align-items: center
+
 
         & > .input
             text-overflow: ellipsis
@@ -37,17 +38,19 @@
             font-weight: 600
     
 
-        & > .input:nth-last-child(2), & > :nth-last-child(3) 
-            height:40px
-            margin: 10px 0
-            &::placeholder 
-                font-size: large
+        // & > .input:nth-last-child(2), & > :nth-last-child(3) 
+        //     height:40px
+        //     margin: 10px 0
+        //     &::placeholder 
+        //         font-size: large
             
         fieldset
             display: flex
             align-items: center 
             background: white
             width: 90%
+            margin-bottom: 20px
+            margin-top: 5px
             border: none
             border-radius: 10px
             justify-content: center

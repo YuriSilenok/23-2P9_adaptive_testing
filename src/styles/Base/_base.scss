@@ -39,7 +39,7 @@ body {
 .input {
   caret-color: #9c108e;
   @include size;
-  margin: 15px;
+  // margin: 15px;
   border-radius: 15px;
   border: none;
   font-family: 'Courier New', Courier, monospace;
@@ -49,19 +49,26 @@ body {
   padding: 20px;
   box-sizing: border-box;
   transition: all .7s;
+  position: relative;
   transition: box-shadow 0.3s, transform 0.5s;
-  
-  & + label.valid_message {
-    display: none;
+
+  & + label {
+    visibility: hidden;
+    height: 20px;
+    margin-bottom: 5px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
   }
 
-  &.invalid {
-    border: red solid;
+  &.invalid + label {
+    visibility:visible;
+    animation: shake .5s;
+    color: red;
+  }
+  
 
-    & + label.valid_message {
-      display: block;
-      animation: shake 0.5s
-    }
+  &:invalid {
+    border: red solid;
   }
 
   &::placeholder {
@@ -141,6 +148,20 @@ aside {
   margin-left: auto;
   margin-top: 0;
   margin-right: 30px;
+  & > * {
+    z-index: 1;
+  }
+
+  & > svg {
+    align-self: center;
+    justify-self: center;
+    margin-left: 10px;
+    transition: transform .3s;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
 }
 
 #icon {
@@ -151,10 +172,6 @@ aside {
 
 .main_radio {
   scale: 1.5;
-}
-
-label.valid_message { 
-  color: red;
 }
 
 @keyframes shake {

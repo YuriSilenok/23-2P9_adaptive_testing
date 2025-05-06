@@ -88,7 +88,6 @@ body::after {
   caret-color: #9c108e;
   height: 7.5dvh;
   width: 23.4375dvw;
-  margin: 15px;
   border-radius: 15px;
   border: none;
   font-family: "Courier New", Courier, monospace;
@@ -98,17 +97,23 @@ body::after {
   padding: 20px;
   box-sizing: border-box;
   transition: all 0.7s;
+  position: relative;
   transition: box-shadow 0.3s, transform 0.5s;
 }
-.input + label.valid_message {
-  display: none;
+.input + label {
+  visibility: hidden;
+  height: 20px;
+  margin-bottom: 5px;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 700;
 }
-.input.invalid {
-  border: red solid;
-}
-.input.invalid + label.valid_message {
-  display: block;
+.input.invalid + label {
+  visibility: visible;
   animation: shake 0.5s;
+  color: red;
+}
+.input:invalid {
+  border: red solid;
 }
 .input::-moz-placeholder {
   color: gray;
@@ -191,6 +196,18 @@ aside {
   margin-top: 0;
   margin-right: 30px;
 }
+aside > * {
+  z-index: 1;
+}
+aside > svg {
+  align-self: center;
+  justify-self: center;
+  margin-left: 10px;
+  transition: transform 0.3s;
+}
+aside > svg:hover {
+  transform: scale(1.2);
+}
 
 #icon {
   margin-top: 5px;
@@ -200,10 +217,6 @@ aside {
 
 .main_radio {
   scale: 1.5;
-}
-
-label.valid_message {
-  color: red;
 }
 
 @keyframes shake {
@@ -261,9 +274,6 @@ label.valid_message {
 }
 #auth-form #reg-link:hover {
   transform: scale(1.03);
-}
-#auth-form > input {
-  margin: 15px;
 }
 #auth-form > div > input[type=checkbox] {
   -webkit-appearance: none;
@@ -395,7 +405,8 @@ label.valid_message {
 .registration-container #registration-form {
   display: flex;
   flex-direction: column;
-  height: auto;
+  height: -moz-min-content;
+  height: min-content;
   align-items: center;
 }
 .registration-container #registration-form > .input {
@@ -407,21 +418,13 @@ label.valid_message {
   font-size: xx-large;
   font-weight: 600;
 }
-.registration-container #registration-form > .input:nth-last-child(2), .registration-container #registration-form > :nth-last-child(3) {
-  height: 40px;
-  margin: 10px 0;
-}
-.registration-container #registration-form > .input:nth-last-child(2)::-moz-placeholder, .registration-container #registration-form > :nth-last-child(3)::-moz-placeholder {
-  font-size: large;
-}
-.registration-container #registration-form > .input:nth-last-child(2)::placeholder, .registration-container #registration-form > :nth-last-child(3)::placeholder {
-  font-size: large;
-}
 .registration-container #registration-form fieldset {
   display: flex;
   align-items: center;
   background: white;
   width: 90%;
+  margin-bottom: 20px;
+  margin-top: 5px;
   border: none;
   border-radius: 10px;
   justify-content: center;

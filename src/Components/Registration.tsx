@@ -3,7 +3,7 @@ import { themeStore, ThrowStore, useUrl } from "../Static/store"
 import axios from "axios"
 import { Form, useNavigate } from "react-router-dom"
 import { RegistrationForm } from "../Static/interfaces"
-import { Input } from "./Base"
+import { Input } from "./BaseElements"
 
 export default function Regisration () {
     const dialog: RefObject<HTMLDialogElement | null> = useRef(null)
@@ -16,7 +16,7 @@ export default function Regisration () {
     function validity(form: HTMLFormElement) {
         const Form = Object.fromEntries(new FormData(form)) as Partial<RegistrationForm>
         if ( !( Form.name && Form.name.length >= 3 ) ) {
-            ThrowMsg('name', form)
+            return 
         }
     }
 
@@ -40,7 +40,7 @@ export default function Regisration () {
         <>
             <section className="registration-container">
                 <Modal ref={dialog} user={user} />
-                <form onSubmit={ (event:FormEvent<HTMLFormElement>) => {event.preventDefault(), dialog.current?.showModal(),validity(event.currentTarget)} } id="registration-form">
+                <form onSubmit={ (event:FormEvent<HTMLFormElement>) => {event.preventDefault(), validity(event.currentTarget)} } id="registration-form">
 
                     <legend>Регистрация</legend>
 
