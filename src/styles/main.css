@@ -16,6 +16,7 @@
   --button-color-light-2: orange;
   --button-background: linear-gradient(90deg, var(--button-color-light-2), var(--button-color-light-1));
   --button-hover-ground: linear-gradient(90deg, var(--button-color-dark-2), var(--button-color-dark-1));
+  --main-color: black;
 }
 
 .theme-dark {
@@ -23,6 +24,7 @@
   --is-theme-light: 0;
   --button-background: linear-gradient(90deg, var(--button-color-dark-2), var(--button-color-dark-1));
   --button-hover-ground: linear-gradient(90deg, var(--button-color-light-1), var(--button-color-light-2));
+  --main-color:white;
 }
 
 * {
@@ -112,7 +114,7 @@ body::after {
   animation: shake 0.5s;
   color: red;
 }
-.input:invalid {
+.input:invalid, .input.invalid {
   border: red solid;
 }
 .input::-moz-placeholder {
@@ -200,6 +202,7 @@ aside > * {
   z-index: 1;
 }
 aside > svg {
+  color: var(--main-color);
   align-self: center;
   justify-self: center;
   margin-left: 10px;
@@ -389,7 +392,7 @@ aside > svg:hover {
   height: 100dvh;
   flex-direction: column;
 }
-.registration-container dialog[open] {
+.registration-container dialog.SuccessfulModal[open] {
   justify-self: center;
   align-self: center;
   margin: auto;
@@ -397,6 +400,76 @@ aside > svg:hover {
   border: none;
   background: none;
   color: black;
+}
+.registration-container dialog.SuccessfulModal[open] p {
+  font-size: x-large;
+  color: white;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.registration-container dialog.SuccessfulModal[open] button {
+  width: 100%;
+}
+.registration-container dialog.SuccessfulModal[open] button:hover {
+  transform: scale(1);
+}
+.registration-container dialog.WaitModal[open] {
+  justify-self: center;
+  align-self: center;
+  opacity: 1;
+  border: none;
+  background: none;
+  color: black;
+  height: 100dvh;
+  align-content: center;
+}
+.registration-container dialog.WaitModal[open] .WaitModal__container {
+  justify-self: center;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.registration-container dialog.WaitModal[open] .WaitModal__container #circle1 {
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  position: relative;
+  left: 185px;
+  border-top: 5px solid darksalmon;
+  animation: rotate 2s infinite ease;
+}
+.registration-container dialog.WaitModal[open] .WaitModal__container #circle2 {
+  height: 170px;
+  width: 170px;
+  border-radius: 50%;
+  border-top: 5px solid red;
+  animation: rotate 1.75s ease infinite;
+}
+.registration-container dialog.WaitModal[open] .WaitModal__container #circle3 {
+  height: 140px;
+  width: 140px;
+  border-radius: 50%;
+  border-top: 5px solid aqua;
+  left: -155px;
+  position: relative;
+  animation: rotate 1.5s ease infinite;
+}
+.registration-container dialog.WaitModal[open] .WaitModal__container #square {
+  height: 50px;
+  width: 50px;
+  background-color: bisque;
+  animation: rotate 1s linear infinite;
+  border-radius: 10px;
+  position: relative;
+  left: -250px;
+}
+@keyframes rotate {
+  to {
+    rotate: 360deg;
+  }
 }
 .registration-container dialog::backdrop {
   -webkit-backdrop-filter: blur(5px);

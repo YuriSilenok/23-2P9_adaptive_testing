@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom"
 import React, { FormEvent, useEffect, useRef } from "react"
 import { Authentification, Identification, Auth } from "../Static/Users"
 import { userStore } from "../Static/store"
-import { Input } from "./BaseElements"
+import { Input } from "../Components/Input"
 
 export default function Autorize () {
 

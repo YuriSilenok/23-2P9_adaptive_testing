@@ -9,7 +9,7 @@
     height: 100dvh
     flex-direction: column
 
-    dialog[open]
+    dialog.SuccessfulModal[open]
         justify-self: center
         align-self: center
         margin: auto
@@ -17,7 +17,86 @@
         border: none
         background: none
         color: black
+
+        p
+            font-size: x-large
+            color: white
+            font-family: 'Courier New', Courier, monospace
+            font-weight: 600
+            text-align: center
+            margin-bottom: 10px
+        
+        button
+            &:hover
+                transform: scale(1)
+            width: 100%    
+
     
+    
+    dialog.WaitModal[open]
+        justify-self: center
+        align-self: center
+        opacity: 1
+        border: none
+        background: none
+        color: black
+        height: 100dvh
+        align-content: center
+        // align-self: center
+        // justify-self: center
+        .WaitModal__container 
+            justify-self: center
+            align-self: center
+            display: flex
+            align-items: center
+            justify-content: center
+            // height: 100dvh
+            #circle1 
+                height: 200px
+                width: 200px
+                border-radius: 50%
+                position: relative
+                left: 185px
+                border-top: 5px solid darksalmon
+                animation: rotate 2s infinite ease
+        
+
+            #circle2 
+                height: 170px
+                width: 170px
+                border-radius: 50%
+                border-top: 5px solid red
+                animation: rotate 1.75s ease infinite
+            
+
+            #circle3 
+                height: 140px
+                width: 140px
+                border-radius: 50%
+                border-top: 5px solid aqua
+                left: -155px
+                position: relative
+                animation: rotate 1.5s ease infinite
+            
+
+            #square 
+                height: 50px
+                width: 50px
+                background-color: bisque
+                animation: rotate 1s linear infinite
+                border-radius: 10px
+                position: relative
+                left: -250px
+            
+            @keyframes rotate 
+                from
+                
+
+                to 
+                    rotate: 360deg
+
+            
+
     dialog::backdrop
         backdrop-filter: blur(5px)
 

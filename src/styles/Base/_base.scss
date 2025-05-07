@@ -62,12 +62,12 @@ body {
 
   &.invalid + label {
     visibility:visible;
-    animation: shake .5s;
+    animation: shake .5s ;
     color: red;
   }
   
 
-  &:invalid {
+  &:invalid, &.invalid {
     border: red solid;
   }
 
@@ -153,6 +153,7 @@ aside {
   }
 
   & > svg {
+    color: var(--main-color);
     align-self: center;
     justify-self: center;
     margin-left: 10px;

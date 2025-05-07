@@ -23,7 +23,7 @@
 
   --button-background: linear-gradient(90deg, var(--button-color-light-2), var(--button-color-light-1));
   --button-hover-ground: linear-gradient(90deg, var(--button-color-dark-2), var(--button-color-dark-1));
-
+  --main-color: black;
 }
 
 .theme-dark {
@@ -32,6 +32,7 @@
 
   --button-background: linear-gradient(90deg, var(--button-color-dark-2), var(--button-color-dark-1));
   --button-hover-ground: linear-gradient(90deg, var(--button-color-light-1), var(--button-color-light-2));
+  --main-color:white;
 }
 
 *{  

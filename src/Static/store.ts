@@ -112,7 +112,10 @@ export const useUrl = create<{URL: Partial<URL>}>(() => ({
 
 export const ThrowStore = create<{ThrowMsg: (name: string, formElement: HTMLFormElement) => void}>( () => ({
     ThrowMsg: function( name: string, formElement: HTMLFormElement ) {
-        const element = formElement.querySelector(`[name=${name}]`)
-        element!.classList.add('invalid')
+        const element: HTMLInputElement = formElement.querySelector(`[name=${name}]`)!
+        element?.classList.remove('invalid')
+        element?.offsetWidth
+        element?.classList.add('invalid')
+        element?.offsetWidth
     }
 }))
