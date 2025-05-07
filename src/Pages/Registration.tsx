@@ -1,61 +1,92 @@
-import React, { DialogHTMLAttributes, FormEvent, Ref, RefObject, useRef, useState } from "react"
+import React, { FormEvent, Ref, RefObject, useRef, useState } from "react"
 import { themeStore, ThrowStore, useUrl } from "../Static/store"
 import axios from "axios"
 import { Form, useNavigate } from "react-router-dom"
 import { RegistrationForm } from "../Static/interfaces"
-import { Input } from "./BaseElements"
+import { Input } from "../Components/Input"
 
 export default function Regisration () {
-    const dialog: RefObject<HTMLDialogElement | null> = useRef(null)
+    const SuccessfulModal: RefObject<HTMLDialogElement | null> = useRef(null)
+    const WaitingModal: RefObject<HTMLDialogElement | null> = useRef(null)
     const user: RefObject<{login: string, password: string}> = useRef({login:'',password:''})
     const {URL} = useUrl()
     const {ThrowMsg} = ThrowStore()
 
     
-    
-    function validity(form: HTMLFormElement) {
+    function validate(form: HTMLFormElement) {
         const Form = Object.entries(Object.fromEntries(new FormData(form)) as Partial<RegistrationForm>)
         let password: string = ''
+        let flag: boolean = true
         for (const [field, value] of Form) {
+            
             if (field === 'password' && value ) {
                 password = value
             } 
 
             if (field === 'repeat' && value) {
                 if (value === password) {
-                    continue
                 } else {
-                    console.log('пароли не совпадают')
-                    ThrowMsg('password', form)
-                    return 
+                    ThrowMsg('repeat', form)
+                    flag = false
+                    continue
                 }
             }
+
+            if (!value || value.length < 3) {
+                ThrowMsg(field, form)
+                flag = false
+                continue
+            }
+
+            
         }
-        console.log(Form)
+        return flag ?  Form : false
     }
-
-
-    async function handleRegistration (event: FormEvent<HTMLFormElement>) {
+    
+    function handleRegistration (event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
-        
-        let data = await fetch(`${URL.hostname}/auth/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            // body: JSON.stringify( form )
-        })
-        switch (data.status) {
-            case 200:
-                dialog.current?.showModal()
+        const validatedForm = validate(event.currentTarget)
+        if (validatedForm) {
+
+            const registrationPromise = new Promise((resolve, reject) => {
+
+                const responce = fetch(`${URL.hostname}/auth/register`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(Object.fromEntries(validatedForm))
+                })
+
+                responce
+                .then((data:Response) => {
+                    data.ok 
+                    ? resolve(data)
+                    : reject(data)
+                })
+                .catch((err:Response) => {alert('Проблемки с интернетом'), reject(err)})
+
+            })
+            registrationPromise
+            .then((data) => {SuccessfulModal.current?.showModal()})
+            .catch((err) => {console.log(err)})
         }
     }
+
 
     return(
         <>
             <section className="registration-container">
-                <Modal ref={dialog} user={user} />
-                <form onSubmit={ (event:FormEvent<HTMLFormElement>) => {event.preventDefault(), validity(event.currentTarget)} } id="registration-form">
+                <Modal ref={SuccessfulModal} user={user} />
+                <dialog ref={WaitingModal} className="WaitModal" >
+                    <div className="WaitModal__container">
+                        <div id="circle1"></div>
+                        <div id="circle2"></div>
+                        <div id="circle3"></div>
+                        <div id="square"></div>
+                    </div> 
+        </dialog>
+                <form onSubmit={ (event:FormEvent<HTMLFormElement>) => { handleRegistration(event) } } id="registration-form">
 
                     <legend>Регистрация</legend>
 
@@ -124,9 +155,9 @@ const Modal = ({ref, user}) => {
 
     return(
         <>
-            <dialog ref={ref}>
-                <p>You Are Registered</p>
-                <button onClick={() => {nav(`/users/autorize?login=${user.current.login}&password=${user.current.password}`)}} >Авторизоваться</button>
+            <dialog className="SuccessfulModal" ref={ref}>
+                <p>Вы зарегистрированы!</p>
+                <button className="main_button" onClick={() => { nav(`/users/autorize?login=${user.current.login}&password=${user.current.password}`)}} >Авторизоваться</button>
             </dialog>
         </>
     )

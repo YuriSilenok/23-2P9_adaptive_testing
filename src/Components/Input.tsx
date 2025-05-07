@@ -11,10 +11,15 @@ export const Input = (props: {name: string, onChange?: Function, max?: number, m
             className="input" 
             onInvalid={e => {
                 e.preventDefault()
+                e.currentTarget.classList.remove('invalid')
+                e.currentTarget.offsetWidth
                 e.currentTarget.classList.add('invalid')
             }}
             placeholder={props.name} 
             onChange={e => {
+                if (props.name === 'password') {
+                    (document.querySelector('[name=repeat]') ?? undefined)?.classList.remove('invalid')
+                }
                 e.currentTarget.classList.remove('invalid')
                 props.onChange 
                     ? props.onChange(e) 

@@ -1,13 +1,13 @@
 import { BrowserRouter, redirect, Route, Routes } from "react-router-dom";
 import FormLayout from "../Layouts/StudentLOUT";
 import MainLOUT from "../Layouts/MainLOUT";
-import Autorize from "../Components/Autorize";
-import Regisration from "../Components/Registration";
+import Autorize from "../Pages/Autorize";
+import Regisration from "../Pages/Registration";
 import MainRedirect from "../Layouts/Redirect";
-import ShowForm from "../Components/Form";
+import ShowForm from "../Pages/Form";
 import { createBrowserHistory } from "history";
 import TeacherLout from "../Layouts/TeacherLOUT";
-import Results from "../Components/Results";
+import Results from "../Pages/Results";
 
 
 export default function RoutePaths () {
