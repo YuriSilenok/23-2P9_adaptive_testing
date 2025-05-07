@@ -67,7 +67,7 @@ body {
   }
   
 
-  &:invalid {
+  &:invalid, &.invalid {
     border: red solid;
   }
 

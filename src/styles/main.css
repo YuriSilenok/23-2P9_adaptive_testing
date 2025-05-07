@@ -112,7 +112,7 @@ body::after {
   animation: shake 0.5s;
   color: red;
 }
-.input:invalid {
+.input:invalid, .input.invalid {
   border: red solid;
 }
 .input::-moz-placeholder {

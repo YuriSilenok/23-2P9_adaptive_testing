@@ -12,7 +12,7 @@ export const Input = (props: {name: string, onChange?: Function, max?: number, m
             onInvalid={e => {
                 e.preventDefault()
                 e.currentTarget.classList.add('invalid')
-            }} 
+            }}
             placeholder={props.name} 
             onChange={e => {
                 e.currentTarget.classList.remove('invalid')

@@ -14,11 +14,26 @@ export default function Regisration () {
     
     
     function validity(form: HTMLFormElement) {
-        const Form = Object.fromEntries(new FormData(form)) as Partial<RegistrationForm>
-        if ( !( Form.name && Form.name.length >= 3 ) ) {
-            return 
+        const Form = Object.entries(Object.fromEntries(new FormData(form)) as Partial<RegistrationForm>)
+        let password: string = ''
+        for (const [field, value] of Form) {
+            if (field === 'password' && value ) {
+                password = value
+            } 
+
+            if (field === 'repeat' && value) {
+                if (value === password) {
+                    continue
+                } else {
+                    console.log('пароли не совпадают')
+                    ThrowMsg('password', form)
+                    return 
+                }
+            }
         }
+        console.log(Form)
     }
+
 
     async function handleRegistration (event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
@@ -48,15 +63,17 @@ export default function Regisration () {
                     name='username' 
                     onChange={(event) => {
                         user.current.login = event.currentTarget.value
-                    }} />                     
+                    }} invalidMessage="Некорректный логин" />
 
                     <Input 
                     name='name' 
-                    onChange={undefined} /> 
+                    onChange={undefined}
+                    invalidMessage="Некорректное имя пользователя" /> 
 
                     <Input 
                     name="telegram_link" 
-                    onChange={undefined} /> 
+                    onChange={undefined}
+                    defaultValue="https://t.me/example-user.com" /> 
 
                     <fieldset>
                         <legend>Выберите роль:</legend>
@@ -92,7 +109,8 @@ export default function Regisration () {
 
                     <Input 
                     name='repeat' 
-                    onChange={undefined} /> 
+                    onChange={undefined}
+                    invalidMessage="Пароли не совпадают" /> 
 
                     <button type='submit' className="main_button">Зарегистрироваться</button>
                 </form>
