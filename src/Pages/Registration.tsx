@@ -1,9 +1,10 @@
-import React, { FormEvent, Ref, RefObject, useRef, useState } from "react"
-import { themeStore, ThrowStore, useUrl } from "../Static/store"
-import axios from "axios"
-import { Form, useNavigate } from "react-router-dom"
+import React from "react"
+import { FormEvent, RefObject, useRef, useState } from "react"
+import { ThrowStore, useUrl } from "../Static/store"
+import { data, Form, useNavigate } from "react-router-dom"
 import { RegistrationForm } from "../Static/interfaces"
 import { Input } from "../Components/Input"
+import { WaitModal } from "../Components/WaitModal"
 
 export default function Regisration () {
     const SuccessfulModal: RefObject<HTMLDialogElement | null> = useRef(null)
@@ -25,6 +26,7 @@ export default function Regisration () {
 
             if (field === 'repeat' && value) {
                 if (value === password) {
+                    continue
                 } else {
                     ThrowMsg('repeat', form)
                     flag = false
@@ -40,36 +42,46 @@ export default function Regisration () {
 
             
         }
-        return flag ?  Form : false
+        return flag ? Form : false
     }
     
-    function handleRegistration (event: FormEvent<HTMLFormElement>) {
+    async function handleRegistration (event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
-        const validatedForm = validate(event.currentTarget)
+        const form = event.currentTarget
+        const validatedForm = validate(form)
         if (validatedForm) {
+                WaitingModal.current?.showModal()
 
-            const registrationPromise = new Promise((resolve, reject) => {
-
-                const responce = fetch(`${URL.hostname}/auth/register`, {
+                await fetch(`${URL.hostname}/auth/register`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify(Object.fromEntries(validatedForm))
                 })
+                .then(responce => {
+                    WaitingModal.current?.close()
 
-                responce
-                .then((data:Response) => {
-                    data.ok 
-                    ? resolve(data)
-                    : reject(data)
+                    if (responce.ok) {
+                        SuccessfulModal.current?.showModal()
+                        return Promise.resolve();
+                    } else {
+                        return responce.json()
+                    }
                 })
-                .catch((err:Response) => {alert('Проблемки с интернетом'), reject(err)})
-
-            })
-            registrationPromise
-            .then((data) => {SuccessfulModal.current?.showModal()})
-            .catch((err) => {console.log(err)})
+                .catch( err => {
+                    setTimeout(function(){alert('что то с интернетом')}, 100)
+                    WaitingModal.current?.close()
+                    
+                })
+                .then( data => {
+                    typeof data.detail == 'object'
+                    ? data.detail[0].loc[1] === 'telegram_link'
+                        ? ThrowMsg('telegram_link', form)
+                        : null
+                    : ThrowMsg('username', form)
+                })
+                
         }
     }
 
@@ -78,15 +90,16 @@ export default function Regisration () {
         <>
             <section className="registration-container">
                 <Modal ref={SuccessfulModal} user={user} />
-                <dialog ref={WaitingModal} className="WaitModal" >
-                    <div className="WaitModal__container">
-                        <div id="circle1"></div>
-                        <div id="circle2"></div>
-                        <div id="circle3"></div>
-                        <div id="square"></div>
-                    </div> 
-        </dialog>
-                <form onSubmit={ (event:FormEvent<HTMLFormElement>) => { handleRegistration(event) } } id="registration-form">
+                <WaitModal ref={WaitingModal} /> 
+
+                <form 
+                onInvalid={
+                    event => {validate(event.currentTarget)}
+                } 
+                onSubmit={
+                    (event:FormEvent<HTMLFormElement>) => { handleRegistration(event) } 
+                } 
+                id="registration-form">
 
                     <legend>Регистрация</legend>
 
@@ -104,7 +117,8 @@ export default function Regisration () {
                     <Input 
                     name="telegram_link" 
                     onChange={undefined}
-                    defaultValue="https://t.me/example-user.com" /> 
+                    defaultValue="https://t.me/example-user.com" 
+                    invalidMessage="Неправильная ссылка"/> 
 
                     <fieldset>
                         <legend>Выберите роль:</legend>
@@ -136,7 +150,8 @@ export default function Regisration () {
                     name='password' 
                     onChange={(event) => {
                         user.current.password = event.currentTarget.value
-                    }} /> 
+                    }}
+                    invalidMessage="Пароль слишком короткий"/> 
 
                     <Input 
                     name='repeat' 

@@ -17,6 +17,10 @@
         border: none
         background: none
         color: black
+        outline: none
+
+        *
+            outline: none
 
         p
             font-size: x-large
@@ -25,32 +29,40 @@
             font-weight: 600
             text-align: center
             margin-bottom: 10px
+            animation: show .6s  
         
         button
             &:hover
                 transform: scale(1)
             width: 100%    
+            opacity: 0
+            animation: show .6s  forwards
+            animation-delay: .1s
 
-    
+    @keyframes show 
+        from 
+            opacity: 0
+        
+        to
+            opacity: 1
     
     dialog.WaitModal[open]
         justify-self: center
         align-self: center
         opacity: 1
+        outline: 0
         border: none
         background: none
         color: black
         height: 100dvh
         align-content: center
-        // align-self: center
-        // justify-self: center
         .WaitModal__container 
             justify-self: center
             align-self: center
             display: flex
             align-items: center
             justify-content: center
-            // height: 100dvh
+
             #circle1 
                 height: 200px
                 width: 200px
@@ -95,8 +107,6 @@
                 to 
                     rotate: 360deg
 
-            
-
     dialog::backdrop
         backdrop-filter: blur(5px)
 
@@ -105,6 +115,9 @@
         flex-direction: column
         height: min-content
         align-items: center
+
+        & > legend 
+            margin-bottom: 10px
 
 
         & > .input
@@ -115,13 +128,7 @@
             font-family: 'Courier New', Courier, monospace
             font-size: xx-large
             font-weight: 600
-    
-
-        // & > .input:nth-last-child(2), & > :nth-last-child(3) 
-        //     height:40px
-        //     margin: 10px 0
-        //     &::placeholder 
-        //         font-size: large
+            
             
         fieldset
             display: flex
