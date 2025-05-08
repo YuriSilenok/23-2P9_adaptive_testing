@@ -106,7 +106,7 @@ export const showFormStore = create<ShowFormShema>( set => ({
 
 export const useUrl = create<{URL: Partial<URL>}>(() => ({
     URL: {
-        hostname: "http://127.0.0.1:8001"
+        hostname: "http://192.168.1.102:8001"
     }
 }))
 
