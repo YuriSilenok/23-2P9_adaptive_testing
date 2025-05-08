@@ -79,14 +79,14 @@ export default function Regisration () {
                     ? data.detail[0].loc[1] === 'telegram_link'
                         ? ThrowMsg('telegram_link', form)
                         : null
-                    : ThrowMsg('username', form)
+                    : ThrowMsg('username', form, true)
                 })
                 
         }
     }
 
 
-    return(
+        return(
         <>
             <section className="registration-container">
                 <Modal ref={SuccessfulModal} user={user} />

@@ -110,8 +110,14 @@ export const useUrl = create<{URL: Partial<URL>}>(() => ({
     }
 }))
 
-export const ThrowStore = create<{ThrowMsg: (name: string, formElement: HTMLFormElement) => void}>( () => ({
-    ThrowMsg: function( name: string, formElement: HTMLFormElement ) {
+export const ThrowStore = create<{ThrowMsg: (name: string, formElement: HTMLFormElement, forName?: boolean ) => void}>( () => ({
+    ThrowMsg: function( name: string, formElement: HTMLFormElement, showAlready?: boolean) {
+        if (name === 'username') {
+            showAlready
+                ? formElement.querySelector(`input[name=${name}] + label`)!.innerHTML = 'Пользователь с данным именем уже существует'
+                : formElement.querySelector(`input[name=${name}] + label`)!.innerHTML = 'Некорректное имя пользователя'
+        }
+        
         const element: HTMLInputElement = formElement.querySelector(`[name=${name}]`)!
         element?.classList.remove('invalid')
         element?.offsetWidth
