@@ -1,30 +1,48 @@
 @charset "UTF-8";
 /* """ main css file """ */
+@property --bg-color-start {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #2e9aff;
+}
+@property --bg-color-stop {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f498ad;
+}
+@property --button-color-start {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: orange;
+}
+@property --button-color-stop {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #4ecdc4;
+}
+@property --button-hover-start {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ff00e6;
+}
+@property --button-hover-stop {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #4400ff;
+}
 :root {
   --top-menu-height: 60px;
-  --is-theme-dark: 0;
-  --is-theme-light: 1;
-  --bg-color-light-1: #2e9aff;
-  --bg-color-light-2: #f498ad;
-  --bg-color-dark-1: rgb(41, 32, 112);
-  --bg-color-dark-2: black;
-  --backdrop-light: linear-gradient(235deg, var(--bg-color-light-1), var(--bg-color-light-2));
-  --backdrop-dark: linear-gradient(235deg, var(--bg-color-dark-1), var(--bg-color-dark-2) );
-  --button-color-dark-1: #4400ff;
-  --button-color-dark-2: #ff00e6;
-  --button-color-light-1: #4ecdc4;
-  --button-color-light-2: orange;
-  --button-background: linear-gradient(90deg, var(--button-color-light-2), var(--button-color-light-1));
-  --button-hover-ground: linear-gradient(90deg, var(--button-color-dark-2), var(--button-color-dark-1));
   --main-color: black;
 }
 
 .theme-dark {
-  --is-theme-dark: 1;
-  --is-theme-light: 0;
-  --button-background: linear-gradient(90deg, var(--button-color-dark-2), var(--button-color-dark-1));
-  --button-hover-ground: linear-gradient(90deg, var(--button-color-light-1), var(--button-color-light-2));
-  --main-color:white;
+  --bg-color-start: rgb(41, 32, 112);
+  --bg-color-stop:black;
+  --button-color-start: #ff00e6;
+  --button-color-stop: #4400ff;
+  --button-hover-start: #ffa500;
+  --button-hover-stop: #4ecdc4;
+  --main-color: #b41fff;
 }
 
 * {
@@ -63,35 +81,17 @@ a {
 body {
   width: 100dvw;
   height: 100dvh;
-}
-body::after, body::before {
-  content: "";
-  top: 0px;
-  left: 0px;
-  margin: 0;
-  padding: 0;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  z-index: -1;
-  transition: opacity 0.4s;
-}
-body::before {
-  opacity: var(--is-theme-dark);
-  background-image: var(--backdrop-dark);
-}
-body::after {
-  opacity: var(--is-theme-light);
-  background-image: var(--backdrop-light);
+  background-image: linear-gradient(235deg, var(--bg-color-start), var(--bg-color-stop));
+  transition: --bg-color-start 0.4s, --bg-color-stop 0.4s;
 }
 
-.input {
+.main_input {
   caret-color: #9c108e;
   height: 7.5dvh;
   width: 23.4375dvw;
-  border-radius: 15px;
-  border: none;
+  border-radius: 10px;
+  border: 2px gray solid;
+  height: 50px;
   font-family: "Courier New", Courier, monospace;
   font-size: x-large;
   font-weight: 550;
@@ -102,33 +102,80 @@ body::after {
   position: relative;
   transition: box-shadow 0.3s, transform 0.5s;
 }
-.input + label {
+.main_input + label {
   visibility: hidden;
   height: 20px;
   margin-bottom: 5px;
   font-family: "Courier New", Courier, monospace;
   font-weight: 700;
 }
-.input.invalid + label {
+.main_input.invalid + label {
   visibility: visible;
   animation: shake 0.5s;
   color: red;
 }
-.input:invalid, .input.invalid {
-  border: red solid;
+.main_input:invalid, .main_input.invalid {
+  border: 2px red solid;
 }
-.input::-moz-placeholder {
+.main_input::-moz-placeholder {
   color: gray;
 }
-.input::placeholder {
+.main_input::placeholder {
   color: gray;
 }
-.input:focus {
+.main_input:focus {
   outline: none;
   transform: scale(1.05);
 }
-.input:hover {
+.main_input:hover {
   transform: scale(1.05);
+}
+
+.pretty_input {
+  caret-color: #9c108e;
+  height: 7.5dvh;
+  width: 23.4375dvw;
+  border-radius: 10px;
+  border: 2px gray solid;
+  height: 50px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: x-large;
+  font-weight: 550;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: all 0.7s;
+  position: relative;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+.pretty_input + label {
+  visibility: hidden;
+  height: 20px;
+  margin-bottom: 5px;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 700;
+}
+.pretty_input.invalid + label {
+  visibility: visible;
+  animation: shake 0.5s;
+  color: red;
+}
+.pretty_input:invalid, .pretty_input.invalid {
+  border: 2px red solid;
+}
+.pretty_input::-moz-placeholder {
+  font-size: large;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  color: gray;
+}
+.pretty_input::placeholder {
+  font-size: large;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  color: gray;
+}
+.pretty_input:focus, .pretty_input:hover {
+  outline: none;
+  transform: translate(-2px, -2px);
+  box-shadow: 2px 2px 0 var(--main-color);
 }
 
 .main_button {
@@ -142,11 +189,11 @@ body::after {
   font-family: "Courier New", Courier, monospace;
   font-size: larger;
   position: relative;
-  background-color: rgba(255, 255, 255, 0.185);
   transition: all 0.4s ease;
   scale: 1;
+  transition: scale 0.4s, --button-color-start 0.4s, --button-color-stop 0.4s;
 }
-.main_button::before, .main_button::after {
+.main_button::before {
   content: "";
   top: 0px;
   left: 0px;
@@ -156,29 +203,51 @@ body::after {
   width: 100%;
   height: 100%;
   z-index: -1;
+  background-image: linear-gradient(90deg, var(--button-color-start), var(--button-color-stop));
   border-radius: 20px;
-  transition: 0.4s;
-  filter: blur(3px);
-}
-.main_button::before {
-  background: var(--button-background);
-  -webkit-clip-path: view-box;
-          clip-path: view-box;
-  opacity: 1;
-}
-.main_button::after {
-  background: var(--button-hover-ground);
-  opacity: 0;
+  filter: blur(5px);
 }
 .main_button:hover {
-  transform: scale(1.08);
-  border-color: rgba(255, 255, 255, 0);
+  scale: 1.05;
+  --button-color-start: var(--button-hover-start);
+  --button-color-stop: var(--button-hover-stop);
 }
-.main_button:hover::before {
-  opacity: 0;
+
+.pretty_button {
+  outline: 0;
+  grid-gap: 8px;
+  align-items: center;
+  background-image: linear-gradient(90deg, var(--button-color-start), var(--button-color-stop));
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 8px;
+  border: solid;
+  cursor: pointer;
+  display: inline-flex;
+  flex-shrink: 0;
+  font-size: 16px;
+  gap: 8px;
+  justify-content: center;
+  line-height: 1.5;
+  overflow: hidden;
+  padding: 12px 16px;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: all 0.14s, --button-color-start 0.2s, --button-color-stop 0.2s;
 }
-.main_button:hover::after {
-  opacity: 1;
+.pretty_button:hover {
+  box-shadow: 4px 4px 0 #000;
+  transform: translate(-4px, -4px);
+  --button-color-start: var(--button-hover-start);
+  --button-color-stop: var(--button-hover-stop);
+}
+.pretty_button:active {
+  box-shadow: 2px 2px 0 #000;
+  transform: translate(-2px, -2px);
+}
+.pretty_button :focus-visible {
+  outline-offset: 1px;
 }
 
 .studentpage {
@@ -499,8 +568,7 @@ aside > svg:hover {
   width: 90dvw;
   display: flex;
   flex-direction: column;
-  height: -moz-min-content;
-  height: min-content;
+  height: 600px;
   align-items: center;
 }
 .registration-container #registration-form > legend {

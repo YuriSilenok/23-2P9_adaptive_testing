@@ -104,17 +104,20 @@ export default function Regisration () {
                     <legend>Регистрация</legend>
 
                     <Input 
+                    isPretty
                     name='username' 
                     onChange={(event) => {
                         user.current.login = event.currentTarget.value
                     }} invalidMessage="Некорректный логин" />
 
                     <Input 
+                    isPretty
                     name='name' 
                     onChange={undefined}
                     invalidMessage="Некорректное имя пользователя" /> 
 
                     <Input 
+                    isPretty
                     name="telegram_link" 
                     onChange={undefined}
                     defaultValue="https://t.me/example-user.com" 
@@ -147,13 +150,15 @@ export default function Regisration () {
                     </fieldset>
 
                     <Input 
+                    isPretty
                     name='password' 
                     onChange={(event) => {
                         user.current.password = event.currentTarget.value
                     }}
                     invalidMessage="Пароль слишком короткий"/> 
 
-                    <Input 
+                    <Input
+                    isPretty
                     name='repeat' 
                     onChange={undefined}
                     invalidMessage="Пароли не совпадают" /> 

@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler } from "react"
 
-export const Input = (props: {name: string, onChange?: Function, max?: number, min?: number, defaultValue?: string, invalidMessage?:string}) => {
+export const Input = (props: {name: string, onChange?: Function, max?: number, min?: number, defaultValue?: string, invalidMessage?:string, isPretty?: boolean}) => {
     return(<>
             <input 
             type="text" 
@@ -8,7 +8,7 @@ export const Input = (props: {name: string, onChange?: Function, max?: number, m
             minLength={props.min ?? 3} 
             name={props.name}
             defaultValue={props.defaultValue} 
-            className="input" 
+            className={props.isPretty ? 'pretty_input' : 'main_input'}
             onInvalid={e => {
                 e.preventDefault()
                 e.currentTarget.classList.remove('invalid')
