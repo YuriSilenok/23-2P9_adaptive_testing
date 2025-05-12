@@ -124,7 +124,7 @@ export default function Regisration () {
                     invalidMessage="Неправильная ссылка"/> 
 
                     <fieldset>
-                        <legend>Выберите роль:</legend>
+                        {/* <legend>Выберите роль:</legend>   */}
 
                         <div>
                             <input type="radio" checked
@@ -163,7 +163,7 @@ export default function Regisration () {
                     onChange={undefined}
                     invalidMessage="Пароли не совпадают" /> 
 
-                    <button type='submit' className="main_button">Зарегистрироваться</button>
+                    <button type='submit' className="pretty_button">Зарегистрироваться</button>
                 </form>
             </section>
         </>
@@ -175,7 +175,7 @@ const Modal = ({ref, user}) => {
 
     return(
         <>
-            <dialog className="SuccessfulModal" ref={ref}>
+            <dialog className="SuccessfulModal"  ref={ref}>
                 <p>Вы зарегистрированы!</p>
                 <button className="main_button" onClick={() => { nav(`/users/autorize?login=${user.current.login}&password=${user.current.password}`)}} >Авторизоваться</button>
             </dialog>

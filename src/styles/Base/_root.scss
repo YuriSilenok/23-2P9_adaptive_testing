@@ -10,7 +10,7 @@ initial-value: #2e9aff;
 @property --bg-color-stop {
 syntax: '<color>';
 inherits: true;
-initial-value: #f498ad;
+initial-value: #ff8aa5;
 }
 
 @property --button-color-start {
@@ -28,7 +28,7 @@ initial-value: #f498ad;
 @property --button-hover-start {
   syntax: '<color>';
   inherits: true;
-  initial-value: #ff00e6;
+  initial-value: #ff3eec;
 }
 
 @property --button-hover-stop {
@@ -37,9 +37,14 @@ initial-value: #f498ad;
   initial-value: #4400ff;
 }
 
+@property --main-color {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: black;
+}
+
 :root {
   --top-menu-height: 60px;
-  --main-color: black;
 }
 
 .theme-dark {
@@ -47,9 +52,9 @@ initial-value: #f498ad;
   --bg-color-stop:black;  
   --button-color-start: #ff00e6;
   --button-color-stop: #4400ff;
-  --button-hover-start: #ffa500;
-  --button-hover-stop: #4ecdc4;
-  --main-color: #b41fff;
+  --button-hover-start:#23a085; 
+  --button-hover-stop: #ffa500;
+  --main-color: #ff1fce;
 }
 
 *{  

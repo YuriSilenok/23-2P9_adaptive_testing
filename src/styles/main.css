@@ -8,7 +8,7 @@
 @property --bg-color-stop {
   syntax: "<color>";
   inherits: true;
-  initial-value: #f498ad;
+  initial-value: #ff8aa5;
 }
 @property --button-color-start {
   syntax: "<color>";
@@ -23,16 +23,20 @@
 @property --button-hover-start {
   syntax: "<color>";
   inherits: true;
-  initial-value: #ff00e6;
+  initial-value: #ff3eec;
 }
 @property --button-hover-stop {
   syntax: "<color>";
   inherits: true;
   initial-value: #4400ff;
 }
+@property --main-color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: black;
+}
 :root {
   --top-menu-height: 60px;
-  --main-color: black;
 }
 
 .theme-dark {
@@ -40,9 +44,9 @@
   --bg-color-stop:black;
   --button-color-start: #ff00e6;
   --button-color-stop: #4400ff;
-  --button-hover-start: #ffa500;
-  --button-hover-stop: #4ecdc4;
-  --main-color: #b41fff;
+  --button-hover-start:#23a085;
+  --button-hover-stop: #ffa500;
+  --main-color: #ff1fce;
 }
 
 * {
@@ -70,6 +74,7 @@ html {
   position: relative;
   top: 0;
   left: 0;
+  border-bottom: 2px black dashed;
 }
 
 a {
@@ -136,7 +141,7 @@ body {
   height: 7.5dvh;
   width: 23.4375dvw;
   border-radius: 10px;
-  border: 2px gray solid;
+  border: 2px black solid;
   height: 50px;
   font-family: "Courier New", Courier, monospace;
   font-size: x-large;
@@ -178,13 +183,13 @@ body {
 .pretty_input:focus, .pretty_input:hover {
   outline: none;
   transform: translate(-2px, -2px);
-  box-shadow: 2px 2px 0 var(--main-color);
+  box-shadow: 2px 2px 0 black;
 }
 .pretty_input:focus::-moz-placeholder, .pretty_input:hover::-moz-placeholder {
-  transform: translate(10px) scale(1.1);
+  transform: translate(4px) scale(1.05);
 }
 .pretty_input:focus::placeholder, .pretty_input:hover::placeholder {
-  transform: translate(10px) scale(1.1);
+  transform: translate(4px) scale(1.05);
 }
 .pretty_input:invalid:focus, .pretty_input:invalid:hover {
   --main-color: red;
@@ -194,14 +199,14 @@ body {
   height: 7.5dvh;
   width: 23.4375dvw;
   height: 40px;
-  border: solid 1px wheat;
+  border: solid 2px wheat;
   border-radius: 20px;
   color: white;
   font-weight: 700;
   font-family: "Courier New", Courier, monospace;
   font-size: larger;
   position: relative;
-  background-color: rgba(255, 255, 255, 0.185);
+  background-color: rgb(197, 172, 172);
   transition: all 0.4s ease;
   scale: 1;
   transition: scale 0.4s, --button-color-start 0.4s, --button-color-stop 0.4s;
@@ -218,7 +223,6 @@ body {
   z-index: -1;
   background-image: linear-gradient(90deg, var(--button-color-start), var(--button-color-stop));
   border-radius: 20px;
-  filter: blur(10px);
   -webkit-clip-path: view-box;
           clip-path: view-box;
 }
@@ -233,19 +237,20 @@ body {
   grid-gap: 8px;
   align-items: center;
   background-image: linear-gradient(90deg, var(--button-color-start), var(--button-color-stop));
-  color: #000;
-  border: 1px solid #000;
+  color: white;
+  border: 2px solid black;
   border-radius: 8px;
-  border: solid;
   cursor: pointer;
   display: inline-flex;
   flex-shrink: 0;
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI";
   gap: 8px;
   justify-content: center;
   line-height: 1.5;
   overflow: hidden;
-  padding: 12px 16px;
+  padding: 10px 16px;
   text-decoration: none;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -317,7 +322,7 @@ aside > svg:hover {
     transform: translateX(5px);
   }
 }
-.auth-container {
+section.auth-container {
   position: absolute;
   display: flex;
   align-items: center;
@@ -326,43 +331,55 @@ aside > svg:hover {
   justify-content: center;
   flex-direction: column;
 }
-.auth-container > h2 {
-  margin-bottom: 20px;
+section.auth-container form#auth-form {
+  width: 90dvw;
+  display: flex;
+  flex-direction: column;
+  height: 510px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 500px;
+  padding: 10px;
+  background: url(/bg-01.jpg);
+  border-radius: 20px;
+  border: 2px black solid;
+  box-shadow: 5px 5px 0 var(--main-color);
+  transition: --main-color 0.4s 0.2s;
+}
+section.auth-container form#auth-form > legend {
+  margin-bottom: 25px;
+  text-align: center;
+  width: 55%;
+  border-bottom: 3px black dashed;
+  color: white;
   font-family: "Courier New", Courier, monospace;
   font-size: xx-large;
   font-weight: 600;
-  color: white;
-  transition: color 0.5s;
 }
-
-#auth-form {
-  padding-bottom: 15px;
-  border-radius: 20px;
+section.auth-container form#auth-form > .pretty_input {
+  text-overflow: ellipsis;
+  width: 70%;
+}
+section.auth-container form#auth-form > button {
+  margin-top: 15px;
+  width: 280px;
+}
+section.auth-container form#auth-form > #checkbox-container {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  height: -moz-fit-content;
-  height: fit-content;
+  padding: 10px;
+  margin-bottom: 10px;
+  gap: 10px;
 }
-#auth-form #reg-link {
-  cursor: pointer;
-  margin-top: 10px;
-  text-align: center;
+section.auth-container form#auth-form > #checkbox-container > label {
+  transition: color 0.7s;
   color: white;
-  -webkit-text-decoration: dotted;
-          text-decoration: dotted;
-  transition: all 0.2s;
-}
-#auth-form #reg-link > span {
-  font-weight: 1000;
-  color: wheat;
   font-family: "Courier New", Courier, monospace;
+  font-weight: 800;
 }
-#auth-form #reg-link:hover {
-  transform: scale(1.03);
-}
-#auth-form > div > input[type=checkbox] {
+section.auth-container form#auth-form > #checkbox-container > input[type=checkbox] {
+  transition: transform 0.3s;
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
@@ -374,11 +391,11 @@ aside > svg:hover {
   position: relative;
   border-color: white;
 }
-#auth-form > div > input[type=checkbox]:checked {
+section.auth-container form#auth-form > #checkbox-container > input[type=checkbox]:checked {
   background-color: #4CAF50;
   border-color: #4CAF50;
 }
-#auth-form > div > input[type=checkbox]:checked::before {
+section.auth-container form#auth-form > #checkbox-container > input[type=checkbox]:checked::before {
   content: "✓";
   color: white;
   font-size: 14px;
@@ -387,24 +404,28 @@ aside > svg:hover {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-#auth-form > #checkbox-container {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  margin-bottom: 10px;
-  gap: 10px;
-}
-#auth-form > #checkbox-container > input[type=checkbox] {
-  transition: transform 0.3s;
-}
-#auth-form > #checkbox-container > input[type=checkbox]:hover {
+section.auth-container form#auth-form > #checkbox-container > input[type=checkbox]:hover {
   transform: scale(1.09);
 }
-#auth-form > #checkbox-container > label {
-  transition: color 0.7s;
+section.auth-container #reg-link {
+  cursor: pointer;
+  margin-top: 30px;
+  text-align: center;
+  padding: 5px;
   color: white;
+  -webkit-text-decoration: dotted;
+          text-decoration: dotted;
+  transition: all 0.2s;
+  border-top: 2px dashed black;
+  border-bottom: 2px dashed black;
+}
+section.auth-container #reg-link > span {
+  font-weight: 1000;
+  color: wheat;
   font-family: "Courier New", Courier, monospace;
-  font-weight: 800;
+}
+section.auth-container #reg-link:hover {
+  transform: scale(1.03);
 }
 
 .switcher {
@@ -585,15 +606,26 @@ aside > svg:hover {
   width: 90dvw;
   display: flex;
   flex-direction: column;
-  height: 600px;
+  height: 610px;
   align-items: center;
   position: relative;
+  width: 500px;
+  padding: 10px;
+  background: url(/bg-01.jpg);
+  border-radius: 20px;
+  border: 2px black solid;
+  box-shadow: 5px 5px 0 var(--main-color);
+  transition: --main-color 0.4s 0.2s;
 }
 .registration-container #registration-form > legend {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  width: 55%;
+  border-bottom: 3px black dashed;
 }
-.registration-container #registration-form > .pretty_input {
+.registration-container #registration-form > .pretty_input, .registration-container #registration-form > fieldset {
   text-overflow: ellipsis;
+  width: 70%;
 }
 .registration-container #registration-form > .input[name=password], .registration-container #registration-form > .input[name=repeat] {
   width: 20.8333333333dvw;
@@ -606,32 +638,21 @@ aside > svg:hover {
   font-weight: 600;
 }
 .registration-container #registration-form fieldset {
+  border: 2px black solid;
   display: flex;
   align-items: center;
   background: white;
-  width: 25dvw;
-  width: 23.4375dvw;
   margin-bottom: 20px;
   margin-top: 5px;
-  border: none;
   border-radius: 10px;
   justify-content: center;
-}
-.registration-container #registration-form fieldset legend {
-  color: wheat;
-  width: 154px;
-  height: 20px;
-  font-size: large;
-  position: relative;
-  top: -10px;
 }
 .registration-container #registration-form fieldset div {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 70%;
   position: relative;
-  top: -5px;
 }
 .registration-container #registration-form fieldset div input {
   height: 40px;
@@ -641,7 +662,7 @@ aside > svg:hover {
   font-weight: 600;
 }
 .registration-container #registration-form button {
-  margin-top: 30px;
+  margin-top: 15px;
   width: 280px;
 }
 

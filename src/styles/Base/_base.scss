@@ -9,6 +9,7 @@
   position: relative;
   top: 0;
   left: 0;  
+  border-bottom: 2px black dashed;
 } 
 
 a {
@@ -85,7 +86,7 @@ body {
   caret-color: #9c108e;
   @include size;
   border-radius: 10px;
-  border: 2px gray solid;
+  border: 2px black solid;
   height: 50px;
   font-family: 'Courier New', Courier, monospace;
   font-size: x-large;
@@ -125,12 +126,12 @@ body {
   &:focus, &:hover {
 
     &::placeholder {
-      transform: translate(10px) scale(1.1);
+      transform: translate(4px) scale(1.05);
     }
 
     outline: none;
     transform: translate(-2px, -2px);
-    box-shadow: 2px 2px 0 var(--main-color);
+    box-shadow: 2px 2px 0 black;
   }
   &:invalid {
     &:focus, &:hover {
@@ -142,14 +143,14 @@ body {
 .main_button {
   @include size;
   height: 40px;
-  border: solid 1px wheat ;
+  border: solid 2px wheat ;
   border-radius: 20px;
   color: white;
   font-weight: 700;
   font-family: 'Courier New', Courier, monospace;
   font-size: larger;
   position: relative;
-  background-color: rgba(255, 255, 255, 0.185);
+  background-color: rgb(197, 172, 172);
   transition: all 0.4s ease;
   scale: 1;
 
@@ -161,7 +162,7 @@ body {
     var(--button-color-stop)
     );
     border-radius: 20px;
-    filter: blur(10px);
+    // filter: blur(10px);
     clip-path: view-box;
   }
 
@@ -186,19 +187,20 @@ body {
     var(--button-color-start), 
     var(--button-color-stop)
     );
-  color: #000;
-  border: 1px solid #000;
+  color: white;
+  border: 2px solid black;
   border-radius: 8px;
-  border:  solid;
   cursor: pointer;
   display: inline-flex;
   flex-shrink: 0;
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI';
   gap: 8px;
   justify-content: center;
   line-height: 1.5;
   overflow: hidden;
-  padding: 12px 16px;
+  padding: 10px 16px;
   text-decoration: none;
   text-overflow: ellipsis;
   white-space: nowrap;

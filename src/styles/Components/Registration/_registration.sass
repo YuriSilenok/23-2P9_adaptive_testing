@@ -119,16 +119,29 @@
         width: 90dvw
         display: flex
         flex-direction: column
-        height: 600px
+        height: 610px
         align-items: center
         position: relative
+        width: 500px
+        padding: 10px
+        // background-image: linear-gradient(930deg,  var(--button-hover-start), var(--bg-color-start))
+        // transition: --button-hover-start 0.4s, --bg-color-start .1s
+        background: url(/bg-01.jpg)
+        border-radius: 20px
+        border: 2px black solid
+        box-shadow: 5px 5px 0 var(--main-color) 
+        transition: --main-color .4s .2s
 
         & > legend 
-            margin-bottom: 15px
+            margin-bottom: 20px
+            text-align: center
+            width: 55%
+            border-bottom: 3px black dashed
 
 
-        & > .pretty_input
+        & > .pretty_input ,& > fieldset
             text-overflow: ellipsis
+            width: 70%
 
         
         & > .input[name=password], & > .input[name=repeat]
@@ -143,34 +156,21 @@
             
             
         fieldset
+            border: 2px black solid
             display: flex
             align-items: center 
             background: white
-            width: 25dvw
-            width: pxw(450)
             margin-bottom: 20px
             margin-top: 5px
-            border: none
             border-radius: 10px
             justify-content: center
-
-            legend
-                color: wheat
-                width: 154px
-                height: 20px
-                font-size: large
-                position: relative
-                // color: gray
-                top: -10px
-                // left: calc(50% - 77px)
             
             div
                 display: flex
                 align-items: center
-                justify-content: space-between
+                justify-content: space-around
                 width: 70%
                 position: relative
-                top: -5px
 
                 input
                     height: 40px
@@ -181,6 +181,6 @@
 
 
         button 
-            margin-top: 30px
+            margin-top: 15px
             width:280px
 
