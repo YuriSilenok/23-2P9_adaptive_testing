@@ -208,17 +208,23 @@ body {
     all .14s,
     --button-color-start .2s,
     --button-color-stop .2s;
+
+  &:focus {
+      box-shadow: 2px 2px 0 #000;
+      transform: translate(-2px,-2px);
+  }
+
   &:hover {
       box-shadow: 4px 4px 0 #000;
       transform: translate(-4px,-4px);
       --button-color-start: var(--button-hover-start);
-    --button-color-stop: var(--button-hover-stop);
+      --button-color-stop: var(--button-hover-stop);
+      &:active {
+        box-shadow: 2px 2px 0 #000;
+        transform: translate(-2px,-2px);
+      }
   }
-  &:active {
-      box-shadow: 2px 2px 0 #000;
-      transform: translate(-2px,-2px);
 
-  }
   :focus-visible{
       outline-offset: 1px;
   }

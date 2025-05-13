@@ -44,7 +44,7 @@
   --bg-color-stop:black;
   --button-color-start: #ff00e6;
   --button-color-stop: #4400ff;
-  --button-hover-start:#23a085;
+  --button-hover-start:#19eec0;
   --button-hover-stop: #ffa500;
   --main-color: #ff1fce;
 }
@@ -256,13 +256,17 @@ body {
   white-space: nowrap;
   transition: all 0.14s, --button-color-start 0.2s, --button-color-stop 0.2s;
 }
+.pretty_button:focus {
+  box-shadow: 2px 2px 0 #000;
+  transform: translate(-2px, -2px);
+}
 .pretty_button:hover {
   box-shadow: 4px 4px 0 #000;
   transform: translate(-4px, -4px);
   --button-color-start: var(--button-hover-start);
   --button-color-stop: var(--button-hover-stop);
 }
-.pretty_button:active {
+.pretty_button:hover:active {
   box-shadow: 2px 2px 0 #000;
   transform: translate(-2px, -2px);
 }
@@ -322,376 +326,6 @@ aside > svg:hover {
     transform: translateX(5px);
   }
 }
-section.auth-container {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-  justify-content: center;
-  flex-direction: column;
-}
-section.auth-container form#auth-form {
-  width: 90dvw;
-  display: flex;
-  flex-direction: column;
-  height: 510px;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  width: 500px;
-  padding: 10px;
-  background: url(/bg-01.jpg);
-  border-radius: 20px;
-  border: 2px black solid;
-  box-shadow: 5px 5px 0 var(--main-color);
-  transition: --main-color 0.4s 0.2s;
-}
-section.auth-container form#auth-form > legend {
-  margin-bottom: 25px;
-  text-align: center;
-  width: 55%;
-  border-bottom: 3px black dashed;
-  color: white;
-  font-family: "Courier New", Courier, monospace;
-  font-size: xx-large;
-  font-weight: 600;
-}
-section.auth-container form#auth-form > .pretty_input {
-  text-overflow: ellipsis;
-  width: 70%;
-}
-section.auth-container form#auth-form > button {
-  margin-top: 15px;
-  width: 280px;
-}
-section.auth-container form#auth-form > #checkbox-container {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  margin-bottom: 10px;
-  gap: 10px;
-}
-section.auth-container form#auth-form > #checkbox-container > label {
-  transition: color 0.7s;
-  color: white;
-  font-family: "Courier New", Courier, monospace;
-  font-weight: 800;
-}
-section.auth-container form#auth-form > #checkbox-container > input[type=checkbox] {
-  transition: transform 0.3s;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #555;
-  border-radius: 4px;
-  cursor: pointer;
-  position: relative;
-  border-color: white;
-}
-section.auth-container form#auth-form > #checkbox-container > input[type=checkbox]:checked {
-  background-color: #4CAF50;
-  border-color: #4CAF50;
-}
-section.auth-container form#auth-form > #checkbox-container > input[type=checkbox]:checked::before {
-  content: "✓";
-  color: white;
-  font-size: 14px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-section.auth-container form#auth-form > #checkbox-container > input[type=checkbox]:hover {
-  transform: scale(1.09);
-}
-section.auth-container #reg-link {
-  cursor: pointer;
-  margin-top: 30px;
-  text-align: center;
-  padding: 5px;
-  color: white;
-  -webkit-text-decoration: dotted;
-          text-decoration: dotted;
-  transition: all 0.2s;
-  border-top: 2px dashed black;
-  border-bottom: 2px dashed black;
-}
-section.auth-container #reg-link > span {
-  font-weight: 1000;
-  color: wheat;
-  font-family: "Courier New", Courier, monospace;
-}
-section.auth-container #reg-link:hover {
-  transform: scale(1.03);
-}
-
-.switcher {
-  position: relative;
-  display: flex;
-  width: 90px;
-  height: 40px;
-  border-radius: 20px;
-  align-items: center;
-  justify-content: space-evenly;
-  transition: 0.7s;
-  z-index: 1;
-}
-.switcher::after, .switcher::before {
-  content: "";
-  z-index: -1;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  border-radius: 20px;
-  transition: opacity 0.5s;
-}
-.switcher::before {
-  opacity: 1;
-  background-image: url("/public/Night.jpg");
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-}
-.switcher::after {
-  opacity: 0;
-  background-image: url("/public/Day.jpeg");
-  background-repeat: no-repeat;
-  background-size: 100% 110%;
-  background-position-y: -4px;
-}
-
-.switcher-circle {
-  transition: 0.5s;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  position: relative;
-  left: 0;
-}
-
-.circle {
-  background-color: rgb(45, 38, 56);
-  z-index: 2;
-}
-
-.switcher-on > div.circle {
-  left: 45%;
-  background-color: #f5d5b0;
-}
-
-.switcher-on::after {
-  opacity: 1;
-}
-.switcher-on::before {
-  opacity: 0;
-}
-
-.registration-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  width: 100dvw;
-  height: 100dvh;
-  flex-direction: column;
-}
-.registration-container dialog.SuccessfulModal[open] {
-  justify-self: center;
-  align-self: center;
-  justify-items: center;
-  align-items: center;
-  margin: auto;
-  opacity: 1;
-  border: none;
-  background: none;
-  color: black;
-  outline: none;
-  width: 300px;
-  height: 85px;
-}
-.registration-container dialog.SuccessfulModal[open] * {
-  outline: none;
-}
-.registration-container dialog.SuccessfulModal[open] p {
-  font-size: x-large;
-  color: white;
-  font-family: "Courier New", Courier, monospace;
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 10px;
-  height: 30px;
-  animation: show 0.6s;
-}
-.registration-container dialog.SuccessfulModal[open] button {
-  width: 250px;
-  opacity: 0;
-  animation: show 0.6s forwards;
-  animation-delay: 0.1s;
-}
-.registration-container dialog.SuccessfulModal[open] button:hover, .registration-container dialog.SuccessfulModal[open] button:hover::before, .registration-container dialog.SuccessfulModal[open] button:hover::after {
-  transform: scale(1);
-}
-@keyframes show {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-.registration-container dialog.WaitModal[open] {
-  justify-self: center;
-  align-self: center;
-  opacity: 1;
-  outline: 0;
-  border: none;
-  background: none;
-  color: black;
-  height: 100dvh;
-  align-content: center;
-}
-.registration-container dialog.WaitModal[open] .WaitModal__container {
-  justify-self: center;
-  align-self: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.registration-container dialog.WaitModal[open] .WaitModal__container #circle1 {
-  height: 200px;
-  width: 200px;
-  border-radius: 50%;
-  position: relative;
-  left: 185px;
-  border-top: 5px solid darksalmon;
-  animation: rotate 2s infinite ease;
-}
-.registration-container dialog.WaitModal[open] .WaitModal__container #circle2 {
-  height: 170px;
-  width: 170px;
-  border-radius: 50%;
-  border-top: 5px solid red;
-  animation: rotate 1.75s ease infinite;
-}
-.registration-container dialog.WaitModal[open] .WaitModal__container #circle3 {
-  height: 140px;
-  width: 140px;
-  border-radius: 50%;
-  border-top: 5px solid aqua;
-  left: -155px;
-  position: relative;
-  animation: rotate 1.5s ease infinite;
-}
-.registration-container dialog.WaitModal[open] .WaitModal__container #square {
-  height: 50px;
-  width: 50px;
-  background-color: bisque;
-  animation: rotate 1s linear infinite;
-  border-radius: 10px;
-  position: relative;
-  left: -250px;
-}
-@keyframes rotate {
-  to {
-    rotate: 360deg;
-  }
-}
-.registration-container dialog::backdrop {
-  -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px);
-}
-.registration-container #registration-form {
-  width: 90dvw;
-  display: flex;
-  flex-direction: column;
-  height: 610px;
-  align-items: center;
-  position: relative;
-  width: 500px;
-  padding: 10px;
-  background: url(/bg-01.jpg);
-  border-radius: 20px;
-  border: 2px black solid;
-  box-shadow: 5px 5px 0 var(--main-color);
-  transition: --main-color 0.4s 0.2s;
-}
-.registration-container #registration-form > legend {
-  margin-bottom: 20px;
-  text-align: center;
-  width: 55%;
-  border-bottom: 3px black dashed;
-}
-.registration-container #registration-form > .pretty_input, .registration-container #registration-form > fieldset {
-  text-overflow: ellipsis;
-  width: 70%;
-}
-.registration-container #registration-form > .input[name=password], .registration-container #registration-form > .input[name=repeat] {
-  width: 20.8333333333dvw;
-  height: 40px;
-}
-.registration-container #registration-form legend {
-  color: white;
-  font-family: "Courier New", Courier, monospace;
-  font-size: xx-large;
-  font-weight: 600;
-}
-.registration-container #registration-form fieldset {
-  border: 2px black solid;
-  display: flex;
-  align-items: center;
-  background: white;
-  margin-bottom: 20px;
-  margin-top: 5px;
-  border-radius: 10px;
-  justify-content: center;
-}
-.registration-container #registration-form fieldset div {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  width: 70%;
-  position: relative;
-}
-.registration-container #registration-form fieldset div input {
-  height: 40px;
-}
-.registration-container #registration-form fieldset div label {
-  font-family: "Courier New", Courier, monospace;
-  font-weight: 600;
-}
-.registration-container #registration-form button {
-  margin-top: 15px;
-  width: 280px;
-}
-
-.show-form-container {
-  display: flex;
-  flex-direction: column;
-}
-.show-form-container > * {
-  background-color: rgba(0, 0, 0, 0.468);
-}
-
-.teacher-container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.teacher-container form {
-  display: flex;
-  flex-direction: column;
-}
-.teacher-container form button {
-  margin: 10px;
-  height: 50px;
-  border-radius: 25px;
-}
-
 .profile-container {
   width: 150px;
   height: 40px;
@@ -784,4 +418,405 @@ section.auth-container #reg-link:hover {
 }
 .profile-container input {
   position: relative;
+}
+
+.switcher {
+  position: relative;
+  display: flex;
+  width: 90px;
+  height: 40px;
+  border-radius: 20px;
+  align-items: center;
+  justify-content: space-evenly;
+  transition: 0.7s;
+  z-index: 1;
+}
+.switcher::after, .switcher::before {
+  content: "";
+  z-index: -1;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  border-radius: 20px;
+  transition: opacity 0.5s;
+}
+.switcher::before {
+  opacity: 1;
+  background-image: url("/public/Night.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.switcher::after {
+  opacity: 0;
+  background-image: url("/public/Day.jpeg");
+  background-repeat: no-repeat;
+  background-size: 100% 110%;
+  background-position-y: -4px;
+}
+
+.switcher-circle {
+  transition: 0.5s;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  position: relative;
+  left: 0;
+}
+
+.circle {
+  background-color: rgb(45, 38, 56);
+  z-index: 2;
+}
+
+.switcher-on > div.circle {
+  left: 45%;
+  background-color: #f5d5b0;
+}
+
+.switcher-on::after {
+  opacity: 1;
+}
+.switcher-on::before {
+  opacity: 0;
+}
+
+main.registration-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 100dvw;
+  height: 100dvh;
+  flex-direction: column;
+}
+main.registration-container dialog.SuccessfulModal[open] {
+  justify-self: center;
+  align-self: center;
+  justify-items: center;
+  align-items: center;
+  margin: auto;
+  opacity: 1;
+  border: none;
+  background: none;
+  color: black;
+  outline: none;
+  width: 300px;
+  height: 85px;
+}
+main.registration-container dialog.SuccessfulModal[open] * {
+  outline: none;
+}
+main.registration-container dialog.SuccessfulModal[open] p {
+  font-size: x-large;
+  color: white;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 10px;
+  height: 30px;
+  animation: show 0.6s;
+}
+main.registration-container dialog.SuccessfulModal[open] button {
+  width: 250px;
+  opacity: 0;
+  animation: show 0.6s forwards;
+  animation-delay: 0.1s;
+}
+main.registration-container dialog.SuccessfulModal[open] button:hover, main.registration-container dialog.SuccessfulModal[open] button:hover::before, main.registration-container dialog.SuccessfulModal[open] button:hover::after {
+  transform: scale(1);
+}
+@keyframes show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+main.registration-container dialog.WaitModal[open] {
+  justify-self: center;
+  align-self: center;
+  opacity: 1;
+  outline: 0;
+  border: none;
+  background: none;
+  color: black;
+  height: 100dvh;
+  align-content: center;
+}
+main.registration-container dialog.WaitModal[open] .WaitModal__container {
+  justify-self: center;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+main.registration-container dialog.WaitModal[open] .WaitModal__container #circle1 {
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  position: relative;
+  left: 185px;
+  border-top: 5px solid darksalmon;
+  animation: rotate 2s infinite ease;
+}
+main.registration-container dialog.WaitModal[open] .WaitModal__container #circle2 {
+  height: 170px;
+  width: 170px;
+  border-radius: 50%;
+  border-top: 5px solid red;
+  animation: rotate 1.75s ease infinite;
+}
+main.registration-container dialog.WaitModal[open] .WaitModal__container #circle3 {
+  height: 140px;
+  width: 140px;
+  border-radius: 50%;
+  border-top: 5px solid aqua;
+  left: -155px;
+  position: relative;
+  animation: rotate 1.5s ease infinite;
+}
+main.registration-container dialog.WaitModal[open] .WaitModal__container #square {
+  height: 50px;
+  width: 50px;
+  background-color: bisque;
+  animation: rotate 1s linear infinite;
+  border-radius: 10px;
+  position: relative;
+  left: -250px;
+}
+@keyframes rotate {
+  to {
+    rotate: 360deg;
+  }
+}
+main.registration-container dialog::backdrop {
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+}
+main.registration-container #registration-form {
+  width: 90dvw;
+  display: flex;
+  flex-direction: column;
+  height: 650px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 500px;
+  padding: 10px;
+  background: url(/bg-01.jpg);
+  border-radius: 20px;
+  border: 2px black solid;
+  box-shadow: 5px 5px 0 var(--main-color);
+  transition: --main-color 0.4s 0.2s;
+}
+main.registration-container #registration-form > legend {
+  margin-bottom: 20px;
+  text-align: center;
+  width: 55%;
+  border-bottom: 3px black dashed;
+}
+main.registration-container #registration-form > .pretty_input, main.registration-container #registration-form > fieldset {
+  text-overflow: ellipsis;
+  width: 70%;
+}
+main.registration-container #registration-form > .input[name=password], main.registration-container #registration-form > .input[name=repeat] {
+  width: 20.8333333333dvw;
+  height: 40px;
+}
+main.registration-container #registration-form legend {
+  color: white;
+  font-family: "Courier New", Courier, monospace;
+  font-size: xx-large;
+  font-weight: 600;
+}
+main.registration-container #registration-form fieldset {
+  border: 2px black solid;
+  display: flex;
+  align-items: center;
+  background: white;
+  margin-bottom: 20px;
+  margin-top: 5px;
+  border-radius: 10px;
+  justify-content: center;
+}
+main.registration-container #registration-form fieldset div {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 70%;
+  position: relative;
+}
+main.registration-container #registration-form fieldset div input {
+  height: 40px;
+}
+main.registration-container #registration-form fieldset div label {
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 600;
+}
+main.registration-container #registration-form button {
+  margin-top: 15px;
+  width: 280px;
+}
+
+main.studentnavigator__container {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  flex-direction: column;
+}
+main.studentnavigator__container #studentnavigator__form {
+  display: flex;
+  flex-direction: column;
+  height: 510px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 500px;
+  padding: 10px;
+  background: url(/bg-01.jpg);
+  border-radius: 20px;
+  border: 2px black solid;
+  box-shadow: 5px 5px 0 var(--main-color);
+  transition: --main-color 0.4s 0.2s;
+  height: 300px;
+}
+main.studentnavigator__container #studentnavigator__form > legend {
+  margin-bottom: 40px;
+  text-align: center;
+  width: 55%;
+  border-bottom: 3px black dashed;
+  color: white;
+  font-family: "Courier New", Courier, monospace;
+  font-size: xx-large;
+  font-weight: 600;
+}
+main.studentnavigator__container #studentnavigator__form legend {
+  margin-bottom: 40px;
+}
+
+.teacher-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.teacher-container form {
+  display: flex;
+  flex-direction: column;
+}
+.teacher-container form button {
+  margin: 10px;
+  height: 50px;
+  border-radius: 25px;
+}
+
+main.auth-container {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  flex-direction: column;
+}
+main.auth-container form#auth-form {
+  display: flex;
+  flex-direction: column;
+  height: 510px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 500px;
+  padding: 10px;
+  background: url(/bg-01.jpg);
+  border-radius: 20px;
+  border: 2px black solid;
+  box-shadow: 5px 5px 0 var(--main-color);
+  transition: --main-color 0.4s 0.2s;
+}
+main.auth-container form#auth-form > legend {
+  margin-bottom: 40px;
+  text-align: center;
+  width: 55%;
+  border-bottom: 3px black dashed;
+  color: white;
+  font-family: "Courier New", Courier, monospace;
+  font-size: xx-large;
+  font-weight: 600;
+}
+main.auth-container form#auth-form > .pretty_input {
+  text-overflow: ellipsis;
+  width: 70%;
+}
+main.auth-container form#auth-form > button {
+  margin-top: 15px;
+  width: 280px;
+}
+main.auth-container form#auth-form > #checkbox-container {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+main.auth-container form#auth-form > #checkbox-container > label {
+  transition: color 0.7s;
+  color: white;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 800;
+}
+main.auth-container form#auth-form > #checkbox-container > input[type=checkbox] {
+  transition: transform 0.3s;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #555;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  border-color: white;
+}
+main.auth-container form#auth-form > #checkbox-container > input[type=checkbox]:checked {
+  background-color: #4CAF50;
+  border-color: #4CAF50;
+}
+main.auth-container form#auth-form > #checkbox-container > input[type=checkbox]:checked::before {
+  content: "✓";
+  color: white;
+  font-size: 14px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+main.auth-container form#auth-form > #checkbox-container > input[type=checkbox]:hover {
+  transform: scale(1.09);
+}
+main.auth-container #reg-link {
+  cursor: pointer;
+  margin-top: 30px;
+  text-align: center;
+  padding: 5px;
+  color: white;
+  -webkit-text-decoration: dotted;
+          text-decoration: dotted;
+  transition: all 0.2s;
+  border-top: 2px dashed black;
+  border-bottom: 2px dashed black;
+}
+main.auth-container #reg-link > span {
+  font-weight: 1000;
+  color: wheat;
+  font-family: "Courier New", Courier, monospace;
+}
+main.auth-container #reg-link:hover {
+  transform: scale(1.03);
 }/*# sourceMappingURL=main.css.map */

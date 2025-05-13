@@ -1,4 +1,6 @@
-section.auth-container {
+@use '../../Base/mixins' as *;
+
+main.auth-container {
     position: absolute;
     display: flex;
     align-items: center;
@@ -8,33 +10,7 @@ section.auth-container {
     flex-direction: column;
 
     form#auth-form {
-        width: 90dvw;
-        display: flex;
-        flex-direction: column;
-        height: 510px;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        width: 500px;
-        padding: 10px;
-        // background-image: linear-gradient(930deg,  var(--button-hover-start), var(--bg-color-start))
-        // transition: --button-hover-start 0.4s, --bg-color-start .1s
-        background: url(/bg-01.jpg);
-        border-radius: 20px;
-        border: 2px black solid;
-        box-shadow: 5px 5px 0 var(--main-color);
-        transition: --main-color .4s .2s;
-
-        & > legend {
-            margin-bottom: 25px;
-            text-align: center;
-            width: 55%;
-            border-bottom: 3px black dashed;
-            color: white;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: xx-large;
-            font-weight: 600;
-        }
+        @include formbg;
 
         & > .pretty_input {
             text-overflow: ellipsis;
@@ -113,6 +89,4 @@ section.auth-container {
     &:hover {
         transform: scale(1.03);
     }
-}
-
-}
+}}

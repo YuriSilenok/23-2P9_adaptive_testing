@@ -88,7 +88,7 @@ export default function Regisration () {
 
         return(
         <>
-            <section className="registration-container">
+            <main className="registration-container">
                 <Modal ref={SuccessfulModal} user={user} />
                 <WaitModal ref={WaitingModal} /> 
 
@@ -165,7 +165,7 @@ export default function Regisration () {
 
                     <button type='submit' className="pretty_button">Зарегистрироваться</button>
                 </form>
-            </section>
+            </main>
         </>
     )
 }

@@ -29,7 +29,7 @@ export default function Autorize () {
 
 
     return(
-        <section className="auth-container">
+        <main className="auth-container">
             <form onSubmit={(event) => {handleAuth(event)}} id="auth-form">
                 <legend>Авторизация</legend>
 
@@ -54,7 +54,7 @@ export default function Autorize () {
                 <button type='submit' className="pretty_button" >Авторизоваться</button>
             </form>
             <div onClick={ () => { nav('/users/registration') } } id="reg-link" >Нет аккаунта?<br /><span>ЗАРЕГИСТРИРОВАТЬСЯ!</span></div>
-        </section>
+        </main>
     )
 }
 
