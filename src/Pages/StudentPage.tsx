@@ -1,10 +1,10 @@
-import { useContext, useRef } from "react"
+import { ChangeEvent, useContext, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import { Input } from "../Components/Input"
+import React from "react"
 
 export default function StudentNavigator () {
     const navigate = useNavigate()
-    const input = useRef()
 
 
     const handleSubmit = (event) => {
@@ -17,8 +17,8 @@ export default function StudentNavigator () {
         navigate(`/showform/${data.id}`)
     }
 
-    const handleChange = (e) => {
-        e.target.value = e.target.value.replace(/[^\d]/g, '')
+    const handleChange = (e: InputEvent) => {
+        (e.currentTarget! as HTMLInputElement).value = (e.currentTarget! as HTMLInputElement).value.replace(/[^\d]/g, '')
     };
 
     return(
@@ -34,7 +34,7 @@ export default function StudentNavigator () {
 
                     <Input isPretty 
                     name="id" 
-                    onChange={(event) => 
+                    onChange={(event: InputEvent) => 
                         handleChange(event)
                     } 
                     max={8} min={1} 

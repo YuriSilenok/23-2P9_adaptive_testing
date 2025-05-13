@@ -18,7 +18,7 @@
 @property --button-color-stop {
   syntax: "<color>";
   inherits: true;
-  initial-value: #4ecdc4;
+  initial-value: #14dcb0;
 }
 @property --button-hover-start {
   syntax: "<color>";
