@@ -63,7 +63,13 @@ initial-value: #ff8aa5;
   left: 0;
   right: 0;
   top: 0;
+  outline: none;
+  border: none;
   box-sizing: border-box;
+
+  &:hover, &:focus, &:active {
+    outline: none;
+  }
 }
 
 html {
@@ -73,6 +79,10 @@ html {
 
 #root {
   height: 100%;
+}
+
+label {
+  display: block;
 }
 
 

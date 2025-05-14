@@ -55,7 +55,12 @@
   left: 0;
   right: 0;
   top: 0;
+  outline: none;
+  border: none;
   box-sizing: border-box;
+}
+*:hover, *:focus, *:active {
+  outline: none;
 }
 
 html {
@@ -67,6 +72,10 @@ html {
   height: 100%;
 }
 
+label {
+  display: block;
+}
+
 #main-nav {
   display: flex;
   align-items: center;
@@ -74,7 +83,6 @@ html {
   position: relative;
   top: 0;
   left: 0;
-  border-bottom: 2px black dashed;
 }
 
 a {
@@ -819,4 +827,125 @@ main.auth-container #reg-link > span {
 }
 main.auth-container #reg-link:hover {
   transform: scale(1.03);
+}
+
+main.showform__container {
+  width: 100dvw;
+  height: calc(100dvh - var(--top-menu-height));
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+main.showform__container header {
+  text-align: center;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 700;
+  color: white;
+  font-size: x-large;
+  position: sticky;
+}
+main.showform__container form {
+  width: 100dvw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  padding-top: 10px;
+  align-items: center;
+}
+main.showform__container form h4 {
+  color: white;
+  font-family: "Courier New", Courier, monospace;
+  font-size: large;
+  border-radius: 5px;
+  padding: 7px;
+  border: white 2px dashed;
+  margin-bottom: 20px;
+}
+main.showform__container form button {
+  width: 175px;
+}
+main.showform__container form section {
+  width: 100dvw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 20px;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  height: 600px;
+}
+main.showform__container form section::-webkit-scrollbar {
+  display: none;
+}
+main.showform__container form section > article {
+  display: flex;
+  flex-direction: column;
+  height: 510px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 500px;
+  padding: 10px;
+  background: url(/bg-01.jpg);
+  border-radius: 20px;
+  border: 2px black solid;
+  box-shadow: 5px 5px 0 var(--main-color);
+  transition: --main-color 0.4s 0.2s;
+  height: -moz-fit-content;
+  height: fit-content;
+  align-items: baseline;
+  padding-left: 30px;
+  margin-bottom: 10px;
+}
+main.showform__container form section > article > legend {
+  margin-bottom: 40px;
+  text-align: center;
+  width: 55%;
+  border-bottom: 3px black dashed;
+  color: white;
+  font-family: "Courier New", Courier, monospace;
+  font-size: xx-large;
+  font-weight: 600;
+}
+main.showform__container form section > article fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  outline: none;
+  border: none;
+  width: 90%;
+}
+main.showform__container form section > article fieldset article.answer__container {
+  height: 40px;
+  width: 100%;
+}
+main.showform__container form section > article fieldset article.answer__container label.answer__label {
+  border: 2px black solid;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  align-content: center;
+  outline: none;
+  background-color: white;
+  border-radius: 15px;
+  transition: all 0.14s, --main-color 0.4s 0.2s;
+  color: black;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 600;
+}
+main.showform__container form section > article fieldset article.answer__container label.answer__label:hover {
+  box-shadow: 2px 2px 0 #000;
+  transform: translate(-2px, -2px);
+}
+main.showform__container form section > article fieldset article.answer__container label.answer__label:active {
+  box-shadow: 1px 1px 0 #000;
+  transform: translate(-1px, -1px);
+}
+main.showform__container form section > article fieldset article.answer__container input.answer__input:checked ~ label.answer__label {
+  background-color: rgb(80, 251, 80);
+  scale: 1.02;
 }/*# sourceMappingURL=main.css.map */

@@ -1,32 +1,90 @@
-import { memo, useEffect } from "react";
+import { ChangeEvent, Dispatch, FormEvent, memo, SetStateAction, useEffect, useState } from "react";
 import { showFormStore } from "../Static/store";
-import React from "react";
+import { Question } from "../Static/interfaces";
+import { useParams } from "react-router-dom";
 
 export default function ShowForm () {
     const {form} = showFormStore()
-    useEffect( () => {
-        console.warn(form)
-    } ,[])
+
+
+    const submitHandler = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        const data = Object.fromEntries(new FormData(event.currentTarget))
+        console.log(data)
+    }
+
 
     return(
-        <div className="show-form-container">
-            <h2> { form.title } </h2>
-            <h4> { form.description } </h4>
-            <div className="show-form-questions">
-                {form.questions.map(element => {
-                    console.warn(element)
-                    return <Question element={element} /> 
-                })}
-            </div>
-        </div>
+        <main className="showform__container">
+            <header> { form.title } </header>
+            <form onSubmit={(event: FormEvent<HTMLFormElement>) => {
+                submitHandler(event)
+            }} >
+
+                <h4> { form.description } </h4>
+
+                <section className="showform__questions">
+                    {form.questions.map(element => {
+                        return <QuestionElement key={element.header} element={element} /> 
+                    })}
+                </section>
+                <button type='submit' className="pretty_button" >Отправить</button>
+            </form>
+        </main>
     )
 }
 
 
-const Question = ({element}) => {
+const QuestionElement = (props: {element: Question}) => {
+    const {id} = useParams()
+    const [activeAnswer, setActiveAnswer] = useState(sessionStorage.getItem(`${props.element.header}${id}`) ?? '')
+    
     return(
-        <div className="question-container">
-            <input className="question-checkbox" type="checkbox" />
-        </div>
+        <article className="question__container">
+            <legend className="question__legend" >{props.element.header}</legend>
+
+            <fieldset className="question__answers__fieldset" >
+                {props.element.answers.map( answer => {
+
+                    return <AnswerElement 
+                    state={activeAnswer} 
+                    setter={setActiveAnswer} 
+                    name={props.element.header} 
+                    key={answer.label} 
+                    label={answer.label} /> 
+                })}
+            </fieldset>
+        </article>
+    )
+}
+
+const AnswerElement = (answer: {state: string, setter: Dispatch<SetStateAction<string>>, label: string, name: string}) => {
+    const {id} = useParams()
+
+    return(
+        <article onClick={() => {
+            if (answer.state === answer.label) {
+                answer.setter('')
+                sessionStorage.setItem(`${answer.name}${id}`, '')
+                return
+            } else {
+            answer.setter(answer.label)
+            }
+            sessionStorage.setItem(`${answer.name}${id}`, answer.label)
+        }} className="answer__container">
+
+            <input hidden
+            onChange={ (event: ChangeEvent<HTMLInputElement>) => {}} 
+            type="radio" 
+            className="answer__input" 
+            name={answer.name} 
+            value={answer.label}
+            checked={
+                answer.state === answer.label 
+                || sessionStorage.getItem(`${answer.name}${id}`) === answer.label
+            } />
+
+            <label className="answer__label">{answer.label}</label> 
+        </article>
     )
 }

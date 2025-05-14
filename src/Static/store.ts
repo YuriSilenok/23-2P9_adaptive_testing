@@ -66,28 +66,54 @@ export const themeStore = create(set => ({
 
 export const showFormStore = create<ShowFormShema>( set => ({
     form: {
-        title: 'some title',
-        description : 'some description',
+        title: 'Заголовок формы',
+        description : 'Описание Формы',
         questions: [
             {
-                header: 'question 1 label',
+                header: 'Вопрос №1 ...',
                 answers : [
                     {
-                        label : 'answer 1 for question 1',
+                        label : 'Ответ 1.1',
+                        is_correct: true,
                     },
                     {
-                        label : 'answer 2 for question 1'
+                        label : 'Ответ 1.2',
+                        is_correct: true
                     }
                 ]
             },
             {
-                header: 'question 2 label',
+                header: 'Вопрос №2 ...',
                 answers : [
                     {
-                        label : 'answer 1 for question 2',
+                        label : 'Ответ 2.1',
                     },
                     {
-                        label : 'answer 2 for question 2'
+                        label : 'Ответ 2.2'
+                    }
+                ]
+            },
+            {
+                header: 'Вопрос #3 ...',
+                answers : [
+                    {
+                        label : 'Ответ 1.1',
+                        is_correct: true,
+                    },
+                    {
+                        label : 'Ответ 1.2',
+                        is_correct: true
+                    }
+                ]
+            },
+            {
+                header: 'Вопрос №4 ...',
+                answers : [
+                    {
+                        label : 'Ответ 2.1',
+                    },
+                    {
+                        label : 'Ответ 2.2'
                     }
                 ]
             }

@@ -54,5 +54,18 @@
         }
 }
 
+@mixin pretty_hover{
+    transition:all .14s, --main-color .4s .2s;
+
+    &:hover {
+        box-shadow: 2px 2px 0 #000;
+        transform: translate(-2px, -2px);
+    }
+    &:active {
+        box-shadow: 1px 1px 0 #000;
+        transform: translate(-1px, -1px);
+    }
+}
+
 
 

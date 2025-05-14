@@ -1,4 +1,4 @@
-import { Form } from 'react-router-dom'
+
 import { Status} from './types'
 
 interface userStoreShema {
@@ -28,7 +28,7 @@ interface Answer {
     label: string
 }
 
-interface Question {
+export interface Question {
     header: string,
     answers: Answer[]
 }
