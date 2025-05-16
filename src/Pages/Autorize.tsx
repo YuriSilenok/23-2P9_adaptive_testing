@@ -48,7 +48,7 @@ export default function Autorize () {
                 isPretty/>
 
                 <div id="checkbox-container"> 
-                    <input name="remember" id="remember" type='checkbox' />
+                    <input defaultChecked={true} name="remember" id="remember" type='checkbox' />
                     <label htmlFor="#remember"> Запомнить меня</label>
                 </div>
                 <button type='submit' className="pretty_button" >Авторизоваться</button>

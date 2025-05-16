@@ -1,16 +1,15 @@
+import { useRedirect } from "../Static/utils"
 import { ChangeEvent, Dispatch, FormEvent, memo, SetStateAction, useEffect, useState } from "react";
 import { showFormStore } from "../Static/store";
 import { Question } from "../Static/interfaces";
 import { useParams } from "react-router-dom";
-import { useRedirect } from "../Static/utils";
 
-export default function ShowForm () {
+
+export default function Createform () {
     useRedirect()
-    
-
     const {form} = showFormStore()
 
-    
+
     const submitHandler = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const data = Object.fromEntries(new FormData(event.currentTarget))

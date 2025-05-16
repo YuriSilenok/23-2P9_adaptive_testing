@@ -14,7 +14,7 @@ export default function StudentNavigator () {
             alert('input form id')
             return
         }
-        navigate(`/showform/${data.id}`)
+        navigate(`/showform?id=${data.id}`)
     }
 
     const handleChange = (e: InputEvent) => {

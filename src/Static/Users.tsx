@@ -1,7 +1,7 @@
 import { use } from "react"
 import { userShema } from "./interfaces"
 
-type Status = 'Student' | 'Teacher'
+type Status = 'student' | 'teacher'
 type login = string
 
 
@@ -22,12 +22,12 @@ const Users:User[] = [
     {
         name: "111",
         password: '111',
-        status: 'Student'
+        status: 'student'
     },
     {
         name: 'janpol',
         password:'12345',
-        status: "Teacher"
+        status: "teacher"
     }
 ]
 
