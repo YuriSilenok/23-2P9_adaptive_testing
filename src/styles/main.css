@@ -149,7 +149,7 @@ body {
   height: 7.5dvh;
   width: 23.4375dvw;
   border-radius: 10px;
-  border: 2px black solid;
+  border: 3px black solid;
   height: 50px;
   font-family: "Courier New", Courier, monospace;
   font-size: x-large;
@@ -190,8 +190,8 @@ body {
 }
 .pretty_input:focus, .pretty_input:hover {
   outline: none;
-  transform: translate(-2px, -2px);
-  box-shadow: 2px 2px 0 black;
+  transform: translate(-3px, -3px);
+  box-shadow: 3px 3px 0 black;
 }
 .pretty_input:focus::-moz-placeholder, .pretty_input:hover::-moz-placeholder {
   transform: translate(4px) scale(1.05);

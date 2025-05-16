@@ -85,7 +85,7 @@ body {
   caret-color: #9c108e;
   @include size;
   border-radius: 10px;
-  border: 2px black solid;
+  border: 3px black solid;
   height: 50px;
   font-family: 'Courier New', Courier, monospace;
   font-size: x-large;
@@ -129,8 +129,8 @@ body {
     }
 
     outline: none;
-    transform: translate(-2px, -2px);
-    box-shadow: 2px 2px 0 black;
+    transform: translate(-3px, -3px);
+    box-shadow: 3px 3px 0 black;
   }
   &:invalid {
     &:focus, &:hover {
