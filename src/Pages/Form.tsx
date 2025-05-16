@@ -63,7 +63,7 @@ const QuestionElement = (props: {element: Question}) => {
 }
 
 const AnswerElement = (answer: {state: string, setter: Dispatch<SetStateAction<string>>, label: string, name: string}) => {
-    const {id} = useParams()
+    const id = new URLSearchParams(window.location.search)
 
     return(
         <article onClick={() => {

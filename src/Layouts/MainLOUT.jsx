@@ -12,7 +12,7 @@ export default function MainLOUT () {
     useEffect(() => {
         window.location.pathname === '/' && nick 
         ? [ 
-            status === 'Student' 
+            status === 'student' 
             ? nav('/forstudent')
             : nav('/forteacher')
         ] 
@@ -23,9 +23,10 @@ export default function MainLOUT () {
         <>
             <nav id="main-nav">
                 <img id="icon" src={logo} onClick={() => {
-                    status === 'Student' 
+                    status === 'student' 
                     ? nav('/forstudent')
-                    : nav('/forteacher')}} /> 
+                    : nav('/forteacher')
+                }} /> 
                 <nav className="top-nav">
                 </nav>
                 <aside>

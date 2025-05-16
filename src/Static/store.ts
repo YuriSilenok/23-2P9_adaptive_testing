@@ -31,7 +31,7 @@ export const userStore = create<userStoreShema>( set => ({
     DelUser: () => {
         set({
             nick: undefined,
-            status: 'Student',
+            status: 'student',
             token: undefined
         }),
         localStorage.removeItem('userdata')
@@ -132,7 +132,7 @@ export const showFormStore = create<ShowFormShema>( set => ({
 
 export const useUrl = create<{URL: Partial<URL>}>(() => ({
     URL: {
-        hostname: "http://192.168.1.102:8001"
+        hostname: "http://127.0.0.1:8001"
     }
 }))
 
