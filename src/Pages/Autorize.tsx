@@ -1,46 +1,62 @@
 import { useNavigate } from "react-router-dom"
-import React, { FormEvent, useEffect, useRef } from "react"
+import React, { FormEvent, RefObject, useEffect, useRef } from "react"
 import { Authentification, Identification, Auth } from "../Static/Users"
-import { userStore } from "../Static/store"
+import { ThrowStore, userStore, useURL } from "../Static/store"
 import { Input } from "../Components/Input"
+import {WaitModal} from '../Components/WaitModal'
+import { useRedirect } from "../Static/utils"
 
 export default function Autorize () {
-
     const nav = useNavigate()
+    const {URL} = useURL()
     const {DelUser, RegUser} = userStore()
     const queryParams = new URLSearchParams(window.location.search)
+    const {ThrowMsg} = ThrowStore()
+    const waitmodal: RefObject<HTMLDialogElement | null> = useRef(null)
+
 
     function handleAuth (event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
-        const data = Object.fromEntries(new FormData(event.currentTarget)) as unknown as Auth
-        if (Identification(data.login)) {
-            const AuthData = Authentification(data.login, data.password)
-            if (AuthData) {
-                RegUser({nick: AuthData.name, status: AuthData.status}, data.remember )
-                nav('/')
-
+        waitmodal.current!.showModal()
+        const request = fetch(`http://localhost:8001/auth/login`, {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams(new FormData(event.currentTarget) as unknown as string),
+        })
+        
+        request.then( response => {
+            if (response.ok) {
+                waitmodal.current?.close()
+                return response.json()
             } else {
-                console.log("Неверный пароль")
+                waitmodal.current?.close()
+                alert('что то не так')
             }
-        } else {
-            console.log("Неверный логин")
-        }
+        }).then(data => {
+            RegUser({nick: data.username!, status: data.role!},true)
+            nav('/')
+        })
     }
 
 
     return(
         <main className="auth-container">
+            <WaitModal ref={waitmodal}  /> 
             <form onSubmit={(event) => {handleAuth(event)}} id="auth-form">
                 <legend>Авторизация</legend>
 
-                <Input 
-                name="login" 
+                <Input required 
+                name="username" 
                 min={3} max={50} 
                 defaultValue={ queryParams.get('login') ?? '' } 
                 invalidMessage="Некорректное имя пользователя" 
                 isPretty/>
                 
-                <Input 
+                <Input required
                 name="password" 
                 min={3} max={50} 
                 defaultValue={ queryParams.get('password') ?? '' } 

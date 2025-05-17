@@ -9,7 +9,7 @@ export const userStore = create<userStoreShema>( set => ({
     status: JSON.parse(
                 (localStorage.getItem('userdata')
                 ?? sessionStorage.getItem('userdata')) 
-                ?? '{"status": null}' 
+                ?? '{"status": "student"}' 
             ).status,
 
     nick : JSON.parse(
@@ -17,12 +17,10 @@ export const userStore = create<userStoreShema>( set => ({
             ?? sessionStorage.getItem('userdata')) 
             ?? `{"nick": null}`
         ).nick,
-    token: null,
     RegUser: (data: Partial<userShema>, isRemember: boolean) => {
         set({
             nick : data.nick,
             status : data.status,
-            token : data.token,
         }),
         isRemember 
         ? localStorage.setItem('userdata', JSON.stringify(data))
@@ -32,7 +30,6 @@ export const userStore = create<userStoreShema>( set => ({
         set({
             nick: undefined,
             status: 'student',
-            token: undefined
         }),
         localStorage.removeItem('userdata')
         sessionStorage.removeItem('userdata')
@@ -130,7 +127,7 @@ export const showFormStore = create<ShowFormShema>( set => ({
 }))
 
 
-export const useUrl = create<{URL: Partial<URL>}>(() => ({
+export const useURL = create<{URL: Partial<URL>}>(() => ({
     URL: {
         hostname: "http://127.0.0.1:8001"
     }

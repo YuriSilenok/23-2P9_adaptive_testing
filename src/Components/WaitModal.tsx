@@ -1,4 +1,4 @@
-import React, { RefObject } from "react";
+import  { RefObject } from "react";
 
 export const WaitModal = (props: {ref: RefObject<HTMLDialogElement | null>}) => {
     return(

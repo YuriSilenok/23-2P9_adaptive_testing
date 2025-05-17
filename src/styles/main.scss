@@ -3,6 +3,7 @@
 @use './Base/base';
 
 // Using Components
+@use './Components/WaitModal/_waitmodal.sass';
 @use './Components/UserProfile/userProfile';
 @use './Components/ThemeSwitcher/switcher';
 

@@ -4,7 +4,6 @@ import { Status} from './types'
 interface userStoreShema {
     nick: string | undefined,
     status: 'teacher' | 'student',
-    token: string | null,
     RegUser: (data:userShema, isRemember: boolean) => void,
     DelUser: Function
 }
@@ -21,7 +20,6 @@ export interface RegistrationForm {
 interface userShema {
     nick: string | undefined,
     status: 'teacher' | 'student',
-    token?: string | null
 }
 
 interface Answer {

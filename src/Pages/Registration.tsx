@@ -1,6 +1,6 @@
 import React from "react"
 import { FormEvent, RefObject, useRef, useState } from "react"
-import { ThrowStore, useUrl } from "../Static/store"
+import { ThrowStore, useURL } from "../Static/store"
 import { data, Form, useNavigate } from "react-router-dom"
 import { RegistrationForm } from "../Static/interfaces"
 import { Input } from "../Components/Input"
@@ -10,7 +10,7 @@ export default function Regisration () {
     const SuccessfulModal: RefObject<HTMLDialogElement | null> = useRef(null)
     const WaitingModal: RefObject<HTMLDialogElement | null> = useRef(null)
     const user: RefObject<{login: string, password: string}> = useRef({login:'',password:''})
-    const {URL} = useUrl()
+    const {URL} = useURL()
     const {ThrowMsg} = ThrowStore()
 
     

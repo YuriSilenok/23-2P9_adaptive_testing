@@ -172,7 +172,7 @@ body {
   animation: shake 0.5s;
   color: red;
 }
-.pretty_input:invalid, .pretty_input.invalid {
+.pretty_input:user-invalid, .pretty_input.invalid {
   border: 2px red solid;
 }
 .pretty_input::-moz-placeholder {
@@ -334,6 +334,68 @@ aside > svg:hover {
     transform: translateX(5px);
   }
 }
+.WaitModal[open] {
+  justify-self: center;
+  align-self: center;
+  opacity: 1;
+  outline: 0;
+  border: none;
+  background: none;
+  color: black;
+  height: 100dvh;
+  align-content: center;
+}
+.WaitModal[open] .WaitModal__container {
+  justify-self: center;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.WaitModal[open] .WaitModal__container #circle1 {
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  position: relative;
+  left: 185px;
+  border-top: 5px solid darksalmon;
+  animation: rotate 2s infinite ease;
+}
+.WaitModal[open] .WaitModal__container #circle2 {
+  height: 170px;
+  width: 170px;
+  border-radius: 50%;
+  border-top: 5px solid red;
+  animation: rotate 1.75s ease infinite reverse;
+}
+.WaitModal[open] .WaitModal__container #circle3 {
+  height: 140px;
+  width: 140px;
+  border-radius: 50%;
+  border-top: 5px solid aqua;
+  left: -155px;
+  position: relative;
+  animation: rotate 1.5s ease infinite;
+}
+.WaitModal[open] .WaitModal__container #square {
+  height: 50px;
+  width: 50px;
+  background-color: bisque;
+  animation: rotate 1s linear infinite;
+  border-radius: 10px;
+  position: relative;
+  left: -250px;
+}
+@keyframes rotate {
+  to {
+    rotate: 360deg;
+  }
+}
+.WaitModal[open]::backdrop {
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+}
+
 .profile-container {
   width: 150px;
   height: 40px;
@@ -540,67 +602,6 @@ main.registration-container dialog.SuccessfulModal[open] button:hover, main.regi
   to {
     opacity: 1;
   }
-}
-main.registration-container dialog.WaitModal[open] {
-  justify-self: center;
-  align-self: center;
-  opacity: 1;
-  outline: 0;
-  border: none;
-  background: none;
-  color: black;
-  height: 100dvh;
-  align-content: center;
-}
-main.registration-container dialog.WaitModal[open] .WaitModal__container {
-  justify-self: center;
-  align-self: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-main.registration-container dialog.WaitModal[open] .WaitModal__container #circle1 {
-  height: 200px;
-  width: 200px;
-  border-radius: 50%;
-  position: relative;
-  left: 185px;
-  border-top: 5px solid darksalmon;
-  animation: rotate 2s infinite ease;
-}
-main.registration-container dialog.WaitModal[open] .WaitModal__container #circle2 {
-  height: 170px;
-  width: 170px;
-  border-radius: 50%;
-  border-top: 5px solid red;
-  animation: rotate 1.75s ease infinite;
-}
-main.registration-container dialog.WaitModal[open] .WaitModal__container #circle3 {
-  height: 140px;
-  width: 140px;
-  border-radius: 50%;
-  border-top: 5px solid aqua;
-  left: -155px;
-  position: relative;
-  animation: rotate 1.5s ease infinite;
-}
-main.registration-container dialog.WaitModal[open] .WaitModal__container #square {
-  height: 50px;
-  width: 50px;
-  background-color: bisque;
-  animation: rotate 1s linear infinite;
-  border-radius: 10px;
-  position: relative;
-  left: -250px;
-}
-@keyframes rotate {
-  to {
-    rotate: 360deg;
-  }
-}
-main.registration-container dialog::backdrop {
-  -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px);
 }
 main.registration-container #registration-form {
   width: 90dvw;

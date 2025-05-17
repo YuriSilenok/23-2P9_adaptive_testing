@@ -3,9 +3,10 @@ import datetime
 from typing import Annotated
 import secrets
 import jwt
-from fastapi import Depends, APIRouter, HTTPException, status, Form
+from fastapi import Depends, APIRouter, HTTPException, status, Form, Response, Cookie, Request
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm, \
-                             HTTPBasicCredentials, HTTPBasic, HTTPAuthorizationCredentials
+                            HTTPBasicCredentials, HTTPBasic, HTTPAuthorizationCredentials
+from fastapi.responses import JSONResponse
 from passlib.context import CryptContext
 
 from shemas import (
@@ -14,7 +15,7 @@ from shemas import (
     PollAnswersSubmit, PollWithQuestions
     )
 from crud import find_user, create_user, create_poll, find_password, find_polls, \
-                 find_questions, submit_poll_answers, check_user_answers_from_db
+                find_questions, submit_poll_answers, check_user_answers_from_db
 from utils import verify_password, encode_jwt, decode_jwt
 
 
@@ -45,15 +46,15 @@ async def validate_auth_user(
 
 
 async def get_current_user(
-    token: HTTPAuthorizationCredentials = Depends(oauth2_scheme)
+    # token: HTTPAuthorizationCredentials = Depends(oauth2_scheme), 
+    access_token: str|None = Cookie(None, include_in_schema=False)
 ) -> str:
     credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
+        status_code=401,
         detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = decode_jwt(token)
+        payload = decode_jwt(access_token)
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
@@ -65,8 +66,9 @@ async def get_current_user(
 
 
 async def get_current_active_user(
-    username: str = Depends(get_current_user)
+    username: str = Depends(get_current_user),
 ) -> UserOut:
+    
     user = await find_user(username)
     if user["is_active"]:
         return UserOut(**user)
@@ -85,14 +87,22 @@ async def read_users_me(
 
 @router.post("/login")
 async def login_for_access_token(
-    user: UserCreate = Depends(validate_auth_user),
-) -> Token:
+    user: UserCreate = Depends(validate_auth_user)
+) -> JSONResponse:
     jwt_payload = {
         "sub": user.username,
         "username": user.username
     }
     token = encode_jwt(jwt_payload)
-    return Token(access_token=token, token_type="bearer")
+    response = JSONResponse(content={'username': user.name, 'role': user.role})
+    response.set_cookie(
+        key='access_token',
+        value=token,
+        path="/",
+        httponly=True,
+        max_age=3600*24*30
+    )
+    return  response
 
 
 @router.post("/register")
@@ -121,6 +131,7 @@ async def create_full_poll(
 @router.get("/polls")
 async def get_polls(current_user: Annotated[UserOut, Depends(get_current_active_user)]
 ) -> list[Poll]:
+
     if current_user.role == "teacher":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

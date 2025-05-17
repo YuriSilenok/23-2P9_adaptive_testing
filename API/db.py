@@ -2,7 +2,7 @@
 from datetime import datetime, timedelta
 
 from peewee import SqliteDatabase, CharField, DateTimeField, BooleanField, \
-                   TextField, ForeignKeyField, AutoField, IntegerField, Model, fn
+                    TextField, ForeignKeyField, AutoField, IntegerField, Model, fn
 
 database = SqliteDatabase('my_database.db')
 

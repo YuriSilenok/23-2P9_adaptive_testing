@@ -111,7 +111,7 @@ body {
   }
   
 
-  &:invalid, &.invalid {
+  &:user-invalid, &.invalid {
     border: 2px red solid;
   }
 
