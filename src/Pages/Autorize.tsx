@@ -45,7 +45,7 @@ export default function Autorize () {
 
     return(
         <main className="auth-container">
-            <WaitModal ref={waitmodal}  /> 
+            <WaitModal ref={waitmodal} isOpen={false} /> 
             <form onSubmit={(event) => {handleAuth(event)}} id="auth-form">
                 <legend>Авторизация</legend>
 
