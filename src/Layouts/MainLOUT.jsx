@@ -23,6 +23,7 @@ export default function MainLOUT () {
         <>
             <nav id="main-nav">
                 <img id="icon" src={logo} onClick={() => {
+                    sessionStorage.removeItem('formdata')
                     status === 'student' 
                     ? nav('/forstudent')
                     : nav('/forteacher')

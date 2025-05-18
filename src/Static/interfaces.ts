@@ -23,12 +23,12 @@ interface userShema {
 }
 
 interface Answer {
-    label: string
+    text: string
 }
 
 export interface Question {
-    header: string,
-    answers: Answer[]
+    text: string,
+    answer_options: Answer[]
 }
 
 interface Form {

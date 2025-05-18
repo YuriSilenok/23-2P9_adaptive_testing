@@ -8,11 +8,9 @@ const PathDepends = {
 }
 
 export const useRedirect = (redirectURI?: Pathname) => {
-    console.log('start')
     const nav = useNavigate()
     const userstatus: 'student' | 'teacher' = userStore().status
     const URL = window.location.pathname
-    console.log(userstatus, URL,PathDepends.student.includes(URL))
     useEffect(() => {
         if ( ! PathDepends[userstatus].includes(URL)) {
             nav(redirectURI ? redirectURI : `/for${userstatus}`), console.log('redirected')

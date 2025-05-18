@@ -1,15 +1,41 @@
-import { ChangeEvent, Dispatch, FormEvent, memo, SetStateAction, useEffect, useState } from "react";
+import { ChangeEvent, Dispatch, FormEvent, memo, RefObject, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import { showFormStore } from "../Static/store";
-import { Question } from "../Static/interfaces";
+import { Question, Form } from "../Static/interfaces";
 import { useParams } from "react-router-dom";
 import { useRedirect } from "../Static/utils";
+import axios from "axios";
+import { Waitmodal, WaitModal } from "../Components/WaitModal";
+import { useFormState } from "react-dom";
 
 export default function ShowForm () {
     useRedirect()
-    
+    const params = new URLSearchParams(window.location.search)
+    const waitmodal: Waitmodal = useRef(null)
+    const subform = showFormStore().form
+    const [form, setForm] = useState(sessionStorage.getItem(`formdata#?id=${params.get('id')}`) ? JSON.parse(sessionStorage.getItem(`formdata#?id=${params.get('id')}`)!) :  subform)
 
-    const {form} = showFormStore()
+    if (!sessionStorage.getItem(`formdata#?id=${params.get('id')}`)) {
+        const request = fetch(`http://localhost:8001/auth/get_poll/${params.get('id')}`, {
+            credentials: "include"
+        })
 
+        request
+        .then( (response) => {
+            return response.json()
+        })
+        .then( data => {
+            sessionStorage.setItem(`formdata#?id=${params.get('id')}`, JSON.stringify(data))
+            setForm(data)
+        })
+    } else {
+        waitmodal.current?.close()
+    }
+
+    useEffect( () => {
+        if (sessionStorage.getItem(`formdata#?id=${params.get('id')}`)) {
+            waitmodal.current?.close()
+        }
+    }, [] )
     
     const submitHandler = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
@@ -20,6 +46,8 @@ export default function ShowForm () {
 
     return(
         <main className="showform__container">
+            <WaitModal ref={waitmodal} isOpen/> 
+
             <header> { form.title } </header>
             <form onSubmit={(event: FormEvent<HTMLFormElement>) => {
                 submitHandler(event)
@@ -29,7 +57,7 @@ export default function ShowForm () {
 
                 <section className="showform__questions">
                     {form.questions.map(element => {
-                        return <QuestionElement key={element.header} element={element} /> 
+                        return <QuestionElement key={element.text} element={element} /> 
                     })}
                 </section>
                 <button type='submit' className="pretty_button" >Отправить</button>
@@ -41,21 +69,21 @@ export default function ShowForm () {
 
 const QuestionElement = (props: {element: Question}) => {
     const {id} = useParams()
-    const [activeAnswer, setActiveAnswer] = useState(sessionStorage.getItem(`${props.element.header}${id}`) ?? '')
+    const [activeAnswer, setActiveAnswer] = useState(sessionStorage.getItem(`${props.element.text}${id}`) ?? '')
     
     return(
         <article className="question__container">
-            <legend className="question__legend" >{props.element.header}</legend>
+            <legend className="question__legend" >{props.element.text}</legend>
 
             <fieldset className="question__answers__fieldset" >
-                {props.element.answers.map( answer => {
+                {props.element.answer_options.map( answer => {
 
                     return <AnswerElement 
                     state={activeAnswer} 
                     setter={setActiveAnswer} 
-                    name={props.element.header} 
-                    key={answer.label} 
-                    label={answer.label} /> 
+                    name={props.element.text} 
+                    key={answer.text} 
+                    label={answer.text} /> 
                 })}
             </fieldset>
         </article>

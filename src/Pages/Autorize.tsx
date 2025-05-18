@@ -23,9 +23,9 @@ export default function Autorize () {
             credentials: "include",
             headers: {
                 'accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded'
+                'Content-Type': 'application/json'
             },
-            body: new URLSearchParams(new FormData(event.currentTarget) as unknown as string),
+            body: JSON.stringify( Object.fromEntries( new FormData(event.currentTarget)))
         })
         
         request.then( response => {
@@ -64,7 +64,7 @@ export default function Autorize () {
                 isPretty/>
 
                 <div id="checkbox-container"> 
-                    <input defaultChecked={true} name="remember" id="remember" type='checkbox' />
+                    <input defaultChecked={true} id="remember" type='checkbox' />
                     <label htmlFor="#remember"> Запомнить меня</label>
                 </div>
                 <button type='submit' className="pretty_button" >Авторизоваться</button>

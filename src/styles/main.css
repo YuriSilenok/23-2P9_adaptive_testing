@@ -392,8 +392,8 @@ aside > svg:hover {
   }
 }
 .WaitModal[open]::backdrop {
-  -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
 }
 
 .profile-container {
@@ -572,6 +572,10 @@ main.registration-container dialog.SuccessfulModal[open] {
   outline: none;
   width: 300px;
   height: 85px;
+}
+main.registration-container dialog.SuccessfulModal[open]::backdrop {
+  -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
 }
 main.registration-container dialog.SuccessfulModal[open] * {
   outline: none;

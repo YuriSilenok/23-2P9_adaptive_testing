@@ -32,7 +32,7 @@ def encode_jwt(
                     to_encode,
                     private_key,
                     algorithm)
-
+                    
     return encoded
 
 

@@ -26,12 +26,12 @@ class User(BaseModel):
 
 
 class Poll(BaseModel):
+    id = AutoField(primary_key=True)
     title = CharField(unique=True)
     description = TextField(null=True)
     created_by = ForeignKeyField(User, field=User.username, backref='polls')
     created_at = DateTimeField(default=datetime.now)
     is_active = BooleanField(default=True)
-
 
 class Question(BaseModel):
     id = AutoField(primary_key=True)

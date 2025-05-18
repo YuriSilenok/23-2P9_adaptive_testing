@@ -2,9 +2,10 @@
 from typing import Dict
 from db import database, User, Poll, Question, AnswerOption, UserAnswer
 from utils import get_password_hash
-from shemas import UserCreate, PollCreate, PollAnswersSubmit, UserOut
+from shemas import UserCreate, PollCreate, PollAnswersSubmit, UserOut, PollWithQuestions
 
 from fastapi import HTTPException, status
+from fastapi.responses import JSONResponse
 
 
 @database.atomic()
@@ -14,7 +15,7 @@ async def create_user(user: UserCreate):
             username=user.username,
             name=user.name,
             telegram_link=user.telegram_link,
-            password_hash=get_password_hash(user.password_hash),
+            password_hash=get_password_hash(user.password),
             role=user.role)
 
     except:
@@ -92,34 +93,45 @@ async def find_polls():
 
 
 @database.atomic()
+async def find_poll(poll_id):
+    if not Poll.get_or_none(Poll.id == poll_id):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Poll not found or inactive")
+    else:
+        return JSONResponse(status_code=200, content='Poll finded')
+
+
+@database.atomic()
 async def find_questions(poll_id):
     # Проверяем, что опрос существует и активен
-    poll = Poll.get_or_none((Poll.id == poll_id) & (Poll.is_active is True))
+    poll = Poll.get_or_none(Poll.id == poll_id)
     if not poll:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Poll not found or inactive")
 
     # Получаем все вопросы с вариантами ответов
-    questions = (Question
-                 .select()
-                 .where(Question.poll == poll_id)
-                 .prefetch(AnswerOption))
+    questions = (
+        Question
+            .select()
+            .where(Question.poll == poll_id)
+            .prefetch(AnswerOption)
+    )
 
-    response = {
-        "id": poll.id,
+    response:PollWithQuestions = {
+        'id': poll.id,
         "title": poll.title,
         "description": poll.description,
         "questions": [],
     }
+    
     for question in questions:
         q_data = {
-            "id": question.id_in_poll,
             "text": question.text,
             "question_type": question.question_type,
             "answer_options": [
                 {
-                    "id": option.id_in_question,
                     "text": option.text
                 }
                 for option in question.answer_options
