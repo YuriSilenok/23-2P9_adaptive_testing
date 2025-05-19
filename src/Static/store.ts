@@ -67,9 +67,11 @@ export const showFormStore = create<ShowFormShema>( set => ({
         description : 'desctiption',
         questions: [
             {
+                id: 1,
                 text: 'question',
                 answer_options: [
                     {
+                        id: 1,
                         text : 'answer',
                     },
                 ]

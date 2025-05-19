@@ -174,27 +174,27 @@ async def get_poll_questions(
     return JSONResponse(content=content)
 
 
-# @router.post("/polls/{poll_id}/submit-answers/")
-# async def submit_answers(
-#     poll_id: int,
-#     answers_data: PollAnswersSubmit,
-#     current_user: UserOut = Depends(get_current_active_user)
-# ):
-#     # Проверяем, что пользователь - студент
-#     if current_user.role == "teacher":
-#         raise HTTPException(
-#             status_code=status.HTTP_403_FORBIDDEN,
-#             detail="Only students can submit answers"
-#         )
+@router.post("/polls/{poll_id}/submit-answers/")
+async def submit_answers(
+    poll_id: int,
+    answers_data: PollAnswersSubmit,
+    current_user: UserOut = Depends(get_current_active_user)
+):
+    # Проверяем, что пользователь - студент
+    if current_user.role == "teacher":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only students can submit answers"
+        )
 
-#     return submit_poll_answers(poll_id, answers_data, current_user)
+    return submit_poll_answers(poll_id, answers_data, current_user)
 
 
-# @router.get("/polls/{poll_id}/submit-answers/username")
-# async def check_answers(
-#     poll_id: int,
-#     username: str,
-#     current_user: UserOut = Depends(get_current_active_user)
-# ):
+@router.get("/polls/{poll_id}/submit-answers/username")
+async def check_answers(
+    poll_id: int,
+    username: str,
+    current_user: UserOut = Depends(get_current_active_user)
+):
 
-#     return check_user_answers_from_db(poll_id, username)
+    return check_user_answers_from_db(poll_id, username)

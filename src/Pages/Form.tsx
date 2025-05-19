@@ -12,7 +12,11 @@ export default function ShowForm () {
     const params = new URLSearchParams(window.location.search)
     const waitmodal: Waitmodal = useRef(null)
     const subform = showFormStore().form
-    const [form, setForm] = useState(sessionStorage.getItem(`formdata#?id=${params.get('id')}`) ? JSON.parse(sessionStorage.getItem(`formdata#?id=${params.get('id')}`)!) :  subform)
+    const [form, setForm]: [Form, any] = useState(
+        sessionStorage.getItem(`formdata#?id=${params.get('id')}`) 
+        ? JSON.parse(sessionStorage.getItem(`formdata#?id=${params.get('id')}`)!) 
+        :  subform
+    )
 
     if (!sessionStorage.getItem(`formdata#?id=${params.get('id')}`)) {
         const request = fetch(`http://localhost:8001/auth/get_poll/${params.get('id')}`, {
@@ -40,7 +44,20 @@ export default function ShowForm () {
     const submitHandler = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const data = Object.fromEntries(new FormData(event.currentTarget))
-        console.log(data)
+        let requestBody:Array<{}> = []
+        Object.entries(data).forEach( ([queid, answid]) => {
+            requestBody.push({'question_id': Number(queid), 'selected_option_ids': [Number(answid)]})
+        })
+        console.log({'answers': requestBody})
+        const request = fetch(`http://localhost:8001/auth/polls/${params.get('id')}/submit-answers`, {
+            credentials: 'include', 
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({answers: requestBody})
+        })
+        request.then(request => request.json()).then(data => console.log(data))
     }
 
 
@@ -81,7 +98,8 @@ const QuestionElement = (props: {element: Question}) => {
                     return <AnswerElement 
                     state={activeAnswer} 
                     setter={setActiveAnswer} 
-                    name={props.element.text} 
+                    questionid={props.element.id}
+                    answerid={answer.id} 
                     key={answer.text} 
                     label={answer.text} /> 
                 })}
@@ -90,30 +108,30 @@ const QuestionElement = (props: {element: Question}) => {
     )
 }
 
-const AnswerElement = (answer: {state: string, setter: Dispatch<SetStateAction<string>>, label: string, name: string}) => {
+const AnswerElement = (answer: {state: string, setter: Dispatch<SetStateAction<string>>, label: string,questionid: number, answerid: number}) => {
     const id = new URLSearchParams(window.location.search)
 
     return(
         <article onClick={() => {
             if (answer.state === answer.label) {
                 answer.setter('')
-                sessionStorage.setItem(`${answer.name}${id}`, '')
+                sessionStorage.setItem(`${answer.questionid}${id}`, '')
                 return
             } else {
             answer.setter(answer.label)
             }
-            sessionStorage.setItem(`${answer.name}${id}`, answer.label)
+            sessionStorage.setItem(`${answer.questionid}${id}`, String(answer.answerid))
         }} className="answer__container">
 
             <input hidden
             onChange={ (event: ChangeEvent<HTMLInputElement>) => {event.currentTarget}} 
             type="radio" 
             className="answer__input" 
-            name={answer.name} 
-            value={answer.label}
+            name={String(answer.questionid)} 
+            value={answer.answerid}
             checked={
                 answer.state === answer.label 
-                || sessionStorage.getItem(`${answer.name}${id}`) === answer.label
+                || sessionStorage.getItem(`${answer.questionid}${id}`) === String(answer.answerid)
             } />
 
             <label className="answer__label">{answer.label}</label> 

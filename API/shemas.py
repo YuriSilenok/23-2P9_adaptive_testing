@@ -46,8 +46,8 @@ class AnswerOptionCreate(BaseModel):
     selected_option_ids: list[int]
     question_id: int
 
-    class Config:
-        from_attributes = True
+    # class Config:
+    #     from_attributes = True
 
 
 class AnswerOptionOut(BaseModel):

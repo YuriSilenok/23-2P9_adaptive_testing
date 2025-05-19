@@ -128,10 +128,12 @@ async def find_questions(poll_id):
     
     for question in questions:
         q_data = {
+            'id': question.id,
             "text": question.text,
             "question_type": question.question_type,
             "answer_options": [
                 {
+                    'id': option.id,
                     "text": option.text
                 }
                 for option in question.answer_options
@@ -163,24 +165,24 @@ def submit_poll_answers(
         HTTPException: В случае ошибок валидации
     """
     # Проверяем существование и активность опроса
-    poll = Poll.get_or_none((Poll.id == poll_id) & (Poll.is_active is True))
+    poll = Poll.get_or_none(Poll.id == poll_id)
     if not poll:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Опрос не найден или не активен"
         )
 
-    #  Проверка, что пользователь еще не отвечал на этот опрос
-    existing_answers = UserAnswer.select().where(
-        (UserAnswer.user == current_user.username) &
-        (UserAnswer.question << Question.select().where(Question.poll == poll_id))
-    ).exists()
+    # #  Проверка, что пользователь еще не отвечал на этот опрос
+    # existing_answers = UserAnswer.select().where(
+    #     (UserAnswer.user == current_user.username) &
+    #     (UserAnswer.question << Question.select().where(Question.poll == poll_id))
+    # ).exists()
 
-    if existing_answers:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Вы уже проходили этот опрос"
-        )
+    # if existing_answers:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_400_BAD_REQUEST,
+    #         detail="Вы уже проходили этот опрос"
+        # )
 
     # Получаем общее количество вопросов в опросе
     question_count = Question.select().where(Question.poll == poll_id).count()
@@ -228,14 +230,14 @@ def submit_poll_answers(
         # Обрабатываем каждый выбранный вариант
         for option_id in option_ids:
             option = AnswerOption.get_or_none(
-                (AnswerOption.id_in_question == option_id) &
+                (AnswerOption.id == option_id) &
                 (AnswerOption.question == question)
             )
 
             if not option:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="Вариант ответа не найден"
+                    detail=f"Вариант ответа не найден{option_id}"
                 )
 
             saved_answers.append(option)
@@ -287,7 +289,7 @@ def check_user_answers_from_db(
         HTTPException: Если данные не найдены
     """
     # 1. Проверяем существование опроса
-    poll = Poll.get_or_none((Poll.id == poll_id) & (Poll.is_active is True))
+    poll = Poll.get_or_none(Poll.id == poll_id)
     if not poll:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

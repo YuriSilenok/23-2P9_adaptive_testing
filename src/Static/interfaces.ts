@@ -23,10 +23,12 @@ interface userShema {
 }
 
 interface Answer {
+    id: number
     text: string
 }
 
 export interface Question {
+    id: number
     text: string,
     answer_options: Answer[]
 }
