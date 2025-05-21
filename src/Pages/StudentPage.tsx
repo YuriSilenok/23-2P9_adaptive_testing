@@ -17,11 +17,10 @@ export default function StudentNavigator () {
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         waitmodal.current?.showModal()
-        console.log('ksodj')
         const form = event.currentTarget
         const data = Object.fromEntries(new FormData(event.currentTarget))
-        const request = axios.get(`http://localhost:8001/auth/ping_poll/${data.id}`, {
-            withCredentials: true
+        const request = fetch(`http://localhost:8001/auth/ping_poll/${data.id}`, {
+            credentials: 'include'
         })
         request
         .then(() => {

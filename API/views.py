@@ -131,21 +131,6 @@ async def create_full_poll(
     return db_poll
 
 
-# @router.get("/polls")
-# async def get_polls(current_user: Annotated[UserOut, Depends(get_current_active_user)]
-# ) -> list[Poll]:
-
-#     if current_user.role == "teacher":
-#         raise HTTPException(
-#             status_code=status.HTTP_403_FORBIDDEN,
-#             detail="Only studens can see polls"
-#         )
-#     polls = await find_polls()
-
-#     return polls
-
-
-# from fastapi import HTTPException, status
 @router.get('/ping_poll/{poll_id}')
 async def ping_poll(
     poll_id: int,

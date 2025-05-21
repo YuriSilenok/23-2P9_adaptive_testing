@@ -1,16 +1,18 @@
 import { ChangeEvent, Dispatch, FormEvent, memo, RefObject, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import { showFormStore } from "../Static/store";
 import { Question, Form } from "../Static/interfaces";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useRedirect } from "../Static/utils";
 import axios from "axios";
 import { Waitmodal, WaitModal } from "../Components/WaitModal";
 import { useFormState } from "react-dom";
+import {Button} from '../Components/Button'
 
 export default function ShowForm () {
     useRedirect()
     const params = new URLSearchParams(window.location.search)
     const waitmodal: Waitmodal = useRef(null)
+    const successfulmodal: RefObject<null| HTMLDialogElement> = useRef(null)
     const subform = showFormStore().form
     const [form, setForm]: [Form, any] = useState(
         sessionStorage.getItem(`formdata#?id=${params.get('id')}`) 
@@ -57,13 +59,23 @@ export default function ShowForm () {
             },
             body: JSON.stringify({answers: requestBody})
         })
-        request.then(request => request.json()).then(data => console.log(data))
+        request.then(request => {
+            if (request.ok) {
+                console.log('djogin')
+                successfulmodal.current?.showModal
+            }
+            request.json()
+        })
+        .then(data => 
+            console.log(data)
+        )
     }
 
 
     return(
         <main className="showform__container">
             <WaitModal ref={waitmodal} isOpen/> 
+            <SuccessfulModal ref={waitmodal} labels={['Форма отправлена', "Вернуться на главную страницу"]} redirectURI={'/forstudent'} />
 
             <header> { form.title } </header>
             <form onSubmit={(event: FormEvent<HTMLFormElement>) => {
@@ -77,7 +89,9 @@ export default function ShowForm () {
                         return <QuestionElement key={element.text} element={element} /> 
                     })}
                 </section>
+                <label >{''}</label>
                 <button type='submit' className="pretty_button" >Отправить</button>
+                
             </form>
         </main>
     )
@@ -136,5 +150,16 @@ const AnswerElement = (answer: {state: string, setter: Dispatch<SetStateAction<s
 
             <label className="answer__label">{answer.label}</label> 
         </article>
+    )
+}
+
+const SuccessfulModal = ({ref, labels, redirectURI}) => {
+    return(
+        <>
+            <dialog ref={ref} className="WaitModal  ">
+                <label>{labels[0]}</label>
+                <Button text={labels[1]} isPretty type='submit' onclick={() => {useNavigate()(redirectURI)} } />
+            </dialog>
+        </>
     )
 }

@@ -172,17 +172,17 @@ def submit_poll_answers(
             detail="Опрос не найден или не активен"
         )
 
-    # #  Проверка, что пользователь еще не отвечал на этот опрос
-    # existing_answers = UserAnswer.select().where(
-    #     (UserAnswer.user == current_user.username) &
-    #     (UserAnswer.question << Question.select().where(Question.poll == poll_id))
-    # ).exists()
+    #  Проверка, что пользователь еще не отвечал на этот опрос
+    existing_answers = UserAnswer.select().where(
+        (UserAnswer.user == current_user.username) &
+        (UserAnswer.question << Question.select().where(Question.poll == poll_id))
+    ).exists()
 
-    # if existing_answers:
-    #     raise HTTPException(
-    #         status_code=status.HTTP_400_BAD_REQUEST,
-    #         detail="Вы уже проходили этот опрос"
-        # )
+    if existing_answers:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,    
+            detail="Вы уже проходили этот опрос"
+        )
 
     # Получаем общее количество вопросов в опросе
     question_count = Question.select().where(Question.poll == poll_id).count()
