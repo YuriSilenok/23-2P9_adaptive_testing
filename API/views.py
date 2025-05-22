@@ -2,7 +2,6 @@
 import datetime 
 from typing import Annotated
 import secrets
-import jwt
 from pydantic import BaseModel
 from fastapi import Depends, APIRouter, HTTPException, status, Form, Response, Cookie, Request, Body 
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm, \
@@ -35,11 +34,6 @@ async def validate_auth_user(
     user: AuthUser = Body()
 ) -> UserOut:
     data = await find_user(user.username)
-    # unauthed_exc = HTTPException(
-    #     status_code=status.HTTP_401_UNAUTHORIZED,
-    #     detail="Invalid username or password",
-    #     headers={"WWW-Authenticate": "Basic"},
-    #     )
     password_hash = await find_password(user.username)
 
     if not data or not verify_password(user.password, password_hash):
@@ -49,8 +43,7 @@ async def validate_auth_user(
 
 
 async def get_current_user(
-    # token: HTTPAuthorizationCredentials = Depends(oauth2_scheme), 
-    access_token: str|None = Cookie(None, include_in_schema=False)
+    access_token: str|bytes = Cookie(None, include_in_schema=False)
 ) -> str:
     credentials_exception = HTTPException(
         status_code=401,
@@ -73,19 +66,19 @@ async def get_current_active_user(
 ) -> UserOut:
     
     user = await find_user(username)
+
+    if not user:
+        raise HTTPException(
+            status_code=403,
+            detail='hyinya'
+        )
+
     if user["is_active"]:
         return UserOut(**user)
     raise HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
         detail="user inactive"
     )
-
-
-# @router.get("/users/me")
-# async def read_users_me(
-#     current_user: Annotated[UserOut, Depends(get_current_active_user)]
-# ) -> UserOut:
-#     return current_user
 
 
 @router.post("/login")
@@ -154,7 +147,7 @@ async def get_poll_questions(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Only studens can see questions"
         )
-    content:PollWithQuestions = await find_questions(poll_id)
+    content = await find_questions(poll_id)
 
     return JSONResponse(content=content)
 

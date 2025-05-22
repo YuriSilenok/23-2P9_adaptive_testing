@@ -25,16 +25,23 @@ async def create_user(user: UserCreate):
 
 
 @database.atomic()
-async def find_user(username):
+async def find_user(username) :
     user = User.select().where(User.username == username)
 
     for i in user:
-        return {"id": i.id,
-                "username": i.username,
-                "name": i.name,
-                "telegram_link": i.telegram_link,
-                "is_active": i.is_active,
-                "role": i.role}
+        return {
+            "id": i.id,
+            "username": i.username,
+            "name": i.name,
+            "telegram_link": i.telegram_link,
+            "is_active": i.is_active,
+            "role": i.role
+        }
+
+    raise HTTPException(
+        detail='user not finded',
+        status_code=404
+    )
 
 
 @database.atomic()
@@ -46,7 +53,7 @@ async def find_password(username):
 
 
 @database.atomic()
-async def create_poll(poll: PollCreate, user: UserCreate):
+async def create_poll(poll: PollCreate, user: UserOut):
     try:
         db_poll = Poll.create(
             title=poll.title,
@@ -119,7 +126,7 @@ async def find_questions(poll_id):
             .prefetch(AnswerOption)
     )
 
-    response:PollWithQuestions = {
+    response = {
         'id': poll.id,
         "title": poll.title,
         "description": poll.description,
