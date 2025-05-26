@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler } from "react"
 
-export const Input = (props: {required? : boolean, name: string, onChange?: Function, max?: number, min?: number, defaultValue?: string, invalidMessage?:string, isPretty?: boolean}) => {
+export const Input = (props: {required? : boolean, name: string, onChange?: Function, max?: number, min?: number, defaultValue?: string, invalidMessage?:string, isPretty?: boolean, placeholder? : string}) => {
     return(<>
             <input 
             type="text" 
@@ -15,7 +15,7 @@ export const Input = (props: {required? : boolean, name: string, onChange?: Func
                 e.currentTarget.offsetWidth
                 e.currentTarget.classList.add('invalid')
             }}
-            placeholder={props.name} 
+            placeholder={props.placeholder ?? props.name} 
             onChange={e => {
                 if (props.name === 'password') {
                     (document.querySelector('[name=repeat]') ?? undefined)?.classList.remove('invalid')

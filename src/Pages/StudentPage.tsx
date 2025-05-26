@@ -23,13 +23,17 @@ export default function StudentNavigator () {
             credentials: 'include'
         })
         request
-        .then(() => {
+        .then((response) => {
+        if (response.ok) {
             navigate(`/showform?id=${data.id}`)
+        } else {    
             waitmodal.current?.close()
+            ThrowMsg('id', form) 
+        }
         })
         .catch(() => {
             waitmodal.current?.close()
-            ThrowMsg('id', form) 
+            alert('что-то не так')
         })
     }
 

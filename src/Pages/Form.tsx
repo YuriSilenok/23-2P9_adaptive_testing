@@ -75,7 +75,7 @@ export default function ShowForm () {
     return(
         <main className="showform__container">
             <WaitModal ref={waitmodal} isOpen/> 
-            <SuccessfulModal ref={waitmodal} labels={['Форма отправлена', "Вернуться на главную страницу"]} redirectURI={'/forstudent'} />
+            <SuccessfulModal ref={undefined} labels={['Форма отправлена', "Вернуться на главную страницу"]} redirectURI={'/forstudent'} />
 
             <header> { form.title } </header>
             <form onSubmit={(event: FormEvent<HTMLFormElement>) => {
