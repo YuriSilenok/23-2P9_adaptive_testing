@@ -17,7 +17,7 @@ class User(BaseModel):
     name = CharField()
     telegram_link = CharField()
     password_hash = CharField()
-    role = CharField()  # 'student' или 'teacher'
+    role = CharField()
     created_at = DateTimeField(default=datetime.now)
     is_active = BooleanField(default=True)
 

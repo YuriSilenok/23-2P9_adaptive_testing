@@ -1,8 +1,9 @@
 import React, { ChangeEventHandler } from "react"
 
-export const Input = (props: {required? : boolean, name: string, onChange?: Function, max?: number, min?: number, defaultValue?: string, invalidMessage?:string, isPretty?: boolean, placeholder? : string}) => {
+export const Input = (props: {value?: string, required? : boolean, name: string, onChange?: Function, max?: number, min?: number, defaultValue?: string, invalidMessage?:string, isPretty?: boolean, placeholder? : string}) => {
     return(<>
             <input 
+            value={props.value}
             type="text" 
             maxLength={props.max ?? 50} 
             minLength={props.min ?? 3} 
@@ -24,7 +25,8 @@ export const Input = (props: {required? : boolean, name: string, onChange?: Func
                 props.onChange 
                     ? props.onChange(e) 
                     : undefined
-            }} required={props.required}/>
+            }} required={props.required}
+            />
 
             <label className="valid_message">{props.invalidMessage ?? 'invalid field'}</label>
 

@@ -3,9 +3,7 @@ import { showFormStore } from "../Static/store";
 import { Question, Form } from "../Static/interfaces";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRedirect } from "../Static/utils";
-import axios from "axios";
 import { Waitmodal, WaitModal } from "../Components/WaitModal";
-import { useFormState } from "react-dom";
 import {Button} from '../Components/Button'
 
 export default function ShowForm () {
@@ -98,7 +96,7 @@ export default function ShowForm () {
 }
 
 
-const QuestionElement = (props: {element: Question}) => {
+const QuestionElement = (props: {element: Partial<Question>}) => {
     const {id} = useParams()
     const [activeAnswer, setActiveAnswer] = useState(sessionStorage.getItem(`${props.element.text}${id}`) ?? '')
     
@@ -107,15 +105,15 @@ const QuestionElement = (props: {element: Question}) => {
             <legend className="question__legend" >{props.element.text}</legend>
 
             <fieldset className="question__answers__fieldset" >
-                {props.element.answer_options.map( answer => {
+                {props.element.answer_options!.map( answer => {
 
                     return <AnswerElement 
                     state={activeAnswer} 
                     setter={setActiveAnswer} 
-                    questionid={props.element.id}
-                    answerid={answer.id} 
+                    questionid={props.element.id!}
+                    answerid={answer.id!} 
                     key={answer.text} 
-                    label={answer.text} /> 
+                    label={answer.text!} /> 
                 })}
             </fieldset>
         </article>

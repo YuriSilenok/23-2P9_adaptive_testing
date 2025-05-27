@@ -22,13 +22,14 @@ interface userShema {
     status: 'teacher' | 'student',
 }
 
-interface Answer {
-    id: number
+export interface Answer {
+    id?: number
     text: string
+    is_correct? : boolean
 }
 
 export interface Question {
-    id: number
+    id?: number
     text: string,
     answer_options: Answer[]
 }
@@ -43,6 +44,8 @@ interface ShowFormShema {
     form: Form,
     setForm: (_:Form) => void
 }
+
+export interface FormCreate extends Partial<Form>{}
 
 export {userShema, userStoreShema, ShowFormShema, Form}
 
