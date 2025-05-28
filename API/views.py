@@ -113,7 +113,7 @@ async def create_full_poll(
     poll_data: PollCreate,
     current_user: Annotated[UserOut, Depends(get_current_active_user)]
 ):
-    if current_user.role != "student":
+    if current_user.role == "student":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Only teachers can create polls"

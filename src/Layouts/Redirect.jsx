@@ -13,6 +13,13 @@ export default function MainRedirect ({checkAccount = false}) {
         nav('/users/autorize')
     }})
 
+    useEffect( () => {
+        if (window.location.pathname !== ( "/createform" || '/showform' )) {
+            sessionStorage.removeItem('formdata')
+            sessionStorage.removeItem('createformdata')
+        }
+    }, [window.location.pathname])
+
     return(
         <Outlet />
     )

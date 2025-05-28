@@ -937,14 +937,14 @@ main.showform__container form section > article fieldset article.answer__contain
   outline: none;
   background-color: white;
   border-radius: 15px;
-  transition: all 0.14s, --main-color 0.4s 0.2s;
+  transition: all 0.3s, --main-color 0.4s 0.2s;
   color: black;
   font-family: "Courier New", Courier, monospace;
   font-weight: 600;
 }
 main.showform__container form section > article fieldset article.answer__container label.answer__label:hover {
-  box-shadow: 2px 2px 0 #000;
-  transform: translate(-2px, -2px);
+  box-shadow: 3px 3px 0 #000;
+  transform: translate(-3px, -3px);
 }
 main.showform__container form section > article fieldset article.answer__container label.answer__label:active {
   box-shadow: 1px 1px 0 #000;
@@ -953,4 +953,271 @@ main.showform__container form section > article fieldset article.answer__contain
 main.showform__container form section > article fieldset article.answer__container input.answer__input:checked ~ label.answer__label {
   background-color: rgb(80, 251, 80);
   scale: 1.02;
+}
+
+main.createform__container {
+  width: 100dvw;
+  min-height: calc(100dvh - var(--top-menu-height));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+}
+main.createform__container form.createform__form {
+  width: 100dvw;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+main.createform__container form.createform__form header.createform__header {
+  text-align: center;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 700;
+  color: white;
+  font-size: x-large;
+  position: sticky;
+  height: 90px;
+}
+main.createform__container form.createform__form header.createform__header label.createform__title__label {
+  font-weight: 700;
+  color: white;
+  font-size: large;
+  font-family: "Courier New", Courier, monospace;
+  text-align: left;
+}
+main.createform__container form.createform__form header.createform__header input {
+  align-content: center;
+  font-family: monospace;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+main.createform__container form.createform__form header.createform__header input + label {
+  font-size: large;
+}
+main.createform__container form.createform__form div.description__container {
+  width: 50%;
+  height: 95px;
+}
+main.createform__container form.createform__form div.description__container label.createform__description__label {
+  font-weight: 700;
+  color: white;
+  font-size: large;
+  font-family: "Courier New", Courier, monospace;
+}
+main.createform__container form.createform__form div.description__container textarea.createform__description__textarea {
+  width: 100%;
+  max-width: 600px;
+  overflow-y: hidden;
+  min-height: 60px;
+  max-height: 200px;
+  scroll-behavior: auto;
+  padding: 5px;
+  border-radius: 10px;
+  border: 3px solid black;
+  font-family: monospace;
+  font-size: 1.2rem;
+  font-weight: 700;
+  resize: none;
+  transition: all 0.3s, --main-color 0.4s 0.2s;
+  margin-bottom: 20px;
+  align-content: center;
+}
+main.createform__container form.createform__form div.description__container textarea.createform__description__textarea:hover {
+  box-shadow: 3px 3px 0 #000;
+  transform: translate(-3px, -3px);
+}
+main.createform__container form.createform__form div.description__container textarea.createform__description__textarea:active {
+  box-shadow: 1px 1px 0 #000;
+  transform: translate(-1px, -1px);
+}
+main.createform__container form.createform__form div.description__container textarea.createform__description__textarea::-moz-placeholder {
+  font-weight: 700;
+}
+main.createform__container form.createform__form div.description__container textarea.createform__description__textarea::placeholder {
+  font-weight: 700;
+}
+main.createform__container form.createform__form section.createform__questions__container {
+  border-top: dashed white 2px;
+  border-bottom: dashed white 2px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 20px;
+  height: 450px;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+main.createform__container form.createform__form section.createform__questions__container::-webkit-scrollbar {
+  display: none;
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container {
+  display: flex;
+  flex-direction: column;
+  height: 510px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 500px;
+  padding: 10px;
+  background: url(/bg-01.jpg);
+  border-radius: 20px;
+  border: 2px black solid;
+  box-shadow: 5px 5px 0 var(--main-color);
+  transition: --main-color 0.4s 0.15s;
+  height: -moz-fit-content;
+  height: fit-content;
+  align-items: baseline;
+  padding-left: 30px;
+  margin-bottom: 10px;
+  width: 90%;
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container > legend {
+  margin-bottom: 40px;
+  text-align: center;
+  width: 55%;
+  border-bottom: 3px black dashed;
+  color: white;
+  font-family: "Courier New", Courier, monospace;
+  font-size: xx-large;
+  font-weight: 600;
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container label.question__text__label,
+main.createform__container form.createform__form section.createform__questions__container > article.question__container label.question__answers__label {
+  color: white;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container label.question__answers__label {
+  border-top: 2px white dashed;
+  margin-top: 5px;
+  width: 100%;
+  font-family: monospace;
+  font-size: larger;
+  text-align: center;
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container textarea.question__text__input {
+  width: 90%;
+  align-content: center;
+  overflow-y: hidden;
+  min-height: 50px;
+  max-height: 80px;
+  scroll-behavior: auto;
+  padding: 5px;
+  border-radius: 10px;
+  border: 3px solid black;
+  font-family: monospace;
+  font-size: 1rem;
+  resize: none;
+  transition: all 0.3s, --main-color 0.4s 0.2s;
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container textarea.question__text__input:hover {
+  box-shadow: 3px 3px 0 #000;
+  transform: translate(-3px, -3px);
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container textarea.question__text__input:active {
+  box-shadow: 1px 1px 0 #000;
+  transform: translate(-1px, -1px);
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container fieldset.question__answers__container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: auto;
+  outline: none;
+  border: none;
+  width: 90%;
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container fieldset.question__answers__container button.question__addanswer__button {
+  height: 30px;
+  width: 90%;
+  margin-left: 5%;
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container fieldset.question__answers__container article.answer__container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-items: center;
+  gap: 10px;
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container fieldset.question__answers__container article.answer__container div {
+  padding: 5px;
+  width: 85%;
+  border: 2px white solid;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.167);
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container fieldset.question__answers__container article.answer__container div label {
+  font-family: monospace;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container fieldset.question__answers__container article.answer__container div textarea.answer__text__input {
+  width: 100%;
+  align-content: center;
+  overflow-y: hidden;
+  min-height: 40px;
+  max-height: 70px;
+  scroll-behavior: auto;
+  caret-color: #4CAF50;
+  background: transparent;
+  font-family: monospace;
+  color: white;
+  border-bottom: black 3px solid;
+  font-size: 1rem;
+  resize: none;
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container fieldset.question__answers__container article.answer__container input.answer__text__radio {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container fieldset.question__answers__container article.answer__container input.answer__text__radio {
+  transition: transform 0.3s;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #555;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  border-color: white;
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container fieldset.question__answers__container article.answer__container input.answer__text__radio::before {
+  content: "";
+  position: absolute;
+  color: white;
+  border-radius: 0px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container fieldset.question__answers__container article.answer__container input.answer__text__radio:checked {
+  background-color: #4CAF50;
+  border-color: #4CAF50;
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container fieldset.question__answers__container article.answer__container input.answer__text__radio:checked::before {
+  content: "✓";
+  color: white;
+  font-size: 14px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+main.createform__container form.createform__form section.createform__questions__container > article.question__container fieldset.question__answers__container article.answer__container input.answer__text__radio:hover {
+  transform: scale(1.09);
+}
+main.createform__container form.createform__form > button {
+  margin-bottom: 10px;
 }/*# sourceMappingURL=main.css.map */

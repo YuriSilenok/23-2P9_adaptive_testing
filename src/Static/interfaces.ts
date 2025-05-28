@@ -30,6 +30,7 @@ export interface Answer {
 
 export interface Question {
     id?: number
+    question_type: 'single_choice'
     text: string,
     answer_options: Answer[]
 }
