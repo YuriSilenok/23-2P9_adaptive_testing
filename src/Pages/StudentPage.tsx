@@ -19,16 +19,30 @@ export default function StudentNavigator () {
         waitmodal.current?.showModal()
         const form = event.currentTarget
         const data = Object.fromEntries(new FormData(event.currentTarget))
-        const request = fetch(`http://localhost:8001/auth/ping_poll/${data.id}`, {
+        const value = data.value as string
+        let id: string | null
+        if (Number(value)) {
+            id = value
+        } else {
+            value.includes('http://localhost:8001/showform?id=') 
+                ? id = value.split('=')[1]
+                : id = "0"
+        }
+        console.log(id)
+        const request = fetch(`http://localhost:8001/auth/ping_poll/${id ?? ''}`, {
             credentials: 'include'
         })
         request
         .then((response) => {
+        console.log(response);
+        
         if (response.ok) {
-            navigate(`/showform?id=${data.id}`)
+            console.log('log');
+            
+            navigate(`/showform?id=${id}`)
         } else {    
             waitmodal.current?.close()
-            ThrowMsg('id', form) 
+            ThrowMsg('value', form) 
         }
         })
         .catch(() => {
@@ -38,7 +52,7 @@ export default function StudentNavigator () {
     }
 
     const handleChange = (e: InputEvent) => {
-        (e.currentTarget! as HTMLInputElement).value = (e.currentTarget! as HTMLInputElement).value.replace(/[^\d]/g, '')
+        // (e.currentTarget! as HTMLInputElement).value = (e.currentTarget! as HTMLInputElement).value.replace(/[^\d]/g, '')
     };
 
     return(
@@ -54,12 +68,13 @@ export default function StudentNavigator () {
                     <legend>Найти форму</legend>
 
                     <Input isPretty required
-                    name="id" 
+                    name="value"
+                    placeholder="id или ссылка" 
                     onChange={(event: InputEvent) => 
                         handleChange(event)
                     } 
-                    max={8} min={1} 
-                    invalidMessage="Неверный ID теста" />
+                    max={50} min={1} 
+                    invalidMessage="Такого теста не существует" />
 
                     <button 
                     className="pretty_button" 

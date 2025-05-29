@@ -5,6 +5,7 @@
 #main-nav {
   display: flex;
   align-items: center;
+  overflow: visible;
   height: var(--top-menu-height);
   position: relative;
   top: 0;
@@ -15,20 +16,6 @@ a {
   text-decoration: none;
   color: black;
   display: none;
-}
-
-body {
-  width: 100dvw;
-  height: 100dvh;
-  background-image: linear-gradient(
-    235deg, 
-    var(--bg-color-start),
-    var(--bg-color-stop)
-  );
-  transition: 
-      --bg-color-start .4s,
-      --bg-color-stop .4s;
-
 }
 
 .main_input {
@@ -87,13 +74,12 @@ body {
   border-radius: 10px;
   border: 3px black solid;
   height: 50px;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: monospace;
   font-size: x-large;
   font-weight: 550;
   padding: 20px;
   box-sizing: border-box;
   transition: all .7s;
-  font-family: 'Times New Roman', Times, serif;
   position: relative;
   transition: box-shadow 0.3s, transform 0.3s;
 

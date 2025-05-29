@@ -72,18 +72,36 @@ initial-value: #ff8aa5;
   }
 }
 
-html {
-  background: fixed;
-  position: fixed;
+html {  
+  min-height: 100%;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 #root {
-  height: 100%;
+  min-height: 100%;
 }
 
 label {
   display: block;
 }
+
+body {
+  min-height: 100dvh;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-image: linear-gradient(
+    235deg, 
+    var(--bg-color-start),
+    var(--bg-color-stop)
+  );
+  transition: 
+      --bg-color-start .4s,
+      --bg-color-stop .4s;
+}
+
 
 
 

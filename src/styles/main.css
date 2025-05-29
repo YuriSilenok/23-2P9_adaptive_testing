@@ -64,21 +64,33 @@
 }
 
 html {
-  background: fixed;
-  position: fixed;
+  min-height: 100%;
+  overflow-y: scroll;
+}
+html::-webkit-scrollbar {
+  display: none;
 }
 
 #root {
-  height: 100%;
+  min-height: 100%;
 }
 
 label {
   display: block;
 }
 
+body {
+  min-height: 100dvh;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-image: linear-gradient(235deg, var(--bg-color-start), var(--bg-color-stop));
+  transition: --bg-color-start 0.4s, --bg-color-stop 0.4s;
+}
+
 #main-nav {
   display: flex;
   align-items: center;
+  overflow: visible;
   height: var(--top-menu-height);
   position: relative;
   top: 0;
@@ -89,13 +101,6 @@ a {
   text-decoration: none;
   color: black;
   display: none;
-}
-
-body {
-  width: 100dvw;
-  height: 100dvh;
-  background-image: linear-gradient(235deg, var(--bg-color-start), var(--bg-color-stop));
-  transition: --bg-color-start 0.4s, --bg-color-stop 0.4s;
 }
 
 .main_input {
@@ -151,13 +156,12 @@ body {
   border-radius: 10px;
   border: 3px black solid;
   height: 50px;
-  font-family: "Courier New", Courier, monospace;
+  font-family: monospace;
   font-size: x-large;
   font-weight: 550;
   padding: 20px;
   box-sizing: border-box;
   transition: all 0.7s;
-  font-family: "Times New Roman", Times, serif;
   position: relative;
   transition: box-shadow 0.3s, transform 0.3s;
 }
@@ -956,12 +960,15 @@ main.showform__container form section > article fieldset article.answer__contain
 }
 
 main.createform__container {
-  width: 100dvw;
+  overflow-y: scroll;
   min-height: calc(100dvh - var(--top-menu-height));
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: start;
+}
+main.createform__container::-webkit-scrollbar {
+  display: none;
 }
 main.createform__container form.createform__form {
   width: 100dvw;
@@ -971,8 +978,13 @@ main.createform__container form.createform__form {
   justify-content: start;
   align-items: center;
 }
+main.createform__container form.createform__form section.buttons__section {
+  display: flex;
+  gap: 10px;
+}
 main.createform__container form.createform__form header.createform__header {
   text-align: center;
+  min-width: 300px;
   font-family: "Courier New", Courier, monospace;
   font-weight: 700;
   color: white;
@@ -988,6 +1000,7 @@ main.createform__container form.createform__form header.createform__header label
   text-align: left;
 }
 main.createform__container form.createform__form header.createform__header input {
+  width: 100%;
   align-content: center;
   font-family: monospace;
   font-size: 1.2rem;
@@ -996,19 +1009,18 @@ main.createform__container form.createform__form header.createform__header input
 main.createform__container form.createform__form header.createform__header input + label {
   font-size: large;
 }
-main.createform__container form.createform__form div.description__container {
-  width: 50%;
-  height: 95px;
-}
-main.createform__container form.createform__form div.description__container label.createform__description__label {
+main.createform__container form.createform__form label.createform__description__label {
   font-weight: 700;
   color: white;
   font-size: large;
+  text-align: left;
+  width: 100%;
+  max-width: 450px;
   font-family: "Courier New", Courier, monospace;
 }
-main.createform__container form.createform__form div.description__container textarea.createform__description__textarea {
+main.createform__container form.createform__form textarea.createform__description__textarea {
   width: 100%;
-  max-width: 600px;
+  max-width: 450px;
   overflow-y: hidden;
   min-height: 60px;
   max-height: 200px;
@@ -1024,18 +1036,18 @@ main.createform__container form.createform__form div.description__container text
   margin-bottom: 20px;
   align-content: center;
 }
-main.createform__container form.createform__form div.description__container textarea.createform__description__textarea:hover {
+main.createform__container form.createform__form textarea.createform__description__textarea:hover {
   box-shadow: 3px 3px 0 #000;
   transform: translate(-3px, -3px);
 }
-main.createform__container form.createform__form div.description__container textarea.createform__description__textarea:active {
+main.createform__container form.createform__form textarea.createform__description__textarea:active {
   box-shadow: 1px 1px 0 #000;
   transform: translate(-1px, -1px);
 }
-main.createform__container form.createform__form div.description__container textarea.createform__description__textarea::-moz-placeholder {
+main.createform__container form.createform__form textarea.createform__description__textarea::-moz-placeholder {
   font-weight: 700;
 }
-main.createform__container form.createform__form div.description__container textarea.createform__description__textarea::placeholder {
+main.createform__container form.createform__form textarea.createform__description__textarea::placeholder {
   font-weight: 700;
 }
 main.createform__container form.createform__form section.createform__questions__container {
@@ -1047,7 +1059,8 @@ main.createform__container form.createform__form section.createform__questions__
   align-items: center;
   margin-bottom: 20px;
   gap: 20px;
-  height: 450px;
+  min-height: 450px;
+  max-height: 55dvh;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   padding-top: 5px;
@@ -1156,8 +1169,10 @@ main.createform__container form.createform__form section.createform__questions__
   background-color: rgba(0, 0, 0, 0.167);
 }
 main.createform__container form.createform__form section.createform__questions__container > article.question__container fieldset.question__answers__container article.answer__container div label {
+  color: whitesmoke;
+  font-size: 15px;
   font-family: monospace;
-  font-weight: 700;
+  font-weight: 500;
   margin-bottom: 5px;
 }
 main.createform__container form.createform__form section.createform__questions__container > article.question__container fieldset.question__answers__container article.answer__container div textarea.answer__text__input {
@@ -1171,6 +1186,8 @@ main.createform__container form.createform__form section.createform__questions__
   background: transparent;
   font-family: monospace;
   color: white;
+  border-left: 3px transparent solid;
+  border-top: transparent 3px solid;
   border-bottom: black 3px solid;
   font-size: 1rem;
   resize: none;
@@ -1220,4 +1237,8 @@ main.createform__container form.createform__form section.createform__questions__
 }
 main.createform__container form.createform__form > button {
   margin-bottom: 10px;
+}
+
+textarea:user-invalid {
+  border: red solid 3px !important;
 }/*# sourceMappingURL=main.css.map */

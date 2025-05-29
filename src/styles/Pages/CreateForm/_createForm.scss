@@ -1,7 +1,11 @@
 @use '../../Base/mixins' as *;
 
 main.createform__container {
-    width: 100dvw;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
     min-height: calc(100dvh - var(--top-menu-height));
     display: flex;
     flex-direction: column;
@@ -16,8 +20,14 @@ main.createform__container {
         justify-content: start;
         align-items: center;
 
+        section.buttons__section {
+            display: flex;
+            gap: 10px
+        }
+
     header.createform__header {
         text-align: center;
+        min-width: 300px;
         font-family: 'Courier New', Courier, monospace;
         font-weight: 700;
         color: white;
@@ -33,6 +43,7 @@ main.createform__container {
             text-align: left;
         }
         input {
+            width: 100%;
             align-content: center;
             font-family: monospace;
             font-size: 1.2rem;
@@ -44,37 +55,36 @@ main.createform__container {
         }
     }
 
-    div.description__container{
-        width: 50%;
-        height: 95px ;
 
-        label.createform__description__label {
-            font-weight: 700;
-            color: white;
-            font-size: large;
-            font-family: 'Courier New', Courier, monospace;
-        }
+    label.createform__description__label {
+        font-weight: 700;
+        color: white;
+        font-size: large;
+        text-align: left;
+        width: 100%;
+        max-width: 450px;
+        font-family: 'Courier New', Courier, monospace;
+    }
 
-        textarea.createform__description__textarea {
-            width: 100%;
-            max-width: 600px;
-            overflow-y: hidden;
-            min-height: 60px;
-            max-height: 200px;
-            scroll-behavior: auto;
-            padding: 5px;
-            border-radius: 10px;
-            border: 3px solid black;
-            font-family: monospace;
-            font-size: 1.2rem;
+    textarea.createform__description__textarea {
+        width: 100%;
+        max-width: 450px;
+        overflow-y: hidden;
+        min-height: 60px;
+        max-height: 200px;
+        scroll-behavior: auto;
+        padding: 5px;
+        border-radius: 10px;
+        border: 3px solid black;
+        font-family: monospace;
+        font-size: 1.2rem;
+        font-weight: 700;
+        resize: none;
+        @include pretty_hover;
+        margin-bottom: 20px;
+        align-content: center;
+        &::placeholder {
             font-weight: 700;
-            resize: none;
-            @include pretty_hover;
-            margin-bottom: 20px;
-            align-content: center;
-            &::placeholder {
-                font-weight: 700;
-            }
         }
     }
 
@@ -87,7 +97,8 @@ main.createform__container {
         align-items: center;
         margin-bottom: 20px;
         gap: 20px;
-        height: 450px;
+        min-height: 450px;
+        max-height: 55dvh;
         overflow-y: scroll;
         scroll-snap-type: y mandatory;
         padding-top: 5px;
@@ -169,8 +180,10 @@ main.createform__container {
                     background-color: rgba(0, 0, 0, 0.167);
 
                     label {
+                        color: whitesmoke;
+                        font-size: 15px;
                         font-family: monospace;
-                        font-weight: 700;
+                        font-weight: 500;
                         margin-bottom: 5px;
                     }
 
@@ -184,6 +197,8 @@ main.createform__container {
                         caret-color: #4CAF50;
                         background:transparent;
                         font-family: monospace;color: white;
+                        border-left: 3px transparent solid;
+                        border-top: transparent 3px solid;
                         border-bottom: black 3px solid;
                         font-size: 1rem;
                         resize: none;
@@ -247,4 +262,8 @@ main.createform__container {
         margin-bottom: 10px;
     }
   }
+}
+
+textarea:user-invalid{
+    border: red solid 3px !important;
 }

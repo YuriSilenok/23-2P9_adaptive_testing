@@ -1,10 +1,9 @@
 import { useRedirect } from "../Static/utils"
-import { ChangeEvent, createContext, Dispatch, FormEvent, memo, RefObject, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
+import { ChangeEvent, createContext, Dispatch, FormEvent, InvalidEvent, memo, RefObject, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
 import { showFormStore } from "../Static/store";
 import { Answer, Form, FormCreate, Question} from "../Static/interfaces";
 import { useParams } from "react-router-dom";
 import { Input } from '../Components/Input'
-import { create } from "zustand";
 import { Button } from "../Components/Button";
 import { useImmer } from "use-immer";
 
@@ -123,24 +122,31 @@ export default function Createform () {
             onSubmit={(event) => {
                 event.preventDefault()
                 sendForm(form)
-            }}>
+            }}
+            >
                 <header className="createform__header" >
                     <label className="createform__title__label">Заголовок формы:</label>
 
                     <Input isPretty
+                    required
                     className="createform__title__input"
                     value={form.title}
                     onChange ={( event: ChangeEvent<HTMLInputElement> ) => 
                         setTitle(event.currentTarget.value) 
                     } 
+                    invalidMessage="Слишком короткое поле"
+                    min={3}
                     placeholder="" 
                     name="title" />
 
                 </header>
 
-                <div className="description__container">
                     <label className="createform__description__label" >Описание формы:</label>
-                    <textarea rows={1}
+
+                    <textarea 
+                    maxLength={180}
+                    minLength={3}
+                    required
                     placeholder=""
                     value={form.description}
                     className="createform__description__textarea "
@@ -149,7 +155,6 @@ export default function Createform () {
                         autoResizeTextarea(event.currentTarget)
                     }}
                     name="description" />
-                </div> 
 
                 <section className="createform__questions__container">
                     {form.questions.map( (question, index) => 
@@ -172,31 +177,34 @@ export default function Createform () {
                     type="button" />
                 </section>
 
-                <Button 
-                className="createform__submit__button"
-                isPretty 
-                type='submit' 
-                text="Отослать" />
-
-                <Button isPretty
-                type='button'
-                text="Очистить"
-                onclick={() => setForm({
-                    title: '',
-                    description: '',
-                    questions: [
-                        {
-                            text: '',
-                            question_type: "single_choice",
-                            answer_options: [
-                                {
-                                    text: '',
-                                    is_correct: false
-                                }
-                            ]
-                        }
-                    ]
-                })} /> 
+                <section className="buttons__section">
+                    <Button
+                    className="createform__submit__button"
+                    isPretty
+                    type='submit'
+                    text="Отослать" />
+                    <Button isPretty
+                    type='button'
+                    text="Очистить"
+                    onclick={() => {
+                        sessionStorage.removeItem('createformdata')
+                        setForm({
+                        title: '',
+                        description: '',
+                        questions: [
+                            {
+                                text: '',
+                                question_type: "single_choice",
+                                answer_options: [
+                                    {
+                                        text: '',
+                                        is_correct: false
+                                    }
+                                ]
+                            }
+                        ]
+                    })}} />
+                </section>
             </form>
         </main>
     )
@@ -215,17 +223,19 @@ const QuestionElement = memo((props: {
     return(
         <article className="question__container" >
             <label className="question__text__label" htmlFor="">Текст вопроса:</label>
-            <textarea maxLength={110}
-            className="question__text__input textarea pretty_input"  
+            <textarea maxLength={110} minLength={3}
+            required
+            className="question__text__input  pretty_input"  
             name={`answer${props.id}text`}
             placeholder=""
             onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
                 props.questionTextSetter(event.currentTarget.value, props.id)
-
             }}
             value={props.question.text} />
+            
             <label style={{height: '0px', width: '0px'}} hidden />
             <label className="question__answers__label">Варианты ответов:</label>
+
             <fieldset className="question__answers__container">
                 {props.question.answer_options.map( (answer, index) => 
                     <AnswerElement 
@@ -268,6 +278,7 @@ const AnswerElement = memo((props: {
                 <label className="answer__text__label">{`Вариант ответа №${props.id + 1}:`}</label>
                 
                 <textarea maxLength={115} minLength={3}
+                required
                 className="answer__text__input textarea"
                 value={props.answer.text}
                 name={`answer${props.queid}.${props.id}`}
@@ -278,7 +289,7 @@ const AnswerElement = memo((props: {
                 />
             </div>
 
-            <input 
+            <input required
             className="answer__text__radio"
             type='radio' 
             name={`${props.queid}answers`} 
