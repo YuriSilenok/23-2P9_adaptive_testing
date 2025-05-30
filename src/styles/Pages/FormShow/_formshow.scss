@@ -68,14 +68,15 @@ main.showform__container {
                 fieldset {
                     display: flex;
                     flex-direction: column;
-                    gap: 10px;
                     outline: none;
                     border: none;
                     width: 90%;
+                    gap: 10px;
 
                     article.answer__container {
                         height: 40px;
                         width: 100%;
+                        position: relative;
 
                         label.answer__label {
                             border: 2px black solid;
@@ -90,6 +91,17 @@ main.showform__container {
                             color: black;
                             font-family: 'Courier New', Courier, monospace;
                             font-weight: 600;
+                        }
+
+                        input.answer__input {
+                            position: absolute;
+                            width: 1px;
+                            height: 1px;
+                            left: 50%;
+                            top: 50%;
+                            color: transparent;
+                            background: transparent;
+                            z-index: -10;
                         }
                         
                         input.answer__input:checked ~ label.answer__label   {

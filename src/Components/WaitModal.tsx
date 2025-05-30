@@ -17,5 +17,3 @@ export function WaitModal (props: {ref: RefObject<HTMLDialogElement | null>, isO
         </dialog>
     )
 }
-
-export type Waitmodal = RefObject<HTMLDialogElement|null>

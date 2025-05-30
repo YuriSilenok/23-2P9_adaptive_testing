@@ -6,14 +6,19 @@ import { useParams } from "react-router-dom";
 import { Input } from '../Components/Input'
 import { Button } from "../Components/Button";
 import { useImmer } from "use-immer";
+import { WaitModal } from "../Components/WaitModal";
+import { SuccessfulModal } from "../Components/SuccessfulModal";
 
 const autoResizeTextarea = (textarea: HTMLTextAreaElement) => {
-  textarea.style.height = 'auto'; // Сброс высоты
-  textarea.style.height = `${textarea.scrollHeight}px`; // Установка новой высоты
+    textarea.style.height = 'auto'
+    textarea.style.height = `${textarea.scrollHeight}px`
 };
 
 export default function Createform () {
     useRedirect()
+    const sm: RefObject<null | HTMLDialogElement> = useRef(null)
+    const wm: RefObject<null | HTMLDialogElement> = useRef(null)
+    const [formid, setFormID] = useState(null)
 
     const save = (data: any) => {
     sessionStorage.setItem('createformdata', JSON.stringify(data))
@@ -98,9 +103,8 @@ export default function Createform () {
             save(draft)
     }), [])
 
-    const sendForm = (formdata) => {
-        console.log(JSON.stringify(formdata));
-        
+    async function sendForm (formdata) {
+        wm.current?.showModal()
         const request = fetch('http://localhost:8001/auth/create_poll', {
             credentials: 'include',
             method: 'post',
@@ -109,15 +113,48 @@ export default function Createform () {
                 'Content-Type': 'application/json'
             }
         })
+
         request
-        .then(response => response.json())
-        .then(data => console.log(data))
+        .then(response => {
+            wm.current?.close()
+            console.log('ijij');
+            
+            if (response.ok) {
+                return response.json().then(data => {
+                    console.log(data)
+                    setFormID(data.id ?? 'error')
+                    console.log(formid)
+                    sm.current?.showModal()
+                })
+
+            } else {
+                return response.json().then( errdata => {
+                    const el = document.querySelector('input[name=title] + label') as HTMLLabelElement
+                    el.innerHTML = 'Заголовок формы уже используется'
+                    document.querySelector('input[name=title]')?.classList.add('invalid')
+                })
+            }
+        })
+        
         
     }
 
 
     return(
         <main className="createform__container" >
+            <SuccessfulModal ref={sm} labels={[`Форма с id ${formid} создана`, `Вернуться в меню`]} redirectURI="/" children={
+                <a onClick={() => {
+                    try {
+                        navigator.clipboard.writeText(`http://localhost:8001/showform?id=${formid}`)
+                        alert('Успешно скопировано')
+                    } catch {
+                        alert('Ошибка при копировании')
+                    }
+                }}>
+                    Копировать ссылку
+                </a>
+            } />
+            <WaitModal ref={wm} /> 
             <form className="createform__form"
             onSubmit={(event) => {
                 event.preventDefault()

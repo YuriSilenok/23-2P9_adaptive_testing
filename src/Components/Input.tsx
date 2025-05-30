@@ -18,6 +18,8 @@ export const Input = (props: {className?: string, value?: string, required? : bo
             }}
             placeholder={props.placeholder ?? props.name} 
             onChange={e => {
+                const label = document.querySelector(`input[name=${props.name}] + label`) as HTMLLabelElement
+                label.innerHTML = props.invalidMessage ?? 'Некорректное значение'
                 if (props.name === 'password') {
                     (document.querySelector('[name=repeat]') ?? undefined)?.classList.remove('invalid')
                 }

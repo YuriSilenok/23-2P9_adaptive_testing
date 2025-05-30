@@ -3,13 +3,14 @@ import { showFormStore } from "../Static/store";
 import { Question, Form } from "../Static/interfaces";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRedirect } from "../Static/utils";
-import { Waitmodal, WaitModal } from "../Components/WaitModal";
+import { WaitModal } from "../Components/WaitModal";
 import {Button} from '../Components/Button'
+import { SuccessfulModal } from "../Components/SuccessfulModal";
 
 export default function ShowForm () {
     useRedirect()
     const params = new URLSearchParams(window.location.search)
-    const waitmodal: Waitmodal = useRef(null)
+    const waitmodal: RefObject<HTMLDialogElement | null> = useRef(null)
     const successfulmodal: RefObject<null| HTMLDialogElement> = useRef(null)
     const subform = showFormStore().form
     const [form, setForm]: [Form, any] = useState(
@@ -57,23 +58,23 @@ export default function ShowForm () {
             },
             body: JSON.stringify({answers: requestBody})
         })
+
         request.then(request => {
             if (request.ok) {
-                console.log('djogin')
-                successfulmodal.current?.showModal
+                successfulmodal.current?.showModal()
+            } else {
+                if (request.status == 400) {
+                    alert('Вы уже отправляти эту форму')
+                }
             }
-            request.json()
         })
-        .then(data => 
-            console.log(data)
-        )
     }
 
 
     return(
         <main className="showform__container">
             <WaitModal ref={waitmodal} isOpen/> 
-            <SuccessfulModal ref={undefined} labels={['Форма отправлена', "Вернуться на главную страницу"]} redirectURI={'/forstudent'} />
+            <SuccessfulModal ref={successfulmodal} labels={['Форма отправлена', "Вернуться на главную страницу"]} redirectURI={'/'} />
 
             <header> { form.title } </header>
             <form onSubmit={(event: FormEvent<HTMLFormElement>) => {
@@ -135,7 +136,7 @@ const AnswerElement = (answer: {state: string, setter: Dispatch<SetStateAction<s
             sessionStorage.setItem(`${answer.questionid}${id}`, String(answer.answerid))
         }} className="answer__container">
 
-            <input hidden
+            <input required 
             onChange={ (event: ChangeEvent<HTMLInputElement>) => {event.currentTarget}} 
             type="radio" 
             className="answer__input" 
@@ -148,16 +149,5 @@ const AnswerElement = (answer: {state: string, setter: Dispatch<SetStateAction<s
 
             <label className="answer__label">{answer.label}</label> 
         </article>
-    )
-}
-
-const SuccessfulModal = ({ref, labels, redirectURI}) => {
-    return(
-        <>
-            <dialog ref={ref} className="WaitModal  ">
-                <label>{labels[0]}</label>
-                <Button text={labels[1]} isPretty type='submit' onclick={() => {useNavigate()(redirectURI)} } />
-            </dialog>
-        </>
     )
 }
