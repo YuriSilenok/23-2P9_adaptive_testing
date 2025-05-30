@@ -49,6 +49,7 @@ export default function ShowForm () {
         Object.entries(data).forEach( ([queid, answid]) => {
             requestBody.push({'question_id': Number(queid), 'selected_option_ids': [Number(answid)]})
         })
+        waitmodal.current?.showModal()
         console.log({'answers': requestBody})
         const request = fetch(`http://localhost:8001/auth/polls/${params.get('id')}/submit-answers`, {
             credentials: 'include', 
@@ -60,6 +61,7 @@ export default function ShowForm () {
         })
 
         request.then(request => {
+            waitmodal.current?.close()
             if (request.ok) {
                 successfulmodal.current?.showModal()
             } else {
