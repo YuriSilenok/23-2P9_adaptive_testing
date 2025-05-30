@@ -268,119 +268,95 @@ def submit_poll_answers(
 
 
 @database.atomic()
-def check_user_answers_from_db(
-    poll_id: int,
-    username: str
-) -> Dict:
+def check_user_answers_from_db(username: str) -> Dict:
     """
     Проверяет ответы пользователя из базы данных на правильность
 
     Args:
-        poll_id: ID опроса
-        username: Имя пользователя
+        username: Имя пользователя (учителя)
 
     Returns:
-        Словарь с результатами:
+        Словарь с результатами по всем опросам пользователя:
         {
-            "username": str,
-            "poll_id": int,
-            "poll_title": str,
-            "total_questions": int,
-            "answered_questions": int,
-            "correct_answers": int,
-            "score": float,
-            "details": List[Dict]
+            "teacher": str,
+            "polls": [
+                {
+                    "poll_id": int,
+                    "poll_title": str,
+                    "total_questions": int,
+                    "answered_questions": int,
+                    "correct_answers": int,
+                    "score": float,
+                    "details": List[Dict]
+                },
+                ...
+            ]
         }
 
     Raises:
         HTTPException: Если данные не найдены
     """
-    # 1. Проверяем существование опроса
-    poll = Poll.get_or_none(Poll.id == poll_id)
-    if not poll:
+    try:
+        # Получаем все опросы, созданные этим учителем
+        teacher_polls = (Poll
+                        .select()
+                        .where((Poll.created_by == username) & (Poll.is_active == True))
+                        .order_by(Poll.created_at.desc()))
+        
+        result = {
+            "teacher": username,
+            "polls": []
+        }
+
+        for poll in teacher_polls:
+            # Получаем все вопросы для этого опроса
+            questions = (Question
+                        .select()
+                        .where(Question.poll == poll)
+                        .count())
+            
+            # Получаем все ответы студентов на этот опрос
+            user_answers = (UserAnswer
+                          .select()
+                          .join(Question)
+                          .where(Question.poll == poll))
+            
+            # Группируем ответы по пользователям
+            answers_by_user = {}
+            for answer in user_answers:
+                if answer.user.username not in answers_by_user:
+                    answers_by_user[answer.user.username] = []
+                answers_by_user[answer.user.username].append(answer)
+            
+            # Собираем статистику по опросу
+            poll_stats = {
+                "poll_id": poll.id,
+                "poll_title": poll.title,
+                "total_questions": questions,
+                "answered_users": len(answers_by_user),
+                "user_stats": []
+            }
+
+            for student, answers in answers_by_user.items():
+                correct = sum(1 for a in answers if a.answer_option.is_correct)
+                total = len(answers)
+                
+                poll_stats["user_stats"].append({
+                    "student": student,
+                    "answered_questions": total,
+                    "correct_answers": correct,
+                    "score": round(correct / questions * 100, 2) if questions > 0 else 0
+                })
+
+            result["polls"].append(poll_stats)
+
+        return result
+
+    except Exception as e:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Poll not found or inactive"
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error fetching user answers: {str(e)}"
         )
-
-    # 2. Получаем все вопросы опроса с правильными ответами
-    questions = (Question
-                 .select()
-                 .where(Question.poll == poll_id)
-                 .order_by(Question.id_in_poll)
-                 .prefetch(AnswerOption))
-
-    # 3. Получаем ответы пользователя для этого опроса
-    user_answers = (UserAnswer
-                    .select()
-                    .join(Question)
-                    .where(
-                        (UserAnswer.user == username) &
-                        (Question.poll == poll_id)
-                    )
-                    .prefetch(AnswerOption))
-
-    if not user_answers:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User answers not found for this poll"
-        )
-
-    # 4. Подготавливаем структуру для результатов
-    results = {
-        "username": username,
-        "poll_id": poll_id,
-        "poll_title": poll.title,
-        "total_questions": len(questions),
-        "answered_questions": 0,
-        "correct_answers": 0,
-        "score": 0.0,
-        "details": []
-    }
-
-    # 5. Группируем ответы пользователя по вопросам
-    answers_by_question = {}
-    for answer in user_answers:
-        if answer.question.id not in answers_by_question:
-            answers_by_question[answer.question.id] = []
-        answers_by_question[answer.question.id].append(answer.answer_option.id_in_question)
-
-    # 6. Проверяем правильность ответов
-    for question in questions:
-        user_selected = answers_by_question.get(question.id, [])
-        correct_options = [opt.id_in_question for opt in question.answer_options if opt.is_correct]
-
-        # Определяем правильность ответа
-        is_correct = False
-        if question.question_type == "single_choice":
-            is_correct = (len(user_selected) == 1 and
-                          user_selected[0] in correct_options)
-        else:  # multiple_choice
-            is_correct = (set(user_selected) == set(correct_options))
-
-        # Обновляем результаты
-        if user_selected:
-            results["answered_questions"] += 1
-            if is_correct:
-                results["correct_answers"] += 1
-
-        results["details"].append({
-            "question_id": question.id_in_poll,
-            "question_text": question.text,
-            "question_type": question.question_type,
-            "user_answers": user_selected,
-            "correct_answers": correct_options,
-            "is_correct": is_correct
-        })
-
-    # 7. Рассчитываем процент правильных ответов
-    if results["answered_questions"] > 0:
-        results["score"] = round(
-            results["correct_answers"] / results["answered_questions"] * 100,
-            2
-        )
-
-    return results
 
 
 if __name__ == "__main__":

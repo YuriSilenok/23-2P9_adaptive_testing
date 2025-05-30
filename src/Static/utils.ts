@@ -4,7 +4,7 @@ import { userStore } from "./store"
 import { useEffect } from "react"
 const PathDepends = {
     'student': ['/forstudent', '/showform'],
-    'teacher': ['/forteacher', '/createform'],
+    'teacher': ['/forteacher', '/createform', '/forteacher/results'],
 }
 
 export const useRedirect = (redirectURI?: Pathname) => {

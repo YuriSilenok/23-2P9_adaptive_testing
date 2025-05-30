@@ -168,11 +168,13 @@ async def submit_answers(
     return submit_poll_answers(poll_id, answers_data, current_user)
 
 
-@router.get("/polls/{poll_id}/submit-answers/username")
-async def check_answers(
-    poll_id: int,
-    username: str,
+@router.get("/polls/check")
+async def check_statistic(
     current_user: UserOut = Depends(get_current_active_user)
-):
-
-    return check_user_answers_from_db(poll_id, username)
+) -> dict:
+    if current_user.role == 'student':
+        raise HTTPException(
+            status_code=403, 
+            detail='Only teachers can see stats'
+        )
+    return check_user_answers_from_db(current_user.username)
