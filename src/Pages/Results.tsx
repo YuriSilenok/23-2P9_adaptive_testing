@@ -5,30 +5,30 @@ import { useNavigate } from "react-router-dom";
 import {WaitModal} from '../Components/WaitModal'
 
 interface PollStats {
-  poll_id: number;
-  poll_title: string;
-  total_questions: number;
-  answered_users: number;
+  poll_id: number
+  poll_title: string
+  total_questions: number
+  answered_users: number
   user_stats: Array<{
-    student: string;
-    answered_questions: number;
-    correct_answers: number;
-    score: number;
-  }>;
+    student: string
+    answered_questions: number
+    correct_answers: number
+    score: number
+  }>
 }
 
 interface StatsData {
-  teacher: string;
-  polls: PollStats[];
+  teacher: string
+  polls: PollStats[]
 }
 
 
 export default function TeacherStats() {
-  useRedirect();
+  useRedirect()
   const waitmodal = useRef(null)
-  const [stats, setStats] = useState<StatsData | null>(null);
-  const navigate = useNavigate();
-  const modalRef = useRef<HTMLDialogElement>(null);
+  const [stats, setStats] = useState<StatsData | null>(null)
+  const navigate = useNavigate()
+  const modalRef = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -36,15 +36,15 @@ export default function TeacherStats() {
         const response = await fetch("http://localhost:8001/auth/polls/check", {
           credentials: "include",
         });
-        const data: StatsData = await response.json();
-        setStats(data);
+        const data: StatsData = await response.json()
+        setStats(data)
       } catch (error) {
-        console.error("Error fetching stats:", error);
+        console.error("Error fetching stats:", error)
       }
-    };
+    }
 
-    fetchStats();
-  }, []);
+    fetchStats()
+  }, [])
 
   if (!stats) {
     return <WaitModal ref={waitmodal} isOpen />
@@ -71,11 +71,11 @@ export default function TeacherStats() {
         className="stats-back-button"
       />
     </main>
-  );
+  )
 }
 
 const PollStatsCard = memo(({ poll }: { poll: PollStats }) => {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false)
 
   return (
     <article className="poll-card">
@@ -125,5 +125,5 @@ const PollStatsCard = memo(({ poll }: { poll: PollStats }) => {
         </div>
       )}
     </article>
-  );
-});
+  )
+})

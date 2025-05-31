@@ -50,9 +50,8 @@ export default function ShowForm () {
             requestBody.push({'question_id': Number(queid), 'selected_option_ids': [Number(answid)]})
         })
         waitmodal.current?.showModal()
-        console.log({'answers': requestBody})
         const request = fetch(`http://localhost:8001/auth/polls/${params.get('id')}/submit-answers`, {
-            credentials: 'include', 
+            credentials: 'include',
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"

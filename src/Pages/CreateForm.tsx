@@ -2,7 +2,6 @@ import { useRedirect } from "../Static/utils"
 import { ChangeEvent, createContext, Dispatch, FormEvent, InvalidEvent, memo, RefObject, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
 import { showFormStore } from "../Static/store";
 import { Answer, Form, FormCreate, Question} from "../Static/interfaces";
-import { useParams } from "react-router-dom";
 import { Input } from '../Components/Input'
 import { Button } from "../Components/Button";
 import { useImmer } from "use-immer";
@@ -21,8 +20,8 @@ export default function Createform () {
     const [formid, setFormID] = useState(null)
 
     const save = (data: any) => {
-    sessionStorage.setItem('createformdata', JSON.stringify(data))
-}
+        sessionStorage.setItem('createformdata', JSON.stringify(data))
+    }
 
     const [form, setForm] = useImmer(JSON.parse(sessionStorage.getItem('createformdata') ?? JSON.stringify({
             title: '',

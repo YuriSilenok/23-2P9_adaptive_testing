@@ -89,12 +89,14 @@ async def find_polls():
         return "Polls not defiend"
 
     for i in polls:
-        list_polls.append({"id": i.id,
-                           "title": i.title,
-                           "description": i.description,
-                           "created_at": i.created_at,
-                           "created_by_id": i.created_by_id,
-                           "is_active": i.is_active, })
+        list_polls.append({
+            "id": i.id,
+            "title": i.title,
+            "description": i.description,
+            "created_at": i.created_at,
+            "created_by_id": i.created_by_id,
+            "is_active": i.is_active
+        })
 
     return list_polls
 
@@ -111,14 +113,12 @@ async def find_poll(poll_id):
 
 @database.atomic()
 async def find_questions(poll_id):
-    # Проверяем, что опрос существует и активен
     poll = Poll.get_or_none(Poll.id == poll_id)
     if not poll:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Poll not found or inactive")
 
-    # Получаем все вопросы с вариантами ответов
     questions = (
         Question
             .select()
@@ -171,7 +171,7 @@ def submit_poll_answers(
     Raises:
         HTTPException: В случае ошибок валидации
     """
-    # Проверяем существование и активность опроса
+
     poll = Poll.get_or_none(Poll.id == poll_id)
     if not poll:
         raise HTTPException(
@@ -179,7 +179,6 @@ def submit_poll_answers(
             detail="Опрос не найден или не активен"
         )
 
-    #  Проверка, что пользователь еще не отвечал на этот опрос
     existing_answers = UserAnswer.select().where(
         (UserAnswer.user == current_user.username) &
         (UserAnswer.question << Question.select().where(Question.poll == poll_id))
@@ -191,10 +190,8 @@ def submit_poll_answers(
             detail="Вы уже проходили этот опрос"
         )
 
-    # Получаем общее количество вопросов в опросе
     question_count = Question.select().where(Question.poll == poll_id).count()
 
-    # Проверяем отсутствие дубликатов вопросов в ответах
     seen_questions = set()
     for answer in answers_data.answers:
         if answer.question_id in seen_questions:
@@ -206,9 +203,7 @@ def submit_poll_answers(
 
     saved_answers = []
 
-    # Обрабатываем каждый ответ
     for answer in answers_data.answers:
-        # Получаем вопрос и проверяем его принадлежность к опросу
         question = Question.get_or_none(
             (Question.id == answer.question_id) &
             (Question.poll == poll_id)
@@ -220,21 +215,18 @@ def submit_poll_answers(
                 detail="Вопрос не найден"
             )
 
-        # Нормализуем ID вариантов ответа (преобразуем int в list[int])
         option_ids = (
             [answer.selected_option_ids]
             if isinstance(answer.selected_option_ids, int)
             else answer.selected_option_ids
         )
 
-        # Валидация типа вопроса
         if question.question_type == "single_choice" and len(option_ids) > 1:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Вопрос {question.id} допускает только один вариант ответа"
             )
 
-        # Обрабатываем каждый выбранный вариант
         for option_id in option_ids:
             option = AnswerOption.get_or_none(
                 (AnswerOption.id == option_id) &
@@ -249,14 +241,12 @@ def submit_poll_answers(
 
             saved_answers.append(option)
 
-    # Проверяем что ответили на все вопросы
     if len(saved_answers) != question_count:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Вы ответили не на все вопросы"
         )
 
-    # Сохраняем ответы в базу данных
     for option in saved_answers:
         UserAnswer.create(
             user=current_user.username,
@@ -297,7 +287,6 @@ def check_user_answers_from_db(username: str) -> Dict:
         HTTPException: Если данные не найдены
     """
     try:
-        # Получаем все опросы, созданные этим учителем
         teacher_polls = (Poll
                         .select()
                         .where((Poll.created_by == username) & (Poll.is_active == True))
@@ -309,26 +298,22 @@ def check_user_answers_from_db(username: str) -> Dict:
         }
 
         for poll in teacher_polls:
-            # Получаем все вопросы для этого опроса
             questions = (Question
                         .select()
                         .where(Question.poll == poll)
                         .count())
-            
-            # Получаем все ответы студентов на этот опрос
+
             user_answers = (UserAnswer
-                          .select()
-                          .join(Question)
-                          .where(Question.poll == poll))
-            
-            # Группируем ответы по пользователям
+                            .select()
+                            .join(Question)
+                            .where(Question.poll == poll))
+
             answers_by_user = {}
             for answer in user_answers:
                 if answer.user.username not in answers_by_user:
                     answers_by_user[answer.user.username] = []
                 answers_by_user[answer.user.username].append(answer)
-            
-            # Собираем статистику по опросу
+
             poll_stats = {
                 "poll_id": poll.id,
                 "poll_title": poll.title,
