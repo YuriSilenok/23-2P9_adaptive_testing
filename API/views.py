@@ -1,30 +1,17 @@
 """descriptions for all user interactions (API)"""
-import datetime 
-from typing import Annotated
-import secrets
 from pydantic import BaseModel
-from fastapi import Depends, APIRouter, HTTPException, status, Form, Response, Cookie, Request, Body 
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm, \
-                            HTTPBasicCredentials, HTTPBasic, HTTPAuthorizationCredentials
+from fastapi import Depends, APIRouter, HTTPException, status, Cookie, Body 
+from fastapi.security import OAuth2PasswordBearer
 from fastapi.responses import JSONResponse
-from passlib.context import CryptContext
 
-from shemas import (
-    UserCreate, Token,
-    UserOut, Poll, PollCreate,
-    PollAnswersSubmit, PollWithQuestions
-    )
-from crud import find_user, create_user, create_poll, find_password, find_polls, \
-                find_questions, submit_poll_answers, check_user_answers_from_db, find_poll
+from shemas import (UserCreate, UserOut)
+from crud import find_user, create_user, find_password
 from utils import verify_password, encode_jwt, decode_jwt
 
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login", auto_error=False)
 
 class AuthUser(BaseModel): 
     username: str
@@ -43,14 +30,15 @@ async def validate_auth_user(
 
 
 async def get_current_user(
-    access_token: str|bytes = Cookie(None, include_in_schema=False)
+    token_cookie: str|bytes = Cookie(None, include_in_schema=False),
+    token_bearer: str = Depends(oauth2_scheme)
 ) -> str:
     credentials_exception = HTTPException(
         status_code=401,
         detail="Could not validate credentials",
     )
     try:
-        payload = decode_jwt(access_token)
+        payload = decode_jwt(token=token_cookie if token_cookie else token_bearer)
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
@@ -70,7 +58,7 @@ async def get_current_active_user(
     if not user:
         raise HTTPException(
             status_code=403,
-            detail='hyinya'
+            detail='cannot find user'
         )
 
     if user["is_active"]:
@@ -106,75 +94,3 @@ async def register(user: UserCreate) -> str:
     print(user)
     user_data = await create_user(user)
     return user_data
-
-
-@router.post("/create_poll")
-async def create_full_poll(
-    poll_data: PollCreate,
-    current_user: Annotated[UserOut, Depends(get_current_active_user)]
-):
-    if current_user.role == "student":
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Only teachers can create polls"
-        )
-
-    db_poll = await create_poll(poll_data, current_user)
-
-    return db_poll
-
-
-@router.get('/ping_poll/{poll_id}')
-async def ping_poll(
-    poll_id: int,
-    current_user: UserCreate = Depends(get_current_active_user)
-):
-    if current_user.role == "teacher":
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Only studens can see questions"
-        )
-    return await find_poll(poll_id)
-
-
-@router.get("/get_poll/{poll_id}", response_model=PollWithQuestions)
-async def get_poll_questions(
-    poll_id: int,
-    current_user: UserOut = Depends(get_current_active_user)
-):
-    if current_user.role == "teacher":
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Only studens can see questions"
-        )
-    content = await find_questions(poll_id)
-
-    return JSONResponse(content=content)
-
-
-@router.post("/polls/{poll_id}/submit-answers/")
-async def submit_answers(
-    poll_id: int,
-    answers_data: PollAnswersSubmit,
-    current_user: UserOut = Depends(get_current_active_user)
-):
-    # Проверяем, что пользователь - студент
-    if current_user.role == "teacher":
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Only students can submit answers"
-        )
-
-    return submit_poll_answers(poll_id, answers_data, current_user)
-
-
-@router.get("/polls/check")
-async def check_statistic(
-    current_user: UserOut = Depends(get_current_active_user)
-) -> dict:
-    if current_user.role == 'student':
-        raise HTTPException(
-            status_code=403, 
-            detail='Only teachers can see stats'
-        )
-    return check_user_answers_from_db(current_user.username)

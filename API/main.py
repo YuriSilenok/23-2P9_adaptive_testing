@@ -1,4 +1,5 @@
-from fastapi import FastAPI, APIRouter
+"""main"""
+from fastapi import FastAPI
 from views import router as auth_router
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
