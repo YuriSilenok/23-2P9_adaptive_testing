@@ -699,7 +699,6 @@ main.studentnavigator__container {
 main.studentnavigator__container #studentnavigator__form {
   display: flex;
   flex-direction: column;
-  height: 510px;
   align-items: center;
   justify-content: center;
   position: relative;
@@ -754,9 +753,9 @@ main.auth-container {
   flex-direction: column;
 }
 main.auth-container form#auth-form {
+  min-height: 510px;
   display: flex;
   flex-direction: column;
-  height: 510px;
   align-items: center;
   justify-content: center;
   position: relative;
@@ -909,7 +908,6 @@ main.showform__container form section::-webkit-scrollbar {
 main.showform__container form section > article {
   display: flex;
   flex-direction: column;
-  height: 510px;
   align-items: center;
   justify-content: center;
   position: relative;
@@ -1112,7 +1110,6 @@ main.createform__container form.createform__form section.createform__questions__
 main.createform__container form.createform__form section.createform__questions__container > article.question__container {
   display: flex;
   flex-direction: column;
-  height: 510px;
   align-items: center;
   justify-content: center;
   position: relative;
@@ -1320,7 +1317,6 @@ main.stats-container section.polls-stats {
 main.stats-container section.polls-stats article.poll-card {
   display: flex;
   flex-direction: column;
-  height: 510px;
   align-items: center;
   justify-content: center;
   position: relative;

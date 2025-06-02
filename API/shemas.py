@@ -1,7 +1,6 @@
 """API templates"""
 from enum import Enum
-from typing import Annotated
-from pydantic import BaseModel, HttpUrl, Field, field_validator
+from pydantic import BaseModel,Field, field_validator
 from typing import Optional
 from datetime import datetime
 
@@ -14,8 +13,8 @@ class Role(str, Enum):
 class UserBase(BaseModel):
     username: str = Field("your_username", min_length=3, max_length=50)
     name: str = Field("your_name", min_length=2, max_length=100)
-    telegram_link: HttpUrl= "https:t.me//example.com/"
-    role: Role = "student"
+    telegram_link: str = "https:t.me//example.com/"
+    role: Role = Role.STUDENT
 
     @field_validator('telegram_link')
     def validate_telegram_link(cls, v):
@@ -45,9 +44,6 @@ class AnswerOptionBase(BaseModel):
 class AnswerOptionCreate(BaseModel):
     selected_option_ids: list[int]
     question_id: int
-
-    # class Config:
-    #     from_attributes = True
 
 
 class AnswerOptionOut(BaseModel):
@@ -105,9 +101,6 @@ class PollWithQuestions(BaseModel):
     description: str
     questions: list[Question]
 
-    # class Config:
-    #     from_attributes = True
-
 
 class UserAnswerBase(BaseModel):
     answer_option_id: int
@@ -125,9 +118,3 @@ class UserAnswer(UserAnswerBase):
 
     class Config:
         from_attributes = True
-
-
-if __name__ == "__main__":
-    user1 = UserCreate(name="Alice", password="123").model_dump()["name"]
-
-    print(user1)

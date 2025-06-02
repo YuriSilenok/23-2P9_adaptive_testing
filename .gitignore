@@ -227,5 +227,4 @@ dist-ssr
 *.venv
 __pycache__/
 *.pem
-=======
-
+certs/

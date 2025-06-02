@@ -19,28 +19,35 @@ async def create_user(user: UserCreate):
             role=user.role)
 
     except:
-        raise HTTPException(status_code=400, detail="Username already registered")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail="Username already registered"
+        )
 
-    return "Username registered"
+    response = JSONResponse(
+        content='user created',
+    )
+
+    return response
 
 
 @database.atomic()
 async def find_user(username) :
-    user = User.select().where(User.username == username)
+    user = User.get_or_none(User.username == username)
 
-    for i in user:
+    if user:
         return {
-            "id": i.id,
-            "username": i.username,
-            "name": i.name,
-            "telegram_link": i.telegram_link,
-            "is_active": i.is_active,
-            "role": i.role
+            "id": user.id,
+            "username": user.username,
+            "name": user.name,
+            "telegram_link": user.telegram_link,
+            "is_active": user.is_active,
+            "role": user.role
         }
 
     raise HTTPException(
         detail='user not finded',
-        status_code=404
+        status_code=status.HTTP_404_NOT_FOUND
     )
 
 
@@ -74,7 +81,10 @@ async def create_poll(poll: PollCreate, user: UserOut):
                 )
 
     except:
-        raise HTTPException(status_code=400, detail="Pollname already registered")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail="Pollname already registered"
+        )
 
     return db_poll.__data__
 
@@ -107,8 +117,11 @@ async def find_poll(poll_id):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Poll not found or inactive")
+
     else:
-        return JSONResponse(status_code=200, content='Poll finded')
+        return JSONResponse(
+            content='Poll finded'
+        )
 
 
 @database.atomic()
@@ -156,7 +169,7 @@ def submit_poll_answers(
     poll_id: int,
     answers_data: PollAnswersSubmit,
     current_user: UserOut
-) -> list:
+) -> JSONResponse:
     """
     Сохраняет ответы пользователя на вопросы опроса с валидацией
 
@@ -173,6 +186,7 @@ def submit_poll_answers(
     """
 
     poll = Poll.get_or_none(Poll.id == poll_id)
+
     if not poll:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -254,11 +268,15 @@ def submit_poll_answers(
             answer_option=option
         )
 
-    return saved_answers
+    return JSONResponse(
+        content={
+            'answers': saved_answers
+        }
+    )
 
 
 @database.atomic()
-def check_user_answers_from_db(username: str) -> Dict:
+def check_user_answers_from_db(username: str) -> JSONResponse:
     """
     Проверяет ответы пользователя из базы данных на правильность
 
@@ -335,14 +353,12 @@ def check_user_answers_from_db(username: str) -> Dict:
 
             result["polls"].append(poll_stats)
 
-        return result
+        return JSONResponse(
+            content=result
+        )
 
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error fetching user answers: {str(e)}"
         )
-
-
-if __name__ == "__main__":
-    print(find_questions(2))
