@@ -1,17 +1,14 @@
-import React from "react"
 import { FormEvent, RefObject, useRef, useState } from "react"
-import { ThrowStore, useURL } from "../Static/store"
 import { data, Form, useNavigate } from "react-router-dom"
 import { RegistrationForm } from "../Static/interfaces"
 import { Input } from "../Components/Input"
 import { WaitModal } from "../Components/WaitModal"
+import { ThrowMsg, URL } from "../Static/utils"
 
 export default function Regisration () {
     const SuccessfulModal: RefObject<HTMLDialogElement | null> = useRef(null)
     const WaitingModal: RefObject<HTMLDialogElement | null> = useRef(null)
     const user: RefObject<{login: string, password: string}> = useRef({login:'',password:''})
-    const {URL} = useURL()
-    const {ThrowMsg} = ThrowStore()
 
     
     function validate(form: HTMLFormElement) {
@@ -28,14 +25,14 @@ export default function Regisration () {
                 if (value === password) {
                     continue
                 } else {
-                    ThrowMsg('repeat', form)
+                    ThrowMsg('repeat')
                     flag = false
                     continue
                 }
             }
 
             if (!value || value.length < 3) {
-                ThrowMsg(field, form)
+                ThrowMsg(field)
                 flag = false
                 continue
             }
@@ -52,7 +49,7 @@ export default function Regisration () {
         if (validatedForm) {
                 WaitingModal.current?.showModal()
 
-                await fetch(`${URL.hostname}/auth/register`, {
+                await fetch(`${URL}/auth/register`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -77,9 +74,9 @@ export default function Regisration () {
                 .then( data => {
                     typeof data.detail == 'object'
                     ? data.detail[0].loc[1] === 'telegram_link'
-                        ? ThrowMsg('telegram_link', form)
+                        ? ThrowMsg('telegram_link')
                         : null
-                    : ThrowMsg('username', form, true)
+                    : ThrowMsg('username', 'Это имя пользователя уже занято' )
                 })
                 
         }

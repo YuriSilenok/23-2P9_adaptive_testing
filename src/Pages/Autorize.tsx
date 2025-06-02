@@ -1,24 +1,22 @@
 import { useNavigate } from "react-router-dom"
 import React, { FormEvent, RefObject, useEffect, useRef } from "react"
-import { Authentification, Identification, Auth } from "../Static/Users"
-import { ThrowStore, userStore, useURL } from "../Static/store"
+import { userStore } from "../Static/store"
 import { Input } from "../Components/Input"
 import {WaitModal} from '../Components/WaitModal'
-import { useRedirect } from "../Static/utils"
+import { ThrowMsg } from "../Static/utils"
+import { URL } from "../Static/utils"
 
 export default function Autorize () {
     const nav = useNavigate()
-    const {URL} = useURL()
-    const {DelUser, RegUser} = userStore()
+    const {RegUser} = userStore()
     const queryParams = new URLSearchParams(window.location.search)
-    const {ThrowMsg} = ThrowStore()
     const waitmodal: RefObject<HTMLDialogElement | null> = useRef(null)
 
 
     function handleAuth (event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         waitmodal.current!.showModal()
-        const request = fetch(`http://localhost:8001/auth/login`, {
+        const request = fetch(`${URL}/auth/login`, {
             method: 'POST',
             credentials: "include",
             headers: {
@@ -31,14 +29,15 @@ export default function Autorize () {
         request.then( response => {
             if (response.ok) {
                 waitmodal.current?.close()
-                return response.json()
+                response.json()
+                .then( data => {
+                    RegUser({nick: data.username!, status: data.role!},true)
+                    nav('/')
+                })
             } else {
                 waitmodal.current?.close()
-                alert('что то не так')
+                ThrowMsg('password', "Логин или пароль неверны")
             }
-        }).then(data => {
-            RegUser({nick: data.username!, status: data.role!},true)
-            nav('/')
         })
     }
 

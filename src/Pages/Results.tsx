@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from "react";
-import { useRedirect } from "../Static/utils";
+import { URL, useRedirect } from "../Static/utils";
 import { Button } from "../Components/Button";
 import { useNavigate } from "react-router-dom";
 import {WaitModal} from '../Components/WaitModal'
@@ -33,7 +33,7 @@ export default function TeacherStats() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch("http://localhost:8001/auth/polls/check", {
+        const response = await fetch(`${URL}/auth/polls/check`, {
           credentials: "include",
         });
         const data: StatsData = await response.json()

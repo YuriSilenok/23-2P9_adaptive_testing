@@ -1,10 +1,8 @@
 import { ChangeEvent, Dispatch, FormEvent, memo, RefObject, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
-import { showFormStore } from "../Static/store";
 import { Question, Form } from "../Static/interfaces";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRedirect } from "../Static/utils";
+import { URL, useRedirect } from "../Static/utils";
 import { WaitModal } from "../Components/WaitModal";
-import {Button} from '../Components/Button'
 import { SuccessfulModal } from "../Components/SuccessfulModal";
 
 export default function ShowForm () {
@@ -12,7 +10,23 @@ export default function ShowForm () {
     const params = new URLSearchParams(window.location.search)
     const waitmodal: RefObject<HTMLDialogElement | null> = useRef(null)
     const successfulmodal: RefObject<null| HTMLDialogElement> = useRef(null)
-    const subform = showFormStore().form
+    const subform = {
+        title: 'title',
+        description : 'desctiption',
+        questions: [
+            {
+                id: 1,
+                text: 'question',
+                answer_options: [
+                    {
+                        id: 1,
+                        text : 'answer',
+                    },
+                ]
+            }
+        ]
+    }
+    
     const [form, setForm]: [Form, any] = useState(
         sessionStorage.getItem(`formdata#?id=${params.get('id')}`) 
         ? JSON.parse(sessionStorage.getItem(`formdata#?id=${params.get('id')}`)!) 
@@ -20,7 +34,7 @@ export default function ShowForm () {
     )
 
     if (!sessionStorage.getItem(`formdata#?id=${params.get('id')}`)) {
-        const request = fetch(`http://localhost:8001/auth/get_poll/${params.get('id')}`, {
+        const request = fetch(`${URL}/auth/get_poll/${params.get('id')}`, {
             credentials: "include"
         })
 
@@ -50,7 +64,7 @@ export default function ShowForm () {
             requestBody.push({'question_id': Number(queid), 'selected_option_ids': [Number(answid)]})
         })
         waitmodal.current?.showModal()
-        const request = fetch(`http://localhost:8001/auth/polls/${params.get('id')}/submit-answers`, {
+        const request = fetch(`${URL}/auth/polls/${params.get('id')}/submit-answers`, {
             credentials: 'include',
             method: 'POST',
             headers: {

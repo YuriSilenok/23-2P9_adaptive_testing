@@ -1,17 +1,16 @@
-import { ChangeEvent, FormEvent, useContext, useRef } from "react"
+import { ChangeEvent, FormEvent, RefObject, useContext, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import { Input } from "../Components/Input"
 import React from "react"
 import axios from "axios"
-import { Waitmodal, WaitModal } from '../Components/WaitModal'
-import { useRedirect } from "../Static/utils"
-import { ThrowStore } from "../Static/store"
+import { WaitModal } from '../Components/WaitModal'
+import { URL, useRedirect } from "../Static/utils"
+import { ThrowMsg } from "../Static/utils"
 
 export default function StudentNavigator () {
     useRedirect()
-    const {ThrowMsg} = ThrowStore()
     const navigate = useNavigate()
-    const waitmodal: Waitmodal = useRef(null)
+    const waitmodal: RefObject<null | HTMLDialogElement> = useRef(null)
 
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -29,7 +28,7 @@ export default function StudentNavigator () {
                 : id = "0"
         }
         console.log(id)
-        const request = fetch(`http://localhost:8001/auth/ping_poll/${id ?? ''}`, {
+        const request = fetch(`${URL}/auth/ping_poll/${id ?? ''}`, {
             credentials: 'include'
         })
         request
@@ -42,7 +41,7 @@ export default function StudentNavigator () {
             navigate(`/showform?id=${id}`)
         } else {    
             waitmodal.current?.close()
-            ThrowMsg('value', form) 
+            ThrowMsg('value') 
         }
         })
         .catch(() => {

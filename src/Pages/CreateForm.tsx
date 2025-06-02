@@ -1,6 +1,5 @@
-import { useRedirect } from "../Static/utils"
+import { URL, useRedirect } from "../Static/utils"
 import { ChangeEvent, createContext, Dispatch, FormEvent, InvalidEvent, memo, RefObject, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
-import { showFormStore } from "../Static/store";
 import { Answer, Form, FormCreate, Question} from "../Static/interfaces";
 import { Input } from '../Components/Input'
 import { Button } from "../Components/Button";
@@ -104,7 +103,7 @@ export default function Createform () {
 
     async function sendForm (formdata) {
         wm.current?.showModal()
-        const request = fetch('http://localhost:8001/auth/create_poll', {
+        const request = fetch(`${URL}/auth/create_poll`, {
             credentials: 'include',
             method: 'post',
             body: JSON.stringify(formdata),
