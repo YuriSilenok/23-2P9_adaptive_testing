@@ -12,7 +12,6 @@ class UserBase(BaseModel):
     username: str = Field("your_username", min_length=3, max_length=50)
     name: str = Field("your_name", min_length=2, max_length=100)
     telegram_link: str = "https:t.me//example.com/"
-    role: Roles = Roles.STUDENT
 
     @field_validator('telegram_link')
     def validate_telegram_link(cls, v):
@@ -23,10 +22,11 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str = "your_password"
+    role: Roles
 
 
 class UserOut(UserBase):
-    pass
+    role: Roles
 
 
 class Token(BaseModel):

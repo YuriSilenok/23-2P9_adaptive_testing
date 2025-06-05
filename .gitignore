@@ -228,4 +228,4 @@ dist-ssr
 __pycache__/
 *.pem
 serts/
-
+*.db

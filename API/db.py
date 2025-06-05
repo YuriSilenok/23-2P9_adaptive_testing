@@ -27,8 +27,8 @@ class Role(BaseModel):
 
 
 class UserRole(BaseModel):
-    user= ForeignKeyField(
-        User, backref="user_roles", on_update="CASCADE", on_delete="CASCADE"
+    user = ForeignKeyField(
+        User, backref="roles", on_update="CASCADE", on_delete="CASCADE"
     )
     role = ForeignKeyField(
         Role, backref="role_users", on_update="CASCADE", on_delete="CASCADE"
@@ -37,18 +37,19 @@ class UserRole(BaseModel):
 
 if __name__ == "__main__":
     database.connect()
-    database.create_tables([User])
+    database.drop_tables([User, UserRole, Role])
+    database.create_tables([User, Role, UserRole])
     database.close()
-    Role.get_or_create(name=Roles.STUDENT)
-    teacher_role = Role.get_or_create(name=Roles.TEACHER)
-    
-    base_teacher = User.get_or_create(
+
+    Role.create(name=Roles.STUDENT)
+    teacher_role, _ = Role.get_or_create(name=Roles.TEACHER)
+
+    base_teacher, _ = User.get_or_create(
         username = 'teacher',
         name = 'teacher',
         telegram_link = "https:t.me//base_teacher.com/",
         password_hash = get_password_hash('12345')
     )
-
     UserRole.get_or_create(
         user = base_teacher,
         role = teacher_role

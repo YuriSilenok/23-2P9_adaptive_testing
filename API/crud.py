@@ -1,7 +1,7 @@
 """python interaction with database"""
 from fastapi import HTTPException, status
 
-from db import database, User, UserRole
+from db import database, User, UserRole, Role
 from utils import get_password_hash
 from shemas import UserCreate, Roles
 
@@ -18,7 +18,7 @@ async def create_user(user: UserCreate):
 
         UserRole.create(
             user = currect_user,
-            role = user.role
+            role = Role.get_or_none(Role.name == user.role)
         )
 
     except:
@@ -33,15 +33,14 @@ async def create_user(user: UserCreate):
 @database.atomic()
 async def find_user(username) :
     current_user = User.get_or_none(User.username == username)
-
+    user_role = (UserRole.get_or_none(user = current_user)).role.name
     if current_user:
         return {
-            "id": current_user.id,
             "username": current_user.username,
             "name": current_user.name,
             "telegram_link": current_user.telegram_link,
             "is_active": current_user.is_active,
-            "role": current_user.role
+            "role": user_role
         }
 
     raise HTTPException(

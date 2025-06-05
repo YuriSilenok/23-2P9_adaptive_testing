@@ -7,6 +7,7 @@ from fastapi.responses import JSONResponse
 from shemas import (UserCreate, UserOut)
 from crud import find_user, create_user, find_password
 from utils import verify_password, encode_jwt, decode_jwt
+from db import User, UserRole, Role
 
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
@@ -20,25 +21,25 @@ class AuthUser(BaseModel):
 async def validate_auth_user(
     user: AuthUser = Body()
 ) -> UserOut:
-    data = await find_user(user.username)
+    current_user = await find_user(user.username)
     password_hash = await find_password(user.username)
 
-    if not data or not verify_password(user.password, password_hash):
-        raise HTTPException(status_code=401)
+    if not current_user or not verify_password(user.password, password_hash):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
-    return UserOut(**data)
+    return UserOut(**current_user)
 
 
 async def get_current_user(
-    token_cookie: str|bytes = Cookie(None, include_in_schema=False),
-    token_bearer: str = Depends(oauth2_scheme)
+    access_token: str|bytes = Cookie(None, include_in_schema=False),
+    bearer_token: str = Depends(oauth2_scheme)
 ) -> str:
     credentials_exception = HTTPException(
         status_code=401,
         detail="Could not validate credentials",
     )
     try:
-        payload = decode_jwt(token=token_cookie if token_cookie else token_bearer)
+        payload = decode_jwt(token=access_token if access_token else bearer_token)
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
