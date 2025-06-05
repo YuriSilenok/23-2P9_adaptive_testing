@@ -1,6 +1,9 @@
 """database discription"""
 from datetime import datetime
-from peewee import SqliteDatabase, CharField, DateTimeField, BooleanField, Model
+from peewee import SqliteDatabase, CharField, DateTimeField, BooleanField, Model, ForeignKeyField
+
+from shemas import Roles
+from utils import get_password_hash
 
 database = SqliteDatabase('my_database.db')
 
@@ -15,16 +18,38 @@ class User(BaseModel):
     name = CharField()
     telegram_link = CharField()
     password_hash = CharField()
-    role = CharField()
     created_at = DateTimeField(default=datetime.now)
     is_active = BooleanField(default=True)
 
-    def is_teacher(self):
-        return self.role == 'teacher'
+
+class Role(BaseModel):
+    name=CharField()
+
+
+class UserRole(BaseModel):
+    user= ForeignKeyField(
+        User, backref="user_roles", on_update="CASCADE", on_delete="CASCADE"
+    )
+    role = ForeignKeyField(
+        Role, backref="role_users", on_update="CASCADE", on_delete="CASCADE"
+    )
 
 
 if __name__ == "__main__":
     database.connect()
-    database.drop_tables([User])
     database.create_tables([User])
     database.close()
+    Role.get_or_create(name=Roles.STUDENT)
+    teacher_role = Role.get_or_create(name=Roles.TEACHER)
+    
+    base_teacher = User.get_or_create(
+        username = 'teacher',
+        name = 'teacher',
+        telegram_link = "https:t.me//base_teacher.com/",
+        password_hash = get_password_hash('12345')
+    )
+
+    UserRole.get_or_create(
+        user = base_teacher,
+        role = teacher_role
+    )
