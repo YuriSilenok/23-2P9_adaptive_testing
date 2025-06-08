@@ -5,7 +5,7 @@ from typing import Optional
 from datetime import datetime
 
 
-class Role(str, Enum):
+class Roles(str, Enum):
     STUDENT = "student"
     TEACHER = "teacher"
 
@@ -14,7 +14,6 @@ class UserBase(BaseModel):
     username: str = Field("your_username", min_length=3, max_length=50)
     name: str = Field("your_name", min_length=2, max_length=100)
     telegram_link: str = "https:t.me//example.com/"
-    role: Role = Role.STUDENT
 
     @field_validator('telegram_link')
     def validate_telegram_link(cls, v):
@@ -23,12 +22,13 @@ class UserBase(BaseModel):
         return v
 
 
-class UserCreate(UserBase):
+class UserRegister(UserBase):
     password: str = "your_password"
+    role: Roles 
 
 
 class UserOut(UserBase):
-    pass
+    role: Roles
 
 
 class Token(BaseModel):
@@ -68,9 +68,6 @@ class Question(QuestionBase):
     id: int
     answer_options: list[AnswerOptionOut]
 
-    class Config:
-        from_attributes = True
-
 
 class PollBase(BaseModel):
     title: str = Field(..., min_length=3, max_length=100, )
@@ -86,9 +83,6 @@ class Poll(PollBase):
     created_by_id: str
     created_at: datetime
     is_active: bool = True
-
-    class Config:
-        from_attributes = True
 
 
 class PollAnswersSubmit(BaseModel):
@@ -114,7 +108,3 @@ class UserAnswer(UserAnswerBase):
     id: int
     user_id: int
     question_id: int
-    answered_at: datetime
-
-    class Config:
-        from_attributes = True

@@ -1,22 +1,28 @@
 """python interaction with database"""
 from typing import Dict
-from db import database, User, Poll, Question, AnswerOption, UserAnswer
+from db import database, User, Poll, Question, AnswerOption, UserAnswer, UserRole, Role
 from utils import get_password_hash
-from shemas import UserCreate, PollCreate, PollAnswersSubmit, UserOut, PollWithQuestions
+from shemas import UserRegister, PollCreate, PollAnswersSubmit, UserOut, PollWithQuestions, Roles
 
 from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
+import json
 
 
 @database.atomic()
-async def create_user(user: UserCreate):
+async def create_user(user: UserRegister):
     try:
-        currect_user = User.create(
+        currect_user, _ = User.get_or_create(
             username=user.username,
             name=user.name,
             telegram_link=user.telegram_link,
-            password_hash=get_password_hash(user.password),
-            role=user.role)
+            password_hash=get_password_hash(user.password)
+        )
+
+        UserRole.get_or_create(
+            user = currect_user,
+            role = Role.get_or_none(Role.status == user.role)
+        )
 
     except:
         raise HTTPException(
@@ -33,30 +39,54 @@ async def create_user(user: UserCreate):
 
 @database.atomic()
 async def find_user(username) :
-    user = User.get_or_none(User.username == username)
-
-    if user:
-        return {
-            "id": user.id,
-            "username": user.username,
-            "name": user.name,
-            "telegram_link": user.telegram_link,
-            "is_active": user.is_active,
-            "role": user.role
-        }
-
-    raise HTTPException(
+    not_found_exc = HTTPException(
         detail='user not finded',
         status_code=status.HTTP_404_NOT_FOUND
     )
+    current_user = User.get_or_none(User.username == username)
+    if not current_user:
+        raise not_found_exc
+
+    user_role: UserRole = (UserRole.get_or_none(UserRole.user == current_user))
+
+    if not user_role:
+        raise not_found_exc
+
+    return {
+        "id": current_user.id,
+        "username": current_user.username,
+        "name": current_user.name,
+        "telegram_link": current_user.telegram_link,
+        "role": user_role.role.status
+    }
 
 
 @database.atomic()
-async def find_password(username):
-    user = User.select().where(User.username == username)
+async def compare_role(username, role: Roles):
+    user_role: UserRole = UserRole.get_or_none(UserRole.user == User.get_or_none(User.username == username))
 
-    for i in user:
-        return i.password_hash
+    if not user_role:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='user not found'
+        )
+    print(user_role.role.status, role)
+    if user_role.role.status == role:
+        return True
+    
+    return False
+
+@database.atomic()
+async def find_password(username):
+    user: User = User.get_or_none(User.username == username)
+
+    if user:
+        return user.password_hash
+    
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail='user not found'
+    )
 
 
 @database.atomic()
@@ -67,56 +97,37 @@ async def create_poll(poll: PollCreate, user: UserOut):
             description=poll.description,
             created_by=user.username
         )
-        for question in poll.questions:
+        for index, question in enumerate(poll.questions):
             db_question = Question.create(
                 poll=db_poll,
                 text=question.text,
-                question_type=question.question_type
+                question_type=question.question_type,
+                number = index
             )
-            for option in question.answer_options:
+            for index, option in enumerate(question.answer_options):
                 AnswerOption.create(
                     text=option.text,
                     is_correct=option.is_correct,
-                    question=db_question
+                    question=db_question,
+                    number = index
                 )
 
     except:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, 
-            detail="Pollname already registered"
+            detail="poll already registered"
         )
 
     return db_poll.__data__
 
 
 @database.atomic()
-async def find_polls():
-    try:
-        list_polls = []
-        polls = Poll.select()
-
-    except:
-        return "Polls not defiend"
-
-    for i in polls:
-        list_polls.append({
-            "id": i.id,
-            "title": i.title,
-            "description": i.description,
-            "created_at": i.created_at,
-            "created_by_id": i.created_by_id,
-            "is_active": i.is_active
-        })
-
-    return list_polls
-
-
-@database.atomic()
-async def find_poll(poll_id):
+async def find_poll(poll_id: int):
     if not Poll.get_or_none(Poll.id == poll_id):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Poll not found or inactive")
+            detail="Poll not found or inactive"
+        )
 
     else:
         return JSONResponse(
@@ -127,10 +138,12 @@ async def find_poll(poll_id):
 @database.atomic()
 async def find_questions(poll_id):
     poll = Poll.get_or_none(Poll.id == poll_id)
+
     if not poll:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Poll not found or inactive")
+            detail="Poll not found or inactive"
+        )
 
     questions = (
         Question
@@ -161,7 +174,9 @@ async def find_questions(poll_id):
         }
         response["questions"].append(q_data)
 
-    return response
+    return JSONResponse(
+        content=response
+    )
 
 
 @database.atomic()
@@ -261,6 +276,8 @@ def submit_poll_answers(
             detail="Вы ответили не на все вопросы"
         )
 
+    serializable_answers = []
+
     for option in saved_answers:
         UserAnswer.create(
             user=current_user.username,
@@ -268,9 +285,15 @@ def submit_poll_answers(
             answer_option=option
         )
 
+        serializable_answers.append({
+            'id': option.id,
+            'text': option.text,
+            'question_id': option.question.id,
+        })
+
     return JSONResponse(
         content={
-            'answers': saved_answers
+            'answers': serializable_answers
         }
     )
 
@@ -321,10 +344,12 @@ def check_user_answers_from_db(username: str) -> JSONResponse:
                         .where(Question.poll == poll)
                         .count())
 
-            user_answers = (UserAnswer
-                            .select()
-                            .join(Question)
-                            .where(Question.poll == poll))
+            user_answers = (
+                UserAnswer
+                .select()
+                .join(Question)
+                .where(Question.poll == poll)
+            )
 
             answers_by_user = {}
             for answer in user_answers:

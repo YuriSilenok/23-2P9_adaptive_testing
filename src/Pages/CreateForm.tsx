@@ -143,7 +143,7 @@ export default function Createform () {
             <SuccessfulModal ref={sm} labels={[`Форма с id ${formid} создана`, `Вернуться в меню`]} redirectURI="/" children={
                 <a onClick={() => {
                     try {
-                        navigator.clipboard.writeText(`http://localhost:8001/showform?id=${formid}`)
+                        navigator.clipboard.writeText(`${URL}/showform?id=${formid}`)
                         alert('Успешно скопировано')
                     } catch {
                         alert('Ошибка при копировании')
