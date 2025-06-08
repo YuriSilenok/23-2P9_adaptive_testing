@@ -37,7 +37,6 @@ class UserRole(BaseModel):
 
 if __name__ == "__main__":
     database.connect()
-    database.drop_tables([User, UserRole, Role])
     database.create_tables([User, Role, UserRole])
     database.close()
 

@@ -1,4 +1,4 @@
-"""main"""
+"""main.py for API"""
 from fastapi import FastAPI
 from views import router as auth_router
 import uvicorn
