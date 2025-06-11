@@ -1,4 +1,4 @@
-import { ShowFormShema } from "./interfaces"
+import { ShowFormShema } from "../types/interfaces"
 
 type Theme = 'light' | 'dark'
 

@@ -1,8 +1,9 @@
+export type status = 'teacher' | 'student' | "forbidden" | "unautorized" | "undefined" | "serverunavailable"
 
 interface userStoreShema {
     nick: string | undefined,
-    status: 'teacher' | 'student',
-    RegUser: (data:userShema, isRemember: boolean) => void,
+    status: status,
+    RegUser: (data:userShema) => void,
     DelUser: Function
 }
 

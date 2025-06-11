@@ -6,7 +6,6 @@ from shemas import UserRegister, PollCreate, PollAnswersSubmit, UserOut, PollWit
 
 from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
-import json
 
 
 @database.atomic()

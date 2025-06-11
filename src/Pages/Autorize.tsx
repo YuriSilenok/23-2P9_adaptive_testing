@@ -1,10 +1,11 @@
-import { useNavigate } from "react-router-dom"
+import { isRouteErrorResponse, useNavigate } from "react-router-dom"
 import React, { FormEvent, RefObject, useEffect, useRef } from "react"
-import { userStore } from "../Static/store"
+import { userStore } from "../stores/userStore"
 import { Input } from "../Components/Input"
 import {WaitModal} from '../Components/WaitModal'
-import { ThrowMsg } from "../Static/utils"
-import { URL } from "../Static/utils"
+import { ThrowMsg } from "../utils/form.utils"
+import { URL } from "../config/api.constants";
+import { loginUser } from "../services/api.service"
 
 export default function Autorize () {
     const nav = useNavigate()
@@ -16,30 +17,31 @@ export default function Autorize () {
     function handleAuth (event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         waitmodal.current!.showModal()
-        const request = fetch(`${URL}/auth/login`, {
-            method: 'POST',
-            credentials: "include",
-            headers: {
-                'accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify( Object.fromEntries( new FormData(event.currentTarget)))
-        })
-        
-        request.then( response => {
-            if (response.ok) {
-                waitmodal.current?.close()
-                response.json()
-                .then( data => {
-                    RegUser({nick: data.username!, status: data.role!},true)
-                    nav('/')
-                })
-            } else {
-                waitmodal.current?.close()
-                ThrowMsg('password', "Логин или пароль неверны")
+        loginUser(
+            JSON.stringify(
+                Object.fromEntries( 
+                    new FormData(event.currentTarget)
+                )
+            )
+        )
+        .then( data => {
+            waitmodal.current?.close()
+            RegUser({nick: data.username!, status: data.role!})
+            nav(`/for${data.role}`)
+        })    
+        .catch( error => {
+            waitmodal.current?.close()
+            switch (Number(error.message)) {
+                case 503:
+                    nav('/503')
+                    break
+
+                case 401:
+                    ThrowMsg('password', "Логин или пароль неверны")
+                    break
             }
         })
-    }
+    }   
 
 
     return(

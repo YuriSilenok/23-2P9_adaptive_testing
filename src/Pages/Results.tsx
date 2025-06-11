@@ -1,5 +1,6 @@
 import { memo, useEffect, useRef, useState } from "react";
-import { URL, useRedirect } from "../Static/utils";
+import { URL } from "../config/api.constants";
+import { useRedirect } from "../hooks/useRedirect";
 import { Button } from "../Components/Button";
 import { useNavigate } from "react-router-dom";
 import {WaitModal} from '../Components/WaitModal'

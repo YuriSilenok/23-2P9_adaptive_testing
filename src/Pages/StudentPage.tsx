@@ -4,8 +4,10 @@ import { Input } from "../Components/Input"
 import React from "react"
 import axios from "axios"
 import { WaitModal } from '../Components/WaitModal'
-import { URL, useRedirect } from "../Static/utils"
-import { ThrowMsg } from "../Static/utils"
+import { URL } from "../config/api.constants"
+import {useRedirect} from '../hooks/useRedirect'
+import { ThrowMsg } from "../utils/form.utils"
+import { pingPoll } from "../services/api.service"
 
 export default function StudentNavigator () {
     useRedirect()
@@ -16,8 +18,8 @@ export default function StudentNavigator () {
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         waitmodal.current?.showModal()
-        const form = event.currentTarget
         const data = Object.fromEntries(new FormData(event.currentTarget))
+
         const value = data.value as string
         let id: string | null
         if (Number(value)) {
@@ -27,31 +29,34 @@ export default function StudentNavigator () {
                 ? id = value.split('=')[1]
                 : id = "0"
         }
-        console.log(id)
-        const request = fetch(`${URL}/auth/ping_poll/${id ?? ''}`, {
-            credentials: 'include'
-        })
-        request
-        .then((response) => {
-        console.log(response);
-        
-        if (response.ok) {
-            console.log('log');
-            
+
+        pingPoll(Number(id))
+        .then( () => {
             navigate(`/showform?id=${id}`)
-        } else {    
-            waitmodal.current?.close()
-            ThrowMsg('value') 
-        }
         })
-        .catch(() => {
+        .catch( error => {
             waitmodal.current?.close()
-            alert('что-то не так')
+            switch (Number(error.message)) {
+                case 503:
+                    navigate('/503')
+                    break
+                
+                case 404:
+                    ThrowMsg('value')
+                    break
+                
+                case 403:
+                    navigate('/403')
+                    break
+                
+                case 401:
+                    navigate('/users/autorize')
+            }
         })
     }
 
     const handleChange = (e: InputEvent) => {
-        // (e.currentTarget! as HTMLInputElement).value = (e.currentTarget! as HTMLInputElement).value.replace(/[^\d]/g, '')
+        (e.currentTarget! as HTMLInputElement).value = (e.currentTarget! as HTMLInputElement).value.replace(/[^\d]/g, '')
     };
 
     return(
@@ -72,7 +77,7 @@ export default function StudentNavigator () {
                     onChange={(event: InputEvent) => 
                         handleChange(event)
                     } 
-                    max={50} min={1} 
+                    max={8} min={1} 
                     invalidMessage="Такого теста не существует" />
 
                     <button 

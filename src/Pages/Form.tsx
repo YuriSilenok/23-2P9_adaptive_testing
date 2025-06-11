@@ -1,7 +1,8 @@
 import { ChangeEvent, Dispatch, FormEvent, memo, RefObject, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
-import { Question, Form } from "../Static/interfaces";
+import { Question, Form } from "../types/interfaces";
 import { useNavigate, useParams } from "react-router-dom";
-import { URL, useRedirect } from "../Static/utils";
+import { URL } from "../config/api.constants";
+import { useRedirect } from "../hooks/useRedirect";
 import { WaitModal } from "../Components/WaitModal";
 import { SuccessfulModal } from "../Components/SuccessfulModal";
 

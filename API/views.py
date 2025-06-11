@@ -1,6 +1,6 @@
 """descriptions for all user interactions (API)"""
 from pydantic import BaseModel
-from fastapi import Depends, APIRouter, HTTPException, status, Cookie, Body 
+from fastapi import Depends, APIRouter, HTTPException, status, Cookie, Body , Response
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.responses import JSONResponse
 
@@ -48,16 +48,26 @@ async def validate_auth_user(
 
 
 async def get_current_user(
-    access_token: str|bytes | None = Cookie(None, include_in_schema=False),
-    bearer_token: str = Depends(oauth2_scheme)
-) -> str:
+    access_token: str | bytes | None = Cookie(None, include_in_schema=False),
+    bearer_token: str | None = Depends(oauth2_scheme),
+) -> str | None:
     credentials_exception = HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
         detail="Could not validate credentials",
     )
+    if not access_token and not bearer_token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED
+            )
 
     try:
-        payload = decode_jwt(access_token if access_token else bearer_token)
+        token = access_token or bearer_token
+        if token is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED
+            )
+
+        payload = decode_jwt(token=token)
         username: str = payload.get("sub")
 
         if username is None:
@@ -70,7 +80,7 @@ async def get_current_user(
 
 
 async def get_current_active_user(
-    username: str = Depends(get_current_user),
+    username: str = Depends(get_current_user)
 ) -> UserOut:
 
     user = await find_user(username)
@@ -104,12 +114,37 @@ async def login_for_access_token(
 
     response.set_cookie(
         key='access_token',
-        value=token,
+        value=str(token),
         path="/",
         httponly=True,
         max_age=3600*24*30
     )
 
+    return response
+
+
+@router.get('/users/me')
+async def users_me(
+    user = Depends(get_current_active_user)
+) -> JSONResponse: 
+    return JSONResponse(
+        content={
+            'nick': user.name, 
+            'status': user.role, 
+        }
+    )
+
+@router.post('/logout')
+async def logout():
+    response = JSONResponse(
+        'logout: true'
+    )
+    response.delete_cookie(
+        key="access_token",
+        path="/",
+        httponly=True,
+    )
+    
     return response
 
 

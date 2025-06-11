@@ -1,14 +1,17 @@
 import { FormEvent, RefObject, useRef, useState } from "react"
 import { data, Form, useNavigate } from "react-router-dom"
-import { RegistrationForm } from "../Static/interfaces"
+import { RegistrationForm } from "../types/interfaces"
 import { Input } from "../Components/Input"
 import { WaitModal } from "../Components/WaitModal"
-import { ThrowMsg, URL } from "../Static/utils"
+import { URL } from "../config/api.constants";
+import { ThrowMsg } from "../utils/form.utils"
+import { registerUser } from "../services/api.service"
 
 export default function Regisration () {
     const SuccessfulModal: RefObject<HTMLDialogElement | null> = useRef(null)
     const WaitingModal: RefObject<HTMLDialogElement | null> = useRef(null)
     const user: RefObject<{login: string, password: string}> = useRef({login:'',password:''})
+    const navigate = useNavigate()
 
     
     function validate(form: HTMLFormElement) {
@@ -47,38 +50,29 @@ export default function Regisration () {
         const form = event.currentTarget
         const validatedForm = validate(form)
         if (validatedForm) {
-                WaitingModal.current?.showModal()
+            WaitingModal.current?.showModal()
 
-                await fetch(`${URL}/auth/register`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(Object.fromEntries(validatedForm))
-                })
-                .then(responce => {
-                    WaitingModal.current?.close()
-
-                    if (responce.ok) {
-                        SuccessfulModal.current?.showModal()
-                        return Promise.resolve();
-                    } else {
-                        return responce.json()
-                    }
-                })
-                .catch( err => {
-                    setTimeout(function(){alert('что то с интернетом')}, 100)
-                    WaitingModal.current?.close()
+            registerUser( JSON.stringify(Object.fromEntries(validatedForm)))
+            .then( () => {
+                WaitingModal.current?.close()
+                SuccessfulModal.current?.showModal()
+            })
+            .catch( error => {
+                WaitingModal.current?.close()
+                switch (Number(error.message)) {
+                    case 422:
+                        ThrowMsg('telegram_link')
+                        break
+                        
+                    case 400: 
+                        ThrowMsg("username", "Имя пользователя занято")
+                        break
                     
-                })
-                .then( data => {
-                    typeof data.detail == 'object'
-                    ? data.detail[0].loc[1] === 'telegram_link'
-                        ? ThrowMsg('telegram_link')
-                        : null
-                    : ThrowMsg('username', 'Это имя пользователя уже занято' )
-                })
-                
+                    case 503:
+                        navigate('/503')
+                        break
+                }
+            })
         }
     }
 
@@ -124,7 +118,7 @@ export default function Regisration () {
                         {/* <legend>Выберите роль:</legend>   */}
 
                         <div>
-                            <input type="radio" checked
+                            <input type="radio" 
                             name="role"
                             defaultValue='teacher'
                             className="main_radio"
@@ -137,7 +131,7 @@ export default function Regisration () {
                             defaultValue='student'
                             className="main_radio"
                             id="for_student"
-                            checked
+                            defaultChecked
                             />
                             
                             <label htmlFor="for_student">Студент</label>
@@ -173,7 +167,7 @@ const Modal = ({ref, user}) => {
     return(
         <>
             <dialog className="SuccessfulModal"  ref={ref}>
-                <p>Вы зарегистрированы!</p>
+                <label>Вы зарегистрированы!</label>
                 <button className="main_button" onClick={() => { nav(`/users/autorize?login=${user.current.login}&password=${user.current.password}`)}} >Авторизоваться</button>
             </dialog>
         </>
