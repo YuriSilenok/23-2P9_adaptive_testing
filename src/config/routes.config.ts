@@ -5,7 +5,8 @@ export const Paths = {
     'teacher': ['/forteacher', '/createform', '/forteacher/results'],
     'forbidden': ['/403', '/users/autorize', '/users/registration'],
     'unautorized': ['/401', '/users/autorize', '/users/registration'],
-    'undefined': ['/users/autorize', '/users/registration', '/forstudent', '/showform', '/forteacher', '/createform', '/forteacher/results']
+    'undefined': ['/users/autorize', '/users/registration', '/forstudent', '/showform', '/forteacher', '/createform', '/forteacher/results'],
+    'serverunavailable': ['/users/autorize', '/users/registration', '/forstudent', '/showform', '/forteacher', '/createform', '/forteacher/results']
 }
 
 

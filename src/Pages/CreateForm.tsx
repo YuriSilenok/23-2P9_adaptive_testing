@@ -7,6 +7,9 @@ import { Button } from "../Components/Button";
 import { useImmer } from "use-immer";
 import { WaitModal } from "../Components/WaitModal";
 import { SuccessfulModal } from "../Components/SuccessfulModal";
+import { createPoll } from "../services/api.service";
+import { ThrowMsg } from "../utils/form.utils";
+import { useNavigate } from "react-router-dom";
 
 const autoResizeTextarea = (textarea: HTMLTextAreaElement) => {
     textarea.style.height = 'auto'
@@ -14,10 +17,10 @@ const autoResizeTextarea = (textarea: HTMLTextAreaElement) => {
 };
 
 export default function Createform () {
-    useRedirect()
     const sm: RefObject<null | HTMLDialogElement> = useRef(null)
     const wm: RefObject<null | HTMLDialogElement> = useRef(null)
     const [formid, setFormID] = useState(null)
+    const navigate = useNavigate()
 
     const save = (data: any) => {
         sessionStorage.setItem('createformdata', JSON.stringify(data))
@@ -104,37 +107,26 @@ export default function Createform () {
 
     async function sendForm (formdata) {
         wm.current?.showModal()
-        const request = fetch(`${URL}/auth/create_poll`, {
-            credentials: 'include',
-            method: 'post',
-            body: JSON.stringify(formdata),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
 
-        request
+        createPoll(JSON.stringify(formdata))
         .then(response => {
             wm.current?.close()
-            
-            if (response.ok) {
-                return response.json().then(data => {
-                    console.log(data)
-                    setFormID(data.id ?? 'error')
-                    console.log(formid)
+                    setFormID(response.id ?? 'error')
                     sm.current?.showModal()
-                })
+        })
+        .catch( error => {
+            wm.current?.close()
 
-            } else {
-                return response.json().then( errdata => {
-                    const el = document.querySelector('input[name=title] + label') as HTMLLabelElement
-                    el.innerHTML = 'Заголовок формы уже используется'
-                    document.querySelector('input[name=title]')?.classList.add('invalid')
-                })
+            switch (Number(error.message)) {
+                case 400:
+                    ThrowMsg('title', 'Заголовок формы уже используется')
+                    break
+
+                case 403:
+                    navigate('/403')
+                    break
             }
         })
-        
-        
     }
 
 

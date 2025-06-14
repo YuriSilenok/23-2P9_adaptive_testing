@@ -1,38 +1,53 @@
-import { Link, Outlet, Routes, useNavigate } from "react-router-dom"
+import { Link, NavLink, Outlet, Routes, useNavigate } from "react-router-dom"
 import ThemeSwitcher from "../Components/ThemeSwither"
 import UserProfile from "../Components/UserMenu"
-import logo from '../assets/logo.svg'
 import {userStore} from "../stores/userStore"
-import React ,{ useEffect, useRef } from "react"
+import React ,{ useEffect, useRef, useLayoutEffect } from "react"
 import { WaitModal } from "../Components/WaitModal"
 import { isPathAvailable, Paths } from "../config/routes.config"
+import { ApiService } from "../services/api.service"
+
 
 export default function MainLOUT () {
-    const nav = useNavigate()
+    const navigate = useNavigate()
     const status = userStore().status
     const wm = useRef(null)
+    ApiService.setNavigate(navigate)
+
+
+    const shouldRedirect =
+        (['student', 'teacher'].includes(status) && !isPathAvailable(status)) ||
+        (status === 'forbidden' && !isPathAvailable('forbidden')) ||
+        (status === 'unautorized' && !isPathAvailable('unautorized')) ||
+        (status === 'serverunavailable');
+
     
-    useEffect(
-        () => {
-            if (['student', "teacher"].includes(status) && !isPathAvailable(status)) {
-                nav(`/for${status}`)
-            } 
+    useLayoutEffect(() => {
+        if (!shouldRedirect) return;
 
-            if (status === 'forbidden' && !isPathAvailable('forbidden')) {
-                nav("/403")
-            }
-
-            if (status === 'unautorized' && !isPathAvailable('unautorized')) {
-                nav("/users/autorize")
-            }
-
-            if (status === 'serverunavailable') {
-                nav('/503')
-            }
-    })
+        if (['student', 'teacher'].includes(status) && !isPathAvailable(status)) {
+            navigate(`/for${status}`);
+        } 
+        
+        else if (status === 'forbidden' && !isPathAvailable('forbidden')) {
+            navigate('/403');
+        } 
+        
+        else if (status === 'unautorized' && !isPathAvailable('unautorized')) {
+            navigate('/users/autorize');
+        } 
+        
+        else if (status === 'serverunavailable') {
+            navigate('/503');
+        }
+    }, [shouldRedirect, status, navigate]);
 
     if (status === 'undefined') {
-        return <WaitModal ref={wm} isOpen /> 
+        return <WaitModal ref={wm} isOpen />;
+    }
+
+    if (shouldRedirect) {
+        return null;
     }
     console.log(status)
     
@@ -40,16 +55,16 @@ export default function MainLOUT () {
     return(
         <>
             <nav id="main-nav">
-                <img id="icon" src={logo} onClick={() => {
+                {/* <img id="icon" src={logo} onClick={() => {
                     sessionStorage.removeItem('formdata')
                     status === 'student'
                     ? nav('/forstudent')
                     : nav('/forteacher')
-                }} /> 
+                }} />  */}
                 <nav className="top-nav">
                 </nav>
                 <aside>
-                    {window.location.pathname === '/users/autorize' ? null : <UserProfile /> }    
+                    {window.location.pathname === '/users/autorize' ? null : <UserProfile /> }
                     <ThemeSwitcher />
                     <svg onClick={() => {
                         const newWindow = window.open("", "_self")

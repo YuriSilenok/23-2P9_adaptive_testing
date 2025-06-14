@@ -2,8 +2,9 @@ import { memo, useEffect, useRef, useState } from "react";
 import { URL } from "../config/api.constants";
 import { useRedirect } from "../hooks/useRedirect";
 import { Button } from "../Components/Button";
-import { useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
 import {WaitModal} from '../Components/WaitModal'
+import { getStats } from "../services/api.service";
 
 interface PollStats {
   poll_id: number
@@ -25,26 +26,17 @@ interface StatsData {
 
 
 export default function TeacherStats() {
-  useRedirect()
   const waitmodal = useRef(null)
   const [stats, setStats] = useState<StatsData | null>(null)
   const navigate = useNavigate()
   const modalRef = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await fetch(`${URL}/auth/polls/check`, {
-          credentials: "include",
-        });
-        const data: StatsData = await response.json()
-        setStats(data)
-      } catch (error) {
-        console.error("Error fetching stats:", error)
-      }
-    }
-
-    fetchStats()
+    getStats()
+    .then(data => {
+      setStats(data)
+    })
+    
   }, [])
 
   if (!stats) {

@@ -10,7 +10,6 @@ import { ThrowMsg } from "../utils/form.utils"
 import { pingPoll } from "../services/api.service"
 
 export default function StudentNavigator () {
-    useRedirect()
     const navigate = useNavigate()
     const waitmodal: RefObject<null | HTMLDialogElement> = useRef(null)
 
@@ -37,20 +36,9 @@ export default function StudentNavigator () {
         .catch( error => {
             waitmodal.current?.close()
             switch (Number(error.message)) {
-                case 503:
-                    navigate('/503')
-                    break
-                
                 case 404:
                     ThrowMsg('value')
                     break
-                
-                case 403:
-                    navigate('/403')
-                    break
-                
-                case 401:
-                    navigate('/users/autorize')
             }
         })
     }

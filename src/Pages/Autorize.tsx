@@ -27,15 +27,11 @@ export default function Autorize () {
         .then( data => {
             waitmodal.current?.close()
             RegUser({nick: data.username!, status: data.role!})
-            nav(`/for${data.role}`)
         })    
         .catch( error => {
             waitmodal.current?.close()
+            
             switch (Number(error.message)) {
-                case 503:
-                    nav('/503')
-                    break
-
                 case 401:
                     ThrowMsg('password', "Логин или пароль неверны")
                     break

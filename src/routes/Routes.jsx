@@ -1,4 +1,4 @@
-import { BrowserRouter, redirect, Route, Routes } from "react-router-dom";
+import { BrowserRouter, redirect, Route, Routes, useNavigate } from "react-router-dom";
 import StudentNavigator from "../Pages/StudentPage";
 import MainLOUT from "../Layouts/MainLOUT";
 import Autorize from "../Pages/Autorize";

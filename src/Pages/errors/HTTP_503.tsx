@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 export default function ServiceUnavailablePage() {
     const navigate = useNavigate();
     const status = userStore().status
-    console.log(status);
     
     useEffect(() => { 
         if (status !== 'serverunavailable') {

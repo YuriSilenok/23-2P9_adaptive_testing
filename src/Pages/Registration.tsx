@@ -67,10 +67,6 @@ export default function Regisration () {
                     case 400: 
                         ThrowMsg("username", "Имя пользователя занято")
                         break
-                    
-                    case 503:
-                        navigate('/503')
-                        break
                 }
             })
         }

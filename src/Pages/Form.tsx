@@ -5,9 +5,9 @@ import { URL } from "../config/api.constants";
 import { useRedirect } from "../hooks/useRedirect";
 import { WaitModal } from "../Components/WaitModal";
 import { SuccessfulModal } from "../Components/SuccessfulModal";
+import { getPoll, submitAnswers } from "../services/api.service";
 
 export default function ShowForm () {
-    useRedirect()
     const params = new URLSearchParams(window.location.search)
     const waitmodal: RefObject<HTMLDialogElement | null> = useRef(null)
     const successfulmodal: RefObject<null| HTMLDialogElement> = useRef(null)
@@ -35,18 +35,21 @@ export default function ShowForm () {
     )
 
     if (!sessionStorage.getItem(`formdata#?id=${params.get('id')}`)) {
-        const request = fetch(`${URL}/auth/get_poll/${params.get('id')}`, {
-            credentials: "include"
-        })
-
-        request
-        .then( (response) => {
-            return response.json()
-        })
-        .then( data => {
+        getPoll(Number(params.get("id")))
+        .then( (data) => {
             sessionStorage.setItem(`formdata#?id=${params.get('id')}`, JSON.stringify(data))
             setForm(data)
         })
+        .catch( error => {
+            waitmodal.current?.close()
+            switch (Number(error.message)) {
+                case 404:
+                    setForm({
+                        title: 'Форма недоступна',
+                        description: "Попробуйте запросить позже"
+                    })
+            }
+        })  
     } else {
         waitmodal.current?.close()
     }
@@ -65,23 +68,16 @@ export default function ShowForm () {
             requestBody.push({'question_id': Number(queid), 'selected_option_ids': [Number(answid)]})
         })
         waitmodal.current?.showModal()
-        const request = fetch(`${URL}/auth/polls/${params.get('id')}/submit-answers`, {
-            credentials: 'include',
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({answers: requestBody})
-        })
-
-        request.then(request => {
+        submitAnswers(Number(params.get("id")), JSON.stringify({answers: requestBody}))
+        .then( request => {
             waitmodal.current?.close()
-            if (request.ok) {
-                successfulmodal.current?.showModal()
-            } else {
-                if (request.status == 400) {
-                    alert('Вы уже отправляти эту форму')
-                }
+            successfulmodal.current?.showModal()
+        })
+        .catch( error => {
+            waitmodal.current?.close()
+            switch (Number(error.message)) {
+                case 400:
+                    alert('Вы уже отправляли эту форму')
             }
         })
     }
