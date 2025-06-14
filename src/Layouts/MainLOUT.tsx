@@ -55,12 +55,12 @@ export default function MainLOUT () {
     return(
         <>
             <nav id="main-nav">
-                {/* <img id="icon" src={logo} onClick={() => {
+                <img id="icon" src="../assets/logo.svg" alt="Логотип" onClick={() => {
                     sessionStorage.removeItem('formdata')
                     status === 'student'
-                    ? nav('/forstudent')
-                    : nav('/forteacher')
-                }} />  */}
+                    ? navigate('/forstudent')
+                    : navigate('/forteacher')
+                }} /> 
                 <nav className="top-nav">
                 </nav>
                 <aside>
