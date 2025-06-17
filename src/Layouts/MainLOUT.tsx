@@ -1,10 +1,10 @@
-import { Link, NavLink, Outlet, Routes, useNavigate } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import ThemeSwitcher from "../Components/ThemeSwither"
 import UserProfile from "../Components/UserMenu"
 import {userStore} from "../stores/userStore"
-import React ,{ useEffect, useRef, useLayoutEffect } from "react"
+import { useRef, useLayoutEffect } from "react"
 import { WaitModal } from "../Components/WaitModal"
-import { isPathAvailable, Paths } from "../config/routes.config"
+import { isPathAvailable } from "../config/routes.config"
 import { ApiService } from "../services/api.service"
 
 
@@ -19,35 +19,35 @@ export default function MainLOUT () {
         (['student', 'teacher'].includes(status) && !isPathAvailable(status)) ||
         (status === 'forbidden' && !isPathAvailable('forbidden')) ||
         (status === 'unautorized' && !isPathAvailable('unautorized')) ||
-        (status === 'serverunavailable');
+        (status === 'serverunavailable')
 
     
     useLayoutEffect(() => {
-        if (!shouldRedirect) return;
+        if (!shouldRedirect) return
 
         if (['student', 'teacher'].includes(status) && !isPathAvailable(status)) {
-            navigate(`/for${status}`);
+            navigate(`/for${status}`)
         } 
         
         else if (status === 'forbidden' && !isPathAvailable('forbidden')) {
-            navigate('/403');
+            navigate('/403')
         } 
         
         else if (status === 'unautorized' && !isPathAvailable('unautorized')) {
-            navigate('/users/autorize');
+            navigate('/users/autorize')
         } 
         
         else if (status === 'serverunavailable') {
-            navigate('/503');
+            navigate('/503')
         }
-    }, [shouldRedirect, status, navigate]);
+    }, [shouldRedirect, status, navigate])
 
     if (status === 'undefined') {
-        return <WaitModal ref={wm} isOpen />;
+        return <WaitModal ref={wm} isOpen />
     }
 
     if (shouldRedirect) {
-        return null;
+        return null
     }
     console.log(status)
     

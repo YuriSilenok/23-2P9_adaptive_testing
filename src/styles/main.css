@@ -415,21 +415,12 @@ aside > svg:hover {
   align-items: center;
   justify-content: space-around;
   padding: 10px;
-  background: gray;
+  background: linear-gradient(90deg, var(--button-color-start), var(--button-color-stop));
+  z-index: 1;
+  transition: scale 0.4s, --button-color-start 0.4s, --button-color-stop 0.4s;
   border-radius: 20px;
   overflow: hidden;
-}
-.profile-container .user-shower::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, var(--button-color-start), var(--button-color-stop));
-  filter: blur(15px);
-  z-index: -1;
-  transition: scale 0.4s, --button-color-start 0.4s, --button-color-stop 0.4s;
+  border: black 2px solid;
 }
 .profile-container .user-shower span {
   width: 90px;
@@ -485,7 +476,7 @@ aside > svg:hover {
 }
 .profile-container .active ~ .user-menu {
   opacity: 1;
-  z-index: 1;
+  z-index: 0;
   transform: translateY(40px);
   position: absolute;
 }

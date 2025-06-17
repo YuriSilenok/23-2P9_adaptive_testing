@@ -6,8 +6,6 @@ import {useRedirect} from '../hooks/useRedirect'
 export default function MainRedirect ({checkAccount = false}) {
     const storageClearURIs = ["/createform", '/showform']
     const storageClearKeys = ['formdata', 'createformdata']
-    
-    useRedirect()
     const nav = useNavigate()
     const {nick} = userStore()
 
