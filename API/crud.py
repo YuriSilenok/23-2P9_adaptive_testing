@@ -41,13 +41,6 @@ def find_user(username) :
             telegram_link=current_user.telegram_link,
             role=user_role
         )
-        {
-            "username": current_user.username,
-            "name": current_user.name,
-            "telegram_link": current_user.telegram_link,
-            "is_active": current_user.is_active,
-            "role": user_role
-        }
 
     raise HTTPException(
         detail='user not finded',

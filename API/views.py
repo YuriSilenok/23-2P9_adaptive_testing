@@ -30,7 +30,7 @@ async def validate_auth_user(
     if not current_user or not verify_password(user.password, password_hash):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
-    return UserOut(**current_user)
+    return current_user
 
 
 async def get_current_user(
@@ -65,12 +65,8 @@ async def get_current_active_user(
             detail='cannot find user'
         )
 
-    if user["is_active"]:
-        return UserOut(**user)
-    raise HTTPException(
-        status_code=status.HTTP_403_FORBIDDEN,
-        detail="user inactive"
-    )
+    
+    return user
 
 
 @router.post("/login")
