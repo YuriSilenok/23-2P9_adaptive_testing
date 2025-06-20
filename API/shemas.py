@@ -108,3 +108,7 @@ class UserAnswer(UserAnswerBase):
     id: int
     user_id: int
     question_id: int
+
+class Course(BaseModel):
+    title: str
+    is_active: bool

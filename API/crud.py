@@ -1,8 +1,8 @@
 """python interaction with database"""
 from typing import Dict
-from db import database, User, Poll, Question, AnswerOption, UserAnswer, UserRole, Role
+from db import database, User, Poll, UserCourse, Question, AnswerOption, UserAnswer, UserRole, Role
 from utils import get_password_hash
-from shemas import UserRegister, PollCreate, PollAnswersSubmit, UserOut, PollWithQuestions, Roles
+from shemas import UserRegister, Course, PollCreate, PollAnswersSubmit, UserOut, PollWithQuestions, Roles
 
 from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
@@ -385,4 +385,57 @@ def check_user_answers_from_db(username: str) -> JSONResponse:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error fetching user answers: {str(e)}"
+        )
+
+@database.atomic()
+def course_create(course: Course, user: UserOut):
+
+    if UserCourse.get_or_none(UserCourse.title == course.title, UserCourse.created_by == User.get_or_none(User.username == user.username)):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="course already created"
+        )
+    try:
+        data: UserCourse = UserCourse.create(
+            title = course.title,
+            created_by = user.username,
+        )
+
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Some exc"
+        )
+    return JSONResponse(content={
+        "title": data.title,
+    })
+
+
+@database.atomic()
+def change_activity_of_course(title: str, user: UserOut):
+    try:
+        current_course = UserCourse.get_or_none(UserCourse.title == title, UserCourse.created_by == User.get_or_none(User.username == user.username))
+        current_course.is_active = not current_course.is_active
+        current_course.save()
+        return current_course        
+    
+    except: 
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST
+        )
+
+
+@database.atomic()
+def get_courses_list(user: UserOut):
+    try:
+        courses = UserCourse.select().where(UserCourse.created_by == User.get_or_none(User.username == user.username))
+        to_return = []
+        for course in courses:
+            to_return.append(course.__data__)
+
+        return JSONResponse(content=to_return)
+
+    except: 
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST
         )

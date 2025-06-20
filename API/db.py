@@ -32,6 +32,12 @@ class UserRole(Table):
     role = ForeignKeyField(Role)
 
 
+class UserCourse(Table):
+    title = CharField(max_length=30)
+    created_by = ForeignKeyField(User, field=User.username)
+    is_active = BooleanField(default=True)
+
+
 class Poll(Table):
     title = CharField(unique=True)
     description = TextField(null=True)
@@ -62,17 +68,19 @@ class UserAnswer(Table):
 
 if __name__ == "__main__":
     database.connect()
-    database.create_tables([User, Poll, Question, AnswerOption, UserAnswer, Role, UserRole])
+    database.create_tables([User, Poll, Question, AnswerOption, UserAnswer, Role, UserRole, UserCourse])
     database.close()
     Role.get_or_create(status = Roles.STUDENT)
     teacher_role, _ = Role.get_or_create(status = Roles.TEACHER)
 
     base_teacher, _ = User.get_or_create(
-        username = 'teacher',
-        name = 'teacher',
-        telegram_link = 'https://t.me/teacher_tg.com',
-        password_hash = get_password_hash('12345')
-    )
+    username='teacher',
+    defaults={
+        'name': 'teacher',
+        'telegram_link': 'https://t.me/teacher_tg.com',
+        'password_hash': get_password_hash('12345')
+    }
+)
 
     UserRole.get_or_create(
         user = base_teacher,

@@ -1,19 +1,20 @@
 """descriptions for all user interactions (API)"""
 from pydantic import BaseModel
-from fastapi import Depends, APIRouter, HTTPException, status, Cookie, Body , Response
+from fastapi import Depends, APIRouter, HTTPException, status,Query, Cookie, Body , Response
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.responses import JSONResponse
 
 from shemas import (
     UserRegister, UserOut,
     PollCreate, PollAnswersSubmit,
-    PollWithQuestions, Roles
+    PollWithQuestions, Roles, Course
 )
 from crud import (
     find_user, create_user, compare_role,
     create_poll, find_password, 
     find_questions, submit_poll_answers, 
-    check_user_answers_from_db, find_poll
+    check_user_answers_from_db, find_poll, course_create,
+    change_activity_of_course, get_courses_list
 )
 from utils import (
     verify_password, 
@@ -224,3 +225,44 @@ async def check_statistic(
         )
 
     return check_user_answers_from_db(current_user.username)
+
+
+@router.post('/course/create')
+async def create_course(
+    course: Course = Body(),
+    current_user: UserOut = Depends(get_current_active_user)
+) -> JSONResponse:
+    if await compare_role(current_user.username, Roles.STUDENT):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only teachers can create polls"
+        )
+
+    return course_create(course=course, user=current_user)
+
+
+@router.put('/course/course')
+async def archive_course(
+    title = Query(),
+    current_user: UserOut = Depends(get_current_active_user)
+) -> JSONResponse:
+    if await compare_role(current_user.username, Roles.STUDENT):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only teachers can create polls"
+        )
+
+    return change_activity_of_course(title=title, user=current_user)
+
+
+@router.get('/course/get')
+async def get_courses(
+    current_user = Depends(get_current_active_user)
+) -> JSONResponse:
+    if await compare_role(current_user.username, Roles.STUDENT):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only teachers can create polls"
+        )
+    
+    return get_courses_list(current_user)
