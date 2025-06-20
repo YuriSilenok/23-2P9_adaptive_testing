@@ -3,11 +3,11 @@ from fastapi import HTTPException, status
 
 from db import database, User, UserRole, Role
 from utils import get_password_hash
-from shemas import UserCreate, Roles
+from shemas import UserCreate, Roles, UserOut
 
 
 @database.atomic()
-async def create_user(user: UserCreate):
+def create_user(user: UserCreate):
     try:
         currect_user = User.create(
             username=user.username,
@@ -31,11 +31,17 @@ async def create_user(user: UserCreate):
 
 
 @database.atomic()
-async def find_user(username) :
+def find_user(username) :
     current_user = User.get_or_none(User.username == username)
     user_role = (UserRole.get_or_none(user = current_user)).role.name
     if current_user:
-        return {
+        return UserOut(
+            username=current_user.username,
+            name=current_user.name,
+            telegram_link=current_user.telegram_link,
+            role=user_role
+        )
+        {
             "username": current_user.username,
             "name": current_user.name,
             "telegram_link": current_user.telegram_link,
@@ -50,7 +56,7 @@ async def find_user(username) :
 
 
 @database.atomic()
-async def find_password(username):
+def find_password(username):
     current_user = User.get_or_none(User.username == username)
 
     if current_user:

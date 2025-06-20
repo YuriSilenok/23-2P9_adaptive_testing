@@ -1,7 +1,7 @@
 """descriptions for all user interactions (API)"""
 from pydantic import BaseModel
 from fastapi import Depends, APIRouter, HTTPException, status, Cookie, Body 
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer, HTTPAuthorizationCredentials
 from fastapi.responses import JSONResponse
 
 from shemas import (UserCreate, UserOut)
@@ -12,7 +12,10 @@ from db import User, UserRole, Role
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login", auto_error=False)
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="/auth/login", 
+    auto_error=False
+)
 
 class AuthUser(BaseModel): 
     username: str
@@ -21,8 +24,8 @@ class AuthUser(BaseModel):
 async def validate_auth_user(
     user: AuthUser = Body()
 ) -> UserOut:
-    current_user = await find_user(user.username)
-    password_hash = await find_password(user.username)
+    current_user = find_user(user.username)
+    password_hash = find_password(user.username)
 
     if not current_user or not verify_password(user.password, password_hash):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
@@ -32,7 +35,7 @@ async def validate_auth_user(
 
 async def get_current_user(
     access_token: str|bytes = Cookie(None, include_in_schema=False),
-    bearer_token: str = Depends(oauth2_scheme)
+    bearer_token: HTTPAuthorizationCredentials = Depends(oauth2_scheme)
 ) -> str:
     credentials_exception = HTTPException(
         status_code=401,
@@ -54,7 +57,7 @@ async def get_current_active_user(
     username: str = Depends(get_current_user),
 ) -> UserOut:
     
-    user = await find_user(username)
+    user = find_user(username)
 
     if not user:
         raise HTTPException(
@@ -93,5 +96,5 @@ async def login_for_access_token(
 
 @router.post("/register")
 async def register(user: UserCreate) -> str:
-    user_data = await create_user(user)
+    user_data = create_user(user)
     return user_data

@@ -28,10 +28,10 @@ class Role(BaseModel):
 
 class UserRole(BaseModel):
     user = ForeignKeyField(
-        User, backref="roles", on_update="CASCADE", on_delete="CASCADE"
+        User, backref="user_role", on_update="CASCADE", on_delete="CASCADE"
     )
     role = ForeignKeyField(
-        Role, backref="role_users", on_update="CASCADE", on_delete="CASCADE"
+        Role, backref="user_role", on_update="CASCADE", on_delete="CASCADE"
     )
 
 
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     database.create_tables([User, Role, UserRole])
     database.close()
 
-    Role.create(name=Roles.STUDENT)
+    Role.get_or_create(name=Roles.STUDENT)
     teacher_role, _ = Role.get_or_create(name=Roles.TEACHER)
 
     base_teacher, _ = User.get_or_create(
