@@ -1,7 +1,6 @@
 import { URL } from "../config/api.constants";
-import { useRedirect } from "../hooks/useRedirect";
-import { ChangeEvent, createContext, Dispatch, FormEvent, InvalidEvent, memo, RefObject, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
-import { Answer, Form, FormCreate, Question} from "../types/interfaces";
+import { ChangeEvent, memo, RefObject, useCallback, useRef, useState } from "react";
+import { Answer, Form, Question} from "../types/interfaces";
 import { Input } from '../Components/Input'
 import { Button } from "../Components/Button";
 import { useImmer } from "use-immer";
@@ -14,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 const autoResizeTextarea = (textarea: HTMLTextAreaElement) => {
     textarea.style.height = 'auto'
     textarea.style.height = `${textarea.scrollHeight}px`
-};
+}
 
 export default function Createform () {
     const sm: RefObject<null | HTMLDialogElement> = useRef(null)
@@ -26,77 +25,77 @@ export default function Createform () {
         sessionStorage.setItem('createformdata', JSON.stringify(data))
     }
 
-    const [form, setForm] = useImmer(JSON.parse(sessionStorage.getItem('createformdata') ?? JSON.stringify({
-            title: '',
-            description: '',
-            questions: [
-                {
-                    text: '',
-                    question_type: "single_choice",
-                    answer_options: [
-                        {
-                            text: '',
-                            is_correct: false
-                        }
-                    ]
-                }
-            ]
-        })
-    ) as Form)
-    
-    const setDescription = useCallback((text: string) => 
-        setForm( draft => {
-            draft.description = text
-            save(draft)
-    }), [])
-
-    const setTitle = useCallback((text: string) => 
-        setForm( draft => {
-            draft.title = text
-            save(draft)
-    }), [])
-
-    const setQuestionText = useCallback((text: string, questionID: number) => 
-        setForm( draft => {
-            draft.questions[questionID].text = text
-            save(draft)
-    }), [])  
-    
-    const setAnswerText = useCallback((text: string, questionID: number, answerID: number) =>
-        setForm( draft => {
-            draft.questions[questionID].answer_options ||= []
-            draft.questions[questionID].answer_options[answerID].text = text
-            save(draft)
-    }), [])
-    
-    const addQuestion = useCallback(() => setForm( draft =>
-        {draft.questions.push({
-                    text: '',
-                    question_type: "single_choice",
-                    answer_options: [
-                        {
-                            text: '',
-                            is_correct: false
-                        }
-                    ]
+        const [form, setForm] = useImmer(JSON.parse(sessionStorage.getItem('createformdata') ?? JSON.stringify({
+                title: '',
+                description: '',
+                questions: [
+                    {
+                        text: '',
+                        question_type: "single_choice",
+                        answer_options: [
+                            {
+                                text: '',
+                                is_correct: false
+                            }
+                        ]
+                    }
+                ]
             })
-        save(draft)}
-    ), [])
+        ) as Form)
+        
+        const setDescription = useCallback((text: string) => 
+            setForm( draft => {
+                draft.description = text
+                save(draft)
+        }), [])
 
-    const addAnswer = useCallback((questionID: number) => 
-        setForm(draft =>{
-            draft.questions ||= []
-            draft.questions[questionID].answer_options.push({
-                            text: '',
-                            is_correct: false
-                        })
-        save(draft)
-    }),[])
+        const setTitle = useCallback((text: string) => 
+            setForm( draft => {
+                draft.title = text
+                save(draft)
+        }), [])
 
-    const setAnswerCorrect = useCallback((state: boolean, questionID: number, answerID: number) =>
-        setForm( draft => {
-            draft.questions[questionID].answer_options ||= []
-            draft.questions[questionID].answer_options.forEach((answer) => {
+        const setQuestionText = useCallback((text: string, questionID: number) => 
+            setForm( draft => {
+                draft.questions[questionID].text = text
+                save(draft)
+        }), [])  
+        
+        const setAnswerText = useCallback((text: string, questionID: number, answerID: number) =>
+            setForm( draft => {
+                draft.questions[questionID].answer_options ||= []
+                draft.questions[questionID].answer_options[answerID].text = text
+                save(draft)
+        }), [])
+        
+        const addQuestion = useCallback(() => setForm( draft =>
+            {draft.questions.push({
+                        text: '',
+                        question_type: "single_choice",
+                        answer_options: [
+                            {
+                                text: '',
+                                is_correct: false
+                            }
+                        ]
+                })
+            save(draft)}
+        ), [])
+
+        const addAnswer = useCallback((questionID: number) => 
+            setForm(draft =>{
+                draft.questions ||= []
+                draft.questions[questionID].answer_options.push({
+                                text: '',
+                                is_correct: false
+                            })
+            save(draft)
+        }),[])
+
+        const setAnswerCorrect = useCallback((state: boolean, questionID: number, answerID: number) =>
+            setForm( draft => {
+                draft.questions[questionID].answer_options ||= []
+                draft.questions[questionID].answer_options.forEach((answer) => {
                 if (answer.id === answerID) {
                     answer.is_correct = state
                 } else {answer.is_correct = false}

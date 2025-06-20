@@ -14,7 +14,6 @@ export default function MainLOUT () {
     const wm = useRef(null)
     ApiService.setNavigate(navigate)
 
-
     const shouldRedirect =
         (['student', 'teacher'].includes(status) && !isPathAvailable(status)) ||
         (status === 'forbidden' && !isPathAvailable('forbidden')) ||
@@ -26,7 +25,9 @@ export default function MainLOUT () {
         if (!shouldRedirect) return
 
         if (['student', 'teacher'].includes(status) && !isPathAvailable(status)) {
+            console.time('q')
             navigate(`/for${status}`)
+            console.timeEnd('q')
         } 
         
         else if (status === 'forbidden' && !isPathAvailable('forbidden')) {
@@ -38,7 +39,10 @@ export default function MainLOUT () {
         } 
         
         else if (status === 'serverunavailable') {
+            console.time('time')
             navigate('/503')
+            console.timeEnd('time')
+            
         }
     }, [shouldRedirect, status, navigate])
 

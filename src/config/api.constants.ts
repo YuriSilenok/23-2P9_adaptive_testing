@@ -14,6 +14,6 @@ export const APIUrls = {
 
 
 export type apiUrl = {
-    [K in keyof typeof APIUrls]: 
+    [K in keyof typeof APIUrls]:
         typeof APIUrls[K] extends (pollID: number) => any ? ReturnType<typeof APIUrls[K]> : typeof APIUrls[K]
 }[keyof typeof APIUrls]

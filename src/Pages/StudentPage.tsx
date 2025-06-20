@@ -62,9 +62,9 @@ export default function StudentNavigator () {
                     <Input isPretty required
                     name="value"
                     placeholder="id или ссылка" 
-                    onChange={(event: InputEvent) => 
-                        handleChange(event)
-                    } 
+                    // onChange={(event: InputEvent) => 
+                    //     handleChange(event)
+                    // } 
                     max={8} min={1} 
                     invalidMessage="Такого теста не существует" />
 

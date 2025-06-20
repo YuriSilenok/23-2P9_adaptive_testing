@@ -11,7 +11,7 @@ class ApiServiceClass {
         this.navigate = navigate
     }
 
-    useNavigate = (path: string, replace: boolean = false) => {
+    useNavigate = (path: string, replace: boolean = false): void => {
         this.navigate ? this.navigate(path, {replace: replace}) : console.log('еще не инициализирован')
     }
 
@@ -33,7 +33,6 @@ class ApiServiceClass {
                 if (response.status === 401 && !ignoreUnautorize) {
                     userStore.setState(state => ({...state, status: 'unautorized'}))
                     throw Error
-
                 }
                 throw Error(String(response.status))
             }
@@ -76,8 +75,8 @@ export const loginUser = (body: string) => {
                 'Content-Type': 'application/json'
             },
             body: body
-        }
-        ,true
+        },
+        true
     )
 }
 
