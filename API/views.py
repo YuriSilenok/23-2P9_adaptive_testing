@@ -83,23 +83,56 @@ async def get_current_active_user(
 
 @router.post("/login")
 async def login_for_access_token(
-    user: UserCreate = Depends(validate_auth_user)
+    user: UserOut = Depends(validate_auth_user)
 ) -> JSONResponse:
     jwt_payload = {
         "sub": user.username,
         "username": user.username
     }
+    
     token = encode_jwt(jwt_payload)
-    response = JSONResponse(content={'username': user.name, 'role': user.role})
+    response = JSONResponse(
+        content={
+            'username': user.name, 
+            'role': user.role, 
+            "token": token
+        }
+    )
+
     response.set_cookie(
         key='access_token',
-        value=token,
+        value=str(token),
         path="/",
         httponly=True,
         max_age=3600*24*30
     )
 
-    return  response
+    return response
+
+
+@router.get('/users/me')
+async def users_me(
+    user = Depends(get_current_active_user)
+) -> JSONResponse: 
+    return JSONResponse(
+        content={
+            'nick': user.name, 
+            'status': user.role, 
+        }
+    )
+
+@router.post('/logout')
+async def logout():
+    response = JSONResponse(
+        'logout: true'
+    )
+    response.delete_cookie(
+        key="access_token",
+        path="/",
+        httponly=True,
+    )
+    
+    return response
 
 
 @router.post("/register")

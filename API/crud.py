@@ -33,7 +33,7 @@ def create_user(user: UserCreate):
 @database.atomic()
 def find_user(username) :
     current_user = User.get_or_none(User.username == username)
-    user_role = (UserRole.get_or_none(user = current_user)).role.name
+    user_role = (UserRole.get_or_none(UserRole.user == current_user)).role.name
     if current_user:
         return UserOut(
             username=current_user.username,

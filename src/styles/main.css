@@ -14,7 +14,7 @@
   syntax: "<color>";
   inherits: true;
   initial-value: orange;
-}
+} 
 @property --button-color-stop {
   syntax: "<color>";
   inherits: true;
