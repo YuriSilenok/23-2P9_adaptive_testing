@@ -7,7 +7,7 @@ setup(
     install_requires=[
         "annotated-types==0.7.0",
         "anyio==4.6.2",
-        "bcrypt==4.3.0",
+        "bcrypt==3.2.0",
         "cffi==1.17.1",
         "click==8.1.8",
         "colorama==0.4.6",
