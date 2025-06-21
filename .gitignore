@@ -229,3 +229,4 @@ __pycache__/
 *.pem
 certs/
 *.db
+.toml

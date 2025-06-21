@@ -6,14 +6,16 @@ from fastapi.responses import JSONResponse
 
 from shemas import (
     UserRegister, UserOut,
-    PollCreate, PollAnswersSubmit,
-    PollWithQuestions, Roles, Course
+    # PollCreate, PollAnswersSubmit,
+    # PollWithQuestions,
+    Roles, Course
 )
 from crud import (
     find_user, create_user, compare_role,
-    create_poll, find_password, 
-    find_questions, submit_poll_answers, 
-    check_user_answers_from_db, find_poll, course_create,
+    # create_poll, 
+    # find_questions, submit_poll_answers, 
+    # check_user_answers_from_db, find_poll,
+    course_create,find_password, 
     change_activity_of_course, get_courses_list
 )
 from utils import (
@@ -35,9 +37,9 @@ class AuthUser(BaseModel):
 
 async def validate_auth_user(
     user: AuthUser = Body()
-) -> UserRegister:
-    data = await find_user(user.username)
-    password_hash = await find_password(user.username)
+) -> UserOut:
+    data = find_user(user.username)
+    password_hash = find_password(user.username)
 
     if not data or not verify_password(user.password, password_hash):
         raise HTTPException(
@@ -45,7 +47,7 @@ async def validate_auth_user(
             detail='could not validate password or username'
         )
 
-    return UserRegister(**data)
+    return data
 
 
 async def get_current_user(
@@ -84,7 +86,7 @@ async def get_current_active_user(
     username: str = Depends(get_current_user)
 ) -> UserOut:
 
-    user = await find_user(username)
+    user = find_user(username)
 
     if not user:
         raise HTTPException(
@@ -92,7 +94,7 @@ async def get_current_active_user(
             detail='could not find user'
         )
 
-    return UserOut(**user)
+    return user
 
 
 @router.post("/login")
@@ -151,80 +153,80 @@ async def logout():
 
 @router.post("/register")
 async def register(user: UserRegister) -> JSONResponse:
-    user_data = await create_user(user)
+    user_data = create_user(user)
     return user_data
 
 
-@router.post("/create_poll")
-async def create_full_poll(
-    poll_data: PollCreate,
-    current_user: UserOut = Depends(get_current_active_user)
-) -> JSONResponse:
-    if await compare_role(current_user.username, Roles.STUDENT):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Only teachers can create polls"
-        )
+# @router.post("/create_poll")
+# async def create_full_poll(
+#     poll_data: PollCreate,
+#     current_user: UserOut = Depends(get_current_active_user)
+# ) -> JSONResponse:
+#     if compare_role(current_user.username, Roles.STUDENT):
+#         raise HTTPException(
+#             status_code=status.HTTP_403_FORBIDDEN,
+#             detail="Only teachers can create polls"
+#         )
 
-    db_poll = await create_poll(poll_data, current_user)
+#     db_poll = await create_poll(poll_data, current_user)
 
-    return db_poll
-
-
-@router.get('/ping_poll/{poll_id}')
-async def ping_poll(
-    poll_id: int,
-    current_user: UserOut = Depends(get_current_active_user)
-) -> JSONResponse:
-    if await compare_role(current_user.username, Roles.TEACHER):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Only studens can see questions"
-        )
-
-    return await find_poll(poll_id)
+#     return db_poll
 
 
-@router.get("/get_poll/{poll_id}", response_model=PollWithQuestions)
-async def get_poll_questions(
-    poll_id: int,
-    current_user: UserOut = Depends(get_current_active_user)
-) -> JSONResponse:
-    if await compare_role(current_user.username, Roles.TEACHER):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Only studens can see questions"
-        )
+# @router.get('/ping_poll/{poll_id}')
+# async def ping_poll(
+#     poll_id: int,
+#     current_user: UserOut = Depends(get_current_active_user)
+# ) -> JSONResponse:
+#     if compare_role(current_user.username, Roles.TEACHER):
+#         raise HTTPException(
+#             status_code=status.HTTP_403_FORBIDDEN,
+#             detail="Only studens can see questions"
+#         )
 
-    return await find_questions(poll_id)
-
-
-@router.post("/polls/{poll_id}/submit-answers/")
-async def submit_answers(
-    poll_id: int,
-    answers_data: PollAnswersSubmit,
-    current_user: UserOut = Depends(get_current_active_user)
-) -> JSONResponse:
-    if await compare_role(current_user.username, Roles.TEACHER):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Only students can submit answers"
-        )
-
-    return submit_poll_answers(poll_id, answers_data, current_user)
+#     return find_poll(poll_id)
 
 
-@router.get("/polls/check")
-async def check_statistic(
-    current_user: UserOut = Depends(get_current_active_user)
-) -> JSONResponse:
-    if await compare_role(current_user.username, Roles.STUDENT):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, 
-            detail='Only teachers can see stats'
-        )
+# @router.get("/get_poll/{poll_id}", response_model=PollWithQuestions)
+# async def get_poll_questions(
+#     poll_id: int,
+#     current_user: UserOut = Depends(get_current_active_user)
+# ) -> JSONResponse:
+#     if compare_role(current_user.username, Roles.TEACHER):
+#         raise HTTPException(
+#             status_code=status.HTTP_403_FORBIDDEN,
+#             detail="Only studens can see questions"
+#         )
 
-    return check_user_answers_from_db(current_user.username)
+#     return await find_questions(poll_id)
+
+
+# @router.post("/polls/{poll_id}/submit-answers/")
+# async def submit_answers(
+#     poll_id: int,
+#     answers_data: PollAnswersSubmit,
+#     current_user: UserOut = Depends(get_current_active_user)
+# ) -> JSONResponse:
+#     if compare_role(current_user.username, Roles.TEACHER):
+#         raise HTTPException(
+#             status_code=status.HTTP_403_FORBIDDEN,
+#             detail="Only students can submit answers"
+#         )
+
+#     return submit_poll_answers(poll_id, answers_data, current_user)
+
+
+# @router.get("/polls/check")
+# async def check_statistic(
+#     current_user: UserOut = Depends(get_current_active_user)
+# ) -> JSONResponse:
+#     if compare_role(current_user.username, Roles.STUDENT):
+#         raise HTTPException(
+#             status_code=status.HTTP_403_FORBIDDEN, 
+#             detail='Only teachers can see stats'
+#         )
+
+#     return check_user_answers_from_db(current_user.username)
 
 
 @router.post('/course/create')
@@ -232,7 +234,7 @@ async def create_course(
     course: Course = Body(),
     current_user: UserOut = Depends(get_current_active_user)
 ) -> JSONResponse:
-    if await compare_role(current_user.username, Roles.STUDENT):
+    if compare_role(current_user.username, Roles.STUDENT):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Only teachers can create polls"
@@ -242,11 +244,11 @@ async def create_course(
 
 
 @router.put('/course/course')
-async def archive_course(
+async def change_activity_course(
     title = Query(),
     current_user: UserOut = Depends(get_current_active_user)
 ) -> JSONResponse:
-    if await compare_role(current_user.username, Roles.STUDENT):
+    if compare_role(current_user.username, Roles.STUDENT):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Only teachers can create polls"
@@ -259,7 +261,7 @@ async def archive_course(
 async def get_courses(
     current_user = Depends(get_current_active_user)
 ) -> JSONResponse:
-    if await compare_role(current_user.username, Roles.STUDENT):
+    if compare_role(current_user.username, Roles.STUDENT):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Only teachers can create polls"
