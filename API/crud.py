@@ -364,8 +364,13 @@ def course_create(course: Course, user: UserOut):
 
 @database.atomic()
 def change_activity_of_course(title: str, user: UserOut):
+    current_course = UserCourse.get_or_none(UserCourse.title == title, UserCourse.created_by == User.get_or_none(User.username == user.username))
+    if not current_course:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Course not found"
+        )
     try:
-        current_course = UserCourse.get_or_none(UserCourse.title == title, UserCourse.created_by == User.get_or_none(User.username == user.username))
         current_course.is_active = not current_course.is_active
         current_course.save()
         return current_course.__data__        
