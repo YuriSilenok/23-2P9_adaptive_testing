@@ -1,6 +1,7 @@
 """utils"""
 import jwt
 from passlib.context import CryptContext
+from typing import Union
 
 from config import settings
 
@@ -25,7 +26,7 @@ def encode_jwt(
 
 
 def decode_jwt(
-    token: str | bytes,
+    token: str,
     public_key: str = str(settings.auth_jwt.public_key_path),
     algorithm: str = settings.auth_jwt.algorithm
 ):

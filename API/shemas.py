@@ -32,3 +32,81 @@ class UserOut(UserBase):
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
+
+
+# class AnswerOptionBase(BaseModel):
+#     text: str
+#     is_correct: bool = False
+
+
+# class AnswerOptionCreate(BaseModel):
+#     selected_option_ids: list[int]
+#     question_id: int
+
+
+# class AnswerOptionOut(BaseModel):
+#     id: int
+#     text: str
+
+#     class Config:
+#         from_attributes = True
+
+
+# class QuestionBase(BaseModel):
+#     text: str = Field(..., min_length=3, max_length=500)
+#     question_type: str = "single_choice"
+#     answer_options: list[AnswerOptionBase]
+
+
+# class QuestionCreate(QuestionBase):
+#     poll_id: int
+
+
+# class Question(QuestionBase):
+#     id: int
+#     answer_options: list[AnswerOptionOut]
+
+
+# class PollBase(BaseModel):
+#     title: str = Field(..., min_length=3, max_length=100, )
+#     description: Optional[str] = Field(None, max_length=500)
+
+
+# class PollCreate(PollBase):
+#     questions: list[QuestionBase]
+
+
+# class Poll(PollBase):
+#     id: int
+#     created_by_id: str
+#     created_at: datetime
+#     is_active: bool = True
+
+
+# class PollAnswersSubmit(BaseModel):
+#     answers: list[AnswerOptionCreate]
+
+
+# class PollWithQuestions(BaseModel):
+#     id: int
+#     title: str
+#     description: str
+#     questions: list[Question]
+
+
+# class UserAnswerBase(BaseModel):
+#     answer_option_id: int
+
+
+# class UserAnswerCreate(UserAnswerBase):
+#     question_id: int
+
+
+# class UserAnswer(UserAnswerBase):
+#     id: int
+#     user_id: int
+#     question_id: int
+
+class Course(BaseModel):
+    title: str
+    is_active: bool
