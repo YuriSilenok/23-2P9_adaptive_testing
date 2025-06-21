@@ -19,7 +19,7 @@ def create_user(user: UserCreate):
 
         UserRole.create(
             user = currect_user,
-            role = Role.get_or_none(Role.name == user.role)
+            role = Role.get_or_none(Role.status == user.role)
         )
 
     except:
@@ -50,18 +50,18 @@ def compare_role(username, role: Roles):
 @database.atomic()
 def find_user(username) :
     current_user = User.get_or_none(User.username == username)
-    user_role = (UserRole.get_or_none(UserRole.user == current_user)).role.status
-    if current_user:
-        return UserOut(
-            username=current_user.username,
-            name=current_user.name,
-            telegram_link=current_user.telegram_link,
-            role=user_role
+    if not current_user:
+        raise HTTPException(
+            detail='user not finded',
+            status_code=status.HTTP_401_UNAUTHORIZED
         )
-
-    raise HTTPException(
-        detail='user not finded',
-        status_code=status.HTTP_404_NOT_FOUND
+        
+    user_role = (UserRole.get_or_none(UserRole.user == current_user)).role.status
+    return UserOut(
+        username=current_user.username,
+        name=current_user.name,
+        telegram_link=current_user.telegram_link,
+        role=user_role
     )
 
 

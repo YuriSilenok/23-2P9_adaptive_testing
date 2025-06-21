@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from fastapi import Depends, APIRouter, HTTPException, status, Cookie, Body, Query 
 from fastapi.security import OAuth2PasswordBearer, HTTPAuthorizationCredentials
 from fastapi.responses import JSONResponse
+from typing import Union
 
 from shemas import (UserCreate, UserOut, Course, Roles)
 from crud import find_user, create_user, find_password, compare_role, course_create, change_activity_of_course, get_courses_list
@@ -35,9 +36,9 @@ async def validate_auth_user(
 
 
 async def get_current_user(
-    access_token: str | bytes | None = Cookie(None, include_in_schema=False),
-    bearer_token: str | None = Depends(oauth2_scheme),
-) -> str | None:
+    access_token: Union[str, bytes, None] = Cookie(None, include_in_schema=False),
+    bearer_token: Union[str, None]= Depends(oauth2_scheme),
+) -> Union[str, None]:
     credentials_exception = HTTPException(
         status_code=status.HTTP_403_FORBIDDEN,
         detail="Could not validate credentials",
